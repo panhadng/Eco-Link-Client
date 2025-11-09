@@ -1,0 +1,113 @@
+import { gql } from '@apollo/client';
+
+// Room Queries
+export const GET_ROOMS = gql`
+  query GetRooms {
+    Room(orderBy: lastMessageAt_desc) {
+      id
+      roomId
+      roomName
+      avatar
+      lastMessageAt
+      unreadCount
+      lastMessage {
+        id
+        content
+        date
+      }
+    }
+  }
+`;
+
+// Message Queries
+export const GET_MESSAGES = gql`
+  query GetMessages($roomId: ID!, $first: Int, $offset: Int) {
+    Message(roomId: $roomId, first: $first, offset: $offset, orderBy: indexId_desc) {
+      id
+      indexId
+      content
+      senderId
+      username
+      avatar
+      date
+      saved
+      distributed
+      seen
+      files {
+        url
+        name
+        type
+      }
+    }
+  }
+`;
+
+// Room Mutations
+export const CREATE_ROOM = gql`
+  mutation CreateRoom($userId: ID!) {
+    CreateRoom(userId: $userId) {
+      id
+      roomId
+      roomName
+    }
+  }
+`;
+
+// Message Mutations
+export const CREATE_MESSAGE = gql`
+  mutation CreateMessage($roomId: ID!, $content: String, $files: [FileInput]) {
+    CreateMessage(roomId: $roomId, content: $content, files: $files) {
+      id
+      indexId
+      content
+      senderId
+      username
+      avatar
+      date
+      saved
+      distributed
+      seen
+      files {
+        url
+        name
+        type
+      }
+    }
+  }
+`;
+
+export const MARK_MESSAGES_AS_SEEN = gql`
+  mutation MarkMessagesAsSeen($messageIds: [String!]!) {
+    MarkMessagesAsSeen(messageIds: $messageIds)
+  }
+`;
+
+// Subscriptions
+export const MESSAGE_ADDED_SUBSCRIPTION = gql`
+  subscription OnMessageAdded {
+    chatMessageAdded {
+      id
+      indexId
+      content
+      senderId
+      username
+      avatar
+      date
+      saved
+      distributed
+      seen
+      files {
+        url
+        name
+        type
+      }
+    }
+  }
+`;
+
+export const ROOM_COUNT_UPDATED_SUBSCRIPTION = gql`
+  subscription OnRoomCountUpdated {
+    roomCountUpdated
+  }
+`;
+
