@@ -15,6 +15,7 @@ import { EditProfileModal } from '@/components/profile/EditProfileModal';
 import { MapPinIcon, CalendarIcon, ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline';
 import { formatDate } from '@/lib/utils';
 import Image from 'next/image';
+import { Post } from '@/types';
 
 export default function ProfilePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
@@ -50,13 +51,13 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
     const posts = postsData?.Post || [];
     const sharedPosts = sharedData?.User?.[0]?.shouted || [];
     
-    const authoredPosts = posts.map((post) => ({
+    const authoredPosts = posts.map((post: Post) => ({
       ...post,
       type: 'authored' as const,
       sortDate: new Date(post.createdAt).getTime(),
     }));
 
-    const shared = sharedPosts.map((post) => ({
+    const shared = sharedPosts.map((post: Post) => ({
       ...post,
       type: 'shared' as const,
       sortDate: new Date(post.createdAt).getTime(), // Using post creation date, ideally would use share date
@@ -203,7 +204,7 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
           </Card>
         ) : (
           <div className="space-y-4">
-            {allPosts.map((post) => {
+            {allPosts.map((post: Post & { type: 'authored' | 'shared' }) => {
               if (post.type === 'shared') {
                 return (
                   <SharedPostCard

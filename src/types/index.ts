@@ -107,4 +107,3 @@ export interface FeedFilter {
   authorId?: string;
   orderBy?: string[];
 }
-

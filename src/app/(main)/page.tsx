@@ -6,7 +6,7 @@ import { PostCard } from '@/components/post/PostCard';
 import { Button } from '@/components/ui/Button';
 import { useInView } from 'react-intersection-observer';
 import { useEffect } from 'react';
-
+import { Post } from '@/types';
 export default function FeedPage() {
   const { posts, loading, loadMore } = usePosts(10);
   const { ref, inView } = useInView();
@@ -38,7 +38,7 @@ export default function FeedPage() {
         </div>
       ) : (
         <>
-          {posts.map((post) => (
+          {posts.map((post: Post) => (
             <PostCard key={post.id} post={post} />
           ))}
 
