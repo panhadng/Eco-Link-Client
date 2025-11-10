@@ -4,6 +4,8 @@ import "./globals.css";
 import { ApolloWrapper } from "./ApolloWrapper";
 import { AuthProvider } from "@/context/AuthContext";
 import { Toaster } from "react-hot-toast";
+import { cn } from "@/lib/utils";
+import { ThemeInitializer } from "@/components/theme/ThemeInitializer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,8 +20,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={cn(
+          inter.className,
+          "min-h-screen bg-background text-foreground antialiased transition-colors"
+        )}
+      >
+        <ThemeInitializer />
         <ApolloWrapper>
           <AuthProvider>
             {children}

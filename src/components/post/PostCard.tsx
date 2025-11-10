@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, startTransition } from 'react';
 import { useMutation } from '@apollo/client';
 import { useAuth } from '@/context/AuthContext';
 import { ADD_POST_EMOTION, REMOVE_POST_EMOTION } from '@/lib/graphql/mutations';
@@ -32,7 +32,9 @@ export function PostCard({ post, onPostClick }: PostCardProps) {
   const [likeCount, setLikeCount] = useState(post.emotionsCount || 0);
 
   useEffect(() => {
-    setLikeCount(post.emotionsCount || 0);
+    startTransition(() => {
+      setLikeCount(post.emotionsCount || 0);
+    });
   }, [post.emotionsCount]);
 
   const handleLike = async (e: React.MouseEvent) => {
@@ -82,8 +84,8 @@ export function PostCard({ post, onPostClick }: PostCardProps) {
             </div>
           </Link>
 
-          <button className="rounded-full p-2 hover:bg-gray-100 dark:hover:bg-gray-800">
-            <EllipsisHorizontalIcon className="h-5 w-5 text-gray-500" />
+          <button className="rounded-full p-2 text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800">
+            <EllipsisHorizontalIcon className="h-5 w-5" />
           </button>
         </div>
 

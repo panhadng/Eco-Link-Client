@@ -5,6 +5,7 @@ import { GET_USERS } from '@/lib/graphql/queries';
 import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
+import { User } from '@/types';
 
 export function RightSidebar() {
   const { data, loading } = useQuery(GET_USERS, {
@@ -14,7 +15,7 @@ export function RightSidebar() {
   const users = data?.User || [];
 
   return (
-    <aside className="hidden w-80 flex-shrink-0 xl:block">
+    <aside className="hidden w-80 shrink-0 text-gray-900 dark:text-gray-100 xl:block">
       <div className="sticky top-20 space-y-4">
         {/* Suggestions Card */}
         <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
@@ -34,7 +35,7 @@ export function RightSidebar() {
             </div>
           ) : (
             <div className="space-y-3">
-              {users.slice(0, 5).map((user: any) => (
+              {users.slice(0, 5).map((user: User) => (
                 <div key={user.id} className="flex items-center justify-between">
                   <Link
                     href={`/profile/${user.slug}`}
@@ -50,7 +51,7 @@ export function RightSidebar() {
                       </p>
                     </div>
                   </Link>
-                  <Button size="sm" variant="outline" className="text-white">
+                  <Button size="sm" variant="outline">
                     Follow
                   </Button>
                 </div>

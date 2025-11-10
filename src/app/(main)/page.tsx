@@ -3,7 +3,6 @@
 import { usePosts } from '@/hooks/usePosts';
 import { CreatePost } from '@/components/post/CreatePost';
 import { PostCard } from '@/components/post/PostCard';
-import { Button } from '@/components/ui/Button';
 import { useInView } from 'react-intersection-observer';
 import { useEffect } from 'react';
 import { Post } from '@/types';

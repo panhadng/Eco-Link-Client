@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode, startTransition } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_CURRENT_USER } from '@/lib/graphql/queries';
 import { LOGIN } from '@/lib/graphql/mutations';
@@ -34,8 +34,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Handle initialization and data updates
   useEffect(() => {
     if (!hasToken) {
-      setInitializing(false);
-      setUser(null);
+      startTransition(() => {
+        setInitializing(false);
+        setUser(null);
+      });
       return;
     }
 
@@ -44,14 +46,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     if (data?.currentUser) {
-      setUser(data.currentUser);
-      setInitializing(false);
+      startTransition(() => {
+        setUser(data.currentUser);
+        setInitializing(false);
+      });
     } else if (error) {
       removeAuthToken();
-      setUser(null);
-      setInitializing(false);
+      startTransition(() => {
+        setUser(null);
+        setInitializing(false);
+      });
     } else {
-      setInitializing(false);
+      startTransition(() => {
+        setInitializing(false);
+      });
     }
   }, [hasToken, data, loading, error]);
 
@@ -66,8 +74,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         await refetch();
         toast.success('Logged in successfully!');
       }
-    } catch (error: any) {
-      toast.error(error.message || 'Login failed');
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Login failed';
+      toast.error(message);
       throw error;
     }
   };

@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { HomeIcon, BellIcon, UserCircleIcon, MagnifyingGlassIcon, ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline';
 import { useAuth } from '@/context/AuthContext';
 import { Avatar } from '@/components/ui/Avatar';
-import { Button } from '@/components/ui/Button';
 
 export function Navbar() {
   const { user, logout } = useAuth();
@@ -17,12 +16,12 @@ export function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-40 border-b border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+    <nav className="sticky top-0 z-40 border-b border-gray-200 bg-white text-gray-900 shadow-sm dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100">
       <div className="mx-auto max-w-7xl px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-purple-600">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[linear-gradient(to_bottom_right,#3b82f6,#9333ea)]">
               <span className="text-xl font-bold text-white">E</span>
             </div>
             <span className="hidden text-xl font-bold text-gray-900 dark:text-white sm:inline">
@@ -37,7 +36,7 @@ export function Navbar() {
               <input
                 type="text"
                 placeholder="Search..."
-                className="w-full rounded-full border border-gray-300 bg-gray-50 py-2 pl-10 pr-4 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800"
+                className="w-full rounded-full border border-gray-300 bg-gray-50 py-2 pl-10 pr-4 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
               />
             </div>
           </div>

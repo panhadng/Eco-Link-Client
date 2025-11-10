@@ -53,7 +53,7 @@ export function CommentSection({ postId, comments }: CommentSectionProps) {
               onChange={(e) => setContent(e.target.value)}
               placeholder="Write a comment..."
               rows={3}
-              className="mb-2 text-white"
+              className="mb-2"
             />
             <Button type="submit" size="sm" isLoading={loading} disabled={!content.trim()}>
               Comment

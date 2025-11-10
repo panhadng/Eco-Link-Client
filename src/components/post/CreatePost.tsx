@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback, FormEvent } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -19,6 +19,16 @@ const createPostSchema = z.object({
 });
 
 type CreatePostFormData = z.infer<typeof createPostSchema>;
+
+type CreatePostVariables = {
+  title: string;
+  content: string;
+  visibility?: string;
+  image?: {
+    upload: File;
+    alt: string;
+  };
+};
 
 export function CreatePost() {
   const { user } = useAuth();
@@ -49,17 +59,17 @@ export function CreatePost() {
     }
   };
 
-  const removeImage = () => {
+  const removeImage = useCallback(() => {
     setSelectedImage(null);
     setImagePreview(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
-  };
+  }, []);
 
-  const onSubmit = async (data: CreatePostFormData) => {
+  const onSubmit = useCallback(async (data: CreatePostFormData) => {
     try {
-      const variables: any = {
+      const variables: CreatePostVariables = {
         title: data.title,
         content: data.content,
         visibility: 'public',
@@ -79,13 +89,20 @@ export function CreatePost() {
     } catch (error) {
       console.error('Error creating post:', error);
     }
-  };
+  }, [createPost, removeImage, reset, selectedImage]);
+
+  const onSubmitForm = useCallback(
+    (event: FormEvent<HTMLFormElement>) => {
+      void handleSubmit(onSubmit)(event);
+    },
+    [handleSubmit, onSubmit]
+  );
 
   if (!user) return null;
 
   return (
     <Card className="p-4">
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={onSubmitForm}>
         <div className="flex space-x-3">
           <Avatar name={user.name} size="md" />
           <div className="flex-1">
@@ -102,7 +119,7 @@ export function CreatePost() {
                 <input
                   type="text"
                   placeholder="Post title..."
-                  className="w-full border-0 border-b border-gray-300 bg-transparent p-2 text-lg font-semibold focus:border-blue-500 focus:outline-none dark:border-gray-700 text-white"
+                  className="w-full border-0 border-b border-gray-300 bg-transparent p-2 text-lg font-semibold text-gray-900 focus:border-blue-500 focus:outline-none dark:border-gray-700 dark:text-gray-100"
                   {...register('title')}
                 />
                 {errors.title && (
@@ -113,7 +130,7 @@ export function CreatePost() {
                   placeholder="What's on your mind?"
                   rows={4}
                   error={errors.content?.message}
-                  className="w-full resize-none border-0 p-2 focus:ring-0 text-white"
+                  className="w-full resize-none border-0 bg-transparent p-2 focus:ring-0"
                   {...register('content')}
                 />
 

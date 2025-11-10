@@ -23,7 +23,7 @@ export function Sidebar() {
   ];
 
   return (
-    <aside className="hidden w-64 flex-shrink-0 lg:block">
+    <aside className="hidden w-64 shrink-0 text-gray-900 dark:text-gray-100 lg:block">
       <div className="sticky top-20 space-y-4">
         {/* User Profile Card */}
         {user && (

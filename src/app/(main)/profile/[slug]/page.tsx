@@ -103,7 +103,7 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
       {/* Profile Header */}
       <Card className="overflow-hidden">
         {/* Cover Photo */}
-        <div className="h-32 bg-gradient-to-r from-blue-500 to-purple-600" />
+        <div className="h-32 bg-[linear-gradient(to_right,#3b82f6,#9333ea)]" />
 
         {/* Profile Info */}
         <div className="relative px-6 pb-6">

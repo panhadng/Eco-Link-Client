@@ -1,11 +1,59 @@
 @import "tailwindcss";
 
+:root {
+  color-scheme: light;
+  --background: 210 40% 98%;
+  --foreground: 224 71% 4%;
+  --card: 0 0% 100%;
+  --card-foreground: 224 71% 4%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 224 71% 4%;
+  --primary: 221 83% 53%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222 47% 11%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 47%;
+  --accent: 199 89% 48%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 221 83% 53%;
+  --radius: 0.75rem;
+}
+
+.dark {
+  color-scheme: dark;
+  --background: 224 71% 4%;
+  --foreground: 213 47% 94%;
+  --card: 224 71% 6%;
+  --card-foreground: 213 47% 94%;
+  --popover: 224 71% 6%;
+  --popover-foreground: 213 47% 94%;
+  --primary: 217 91% 60%;
+  --primary-foreground: 222 47% 11%;
+  --secondary: 215 27% 26%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 215 27% 26%;
+  --muted-foreground: 215 20% 65%;
+  --accent: 199 89% 48%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 63% 45%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 215 27% 26%;
+  --input: 215 27% 26%;
+  --ring: 217 91% 60%;
+}
+
 body {
-  background-color: rgb(249 250 251);
-  color: rgb(17 24 39);
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  transition: background-color 150ms ease, color 150ms ease;
 }
 
 body.dark {
-  background-color: rgb(3 7 18);
-  color: rgb(243 244 246);
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
 }
