@@ -57,3 +57,83 @@ body.dark {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
 }
+
+.rich-text {
+  color: inherit;
+  line-height: 1.7;
+}
+
+.rich-text p,
+.rich-text ul,
+.rich-text ol,
+.rich-text pre,
+.rich-text blockquote {
+  margin-top: 0.9rem;
+}
+
+.rich-text p:first-child,
+.rich-text ul:first-child,
+.rich-text ol:first-child,
+.rich-text pre:first-child,
+.rich-text blockquote:first-child,
+.rich-text h1:first-child,
+.rich-text h2:first-child,
+.rich-text h3:first-child,
+.rich-text h4:first-child,
+.rich-text h5:first-child,
+.rich-text h6:first-child {
+  margin-top: 0;
+}
+
+.rich-text ul,
+.rich-text ol {
+  padding-left: 1.5rem;
+}
+
+.rich-text li {
+  margin-top: 0.35rem;
+}
+
+.rich-text h1,
+.rich-text h2,
+.rich-text h3,
+.rich-text h4,
+.rich-text h5,
+.rich-text h6 {
+  margin-top: 1.4rem;
+  font-weight: 600;
+  color: inherit;
+}
+
+.rich-text code {
+  background-color: rgba(15, 23, 42, 0.08);
+  border-radius: 0.4rem;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.875rem;
+}
+
+.dark .rich-text code {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.rich-text pre {
+  padding: 1rem;
+  border-radius: 0.75rem;
+  overflow-x: auto;
+  background-color: rgba(15, 23, 42, 0.08);
+}
+
+.dark .rich-text pre {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.rich-text blockquote {
+  border-left: 4px solid hsl(var(--primary));
+  padding-left: 1rem;
+  font-style: italic;
+}
+
+.rich-text a {
+  color: hsl(var(--primary));
+  text-decoration: underline;
+}

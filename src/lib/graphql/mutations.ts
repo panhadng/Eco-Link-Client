@@ -203,3 +203,84 @@ export const UPDATE_USER = gql`
   }
 `;
 
+// Notification Mutations
+export const MARK_NOTIFICATION_AS_READ = gql`
+  mutation MarkNotificationAsRead($id: ID!) {
+    markAsRead(id: $id) {
+      id
+      read
+      updatedAt
+    }
+  }
+`;
+
+export const MARK_ALL_NOTIFICATIONS_AS_READ = gql`
+  mutation MarkAllNotificationsAsRead {
+    markAllAsRead {
+      id
+      read
+      updatedAt
+    }
+  }
+`;
+
+// Group Mutations
+export const UPDATE_GROUP = gql`
+  mutation UpdateGroup(
+    $id: ID!
+    $name: String
+    $slug: String
+    $about: String
+    $description: String
+    $actionRadius: GroupActionRadius
+    $categoryIds: [ID]
+    $avatar: ImageInput
+    $locationName: String
+  ) {
+    UpdateGroup(
+      id: $id
+      name: $name
+      slug: $slug
+      about: $about
+      description: $description
+      actionRadius: $actionRadius
+      categoryIds: $categoryIds
+      avatar: $avatar
+      locationName: $locationName
+    ) {
+      id
+      name
+      slug
+      about
+      description
+      actionRadius
+      locationName
+      membersCount
+      myRole
+      avatar {
+        url
+      }
+    }
+  }
+`;
+
+export const JOIN_GROUP = gql`
+  mutation JoinGroup($groupId: ID!, $userId: ID!) {
+    JoinGroup(groupId: $groupId, userId: $userId) {
+      id
+      name
+      slug
+    }
+  }
+`;
+
+export const LEAVE_GROUP = gql`
+  mutation LeaveGroup($groupId: ID!, $userId: ID!) {
+    LeaveGroup(groupId: $groupId, userId: $userId) {
+      id
+      name
+      slug
+    }
+  }
+`;
+

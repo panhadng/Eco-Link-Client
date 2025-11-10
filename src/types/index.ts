@@ -12,6 +12,7 @@ export interface User {
   locationName?: string;
   createdAt: string;
   followedByCount: number;
+  followingCount: number;
   followedByCurrentUser?: boolean;
 }
 
@@ -106,4 +107,84 @@ export interface PaginationParams {
 export interface FeedFilter {
   authorId?: string;
   orderBy?: string[];
+}
+
+// Notification types
+export type NotificationReason =
+  | 'mentioned_in_post'
+  | 'mentioned_in_comment'
+  | 'commented_on_post'
+  | 'user_joined_group'
+  | 'user_left_group'
+  | 'changed_group_member_role'
+  | 'removed_user_from_group'
+  | 'followed_user_posted'
+  | 'post_in_group';
+
+export interface NotificationRelatedUser {
+  id: string;
+  name?: string;
+  slug?: string;
+  avatar?: {
+    url: string;
+  };
+}
+
+export type NotificationSource =
+  | {
+      __typename: 'Post';
+      id: string;
+      title?: string | null;
+      slug?: string | null;
+      content?: string | null;
+      author?: NotificationRelatedUser | null;
+    }
+  | {
+      __typename: 'Comment';
+      id: string;
+      content?: string | null;
+      author?: NotificationRelatedUser | null;
+      post?: {
+        id: string;
+        title?: string | null;
+        author?: NotificationRelatedUser | null;
+      } | null;
+    }
+  | {
+      __typename: 'Group';
+      id: string;
+      name?: string | null;
+      slug?: string | null;
+    };
+
+export interface Notification {
+  id: string;
+  read?: boolean | null;
+  reason?: NotificationReason | null;
+  createdAt: string;
+  updatedAt?: string | null;
+  relatedUser?: NotificationRelatedUser | null;
+  from?: NotificationSource | null;
+}
+
+export type GroupMemberRole = 'pending' | 'usual' | 'admin' | 'owner';
+
+export interface Group {
+  id: string;
+  name: string;
+  slug: string;
+  about?: string | null;
+  description: string;
+  descriptionExcerpt?: string | null;
+  groupType: string;
+  actionRadius: string;
+  locationName?: string | null;
+  membersCount: number;
+  myRole?: GroupMemberRole | null;
+  isMutedByMe?: boolean;
+  avatar?: {
+    url: string;
+  };
+  createdAt?: string;
+  updatedAt?: string;
 }

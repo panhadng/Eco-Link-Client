@@ -1,18 +1,53 @@
 'use client';
 
-import { useQuery } from '@apollo/client';
-import { GET_USERS } from '@/lib/graphql/queries';
+import { useMutation, useQuery } from '@apollo/client';
+import { useState } from 'react';
+import { GET_CURRENT_USER, GET_USERS } from '@/lib/graphql/queries';
 import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
 import { User } from '@/types';
+import { FOLLOW_USER, UNFOLLOW_USER } from '@/lib/graphql/mutations';
+import { useAuth } from '@/context/AuthContext';
+import toast from 'react-hot-toast';
 
 export function RightSidebar() {
-  const { data, loading } = useQuery(GET_USERS, {
+  const { user: currentUser, refetchUser: refetchCurrentUser } = useAuth();
+  const { data, loading, refetch } = useQuery(GET_USERS, {
     variables: { first: 5, offset: 0 },
   });
 
-  const users = data?.User || [];
+  const [followUser] = useMutation(FOLLOW_USER, {
+    refetchQueries: [{ query: GET_USERS, variables: { first: 5, offset: 0 } }],
+    awaitRefetchQueries: true,
+  });
+  const [unfollowUser] = useMutation(UNFOLLOW_USER, {
+    refetchQueries: [{ query: GET_USERS, variables: { first: 5, offset: 0 } }],
+    awaitRefetchQueries: true,
+  });
+
+  const users = (data?.User || []).filter((user: User) => user.id !== currentUser?.id);
+  const [mutatingUserId, setMutatingUserId] = useState<string | null>(null);
+
+  const handleToggleFollow = async (user: User) => {
+    try {
+      setMutatingUserId(user.id);
+      if (user.followedByCurrentUser) {
+        await unfollowUser({ variables: { id: user.id } });
+        toast.success(`Unfollowed ${user.name}`);
+      } else {
+        await followUser({ variables: { id: user.id } });
+        toast.success(`Now following ${user.name}`);
+      }
+      await refetch();
+      refetchCurrentUser();
+    } catch (error) {
+      console.error('Error toggling follow state:', error);
+      toast.error('Could not update follow status');
+    } finally {
+      setMutatingUserId(null);
+    }
+  };
 
   return (
     <aside className="hidden w-80 shrink-0 text-gray-900 dark:text-gray-100 xl:block">
@@ -51,8 +86,13 @@ export function RightSidebar() {
                       </p>
                     </div>
                   </Link>
-                  <Button size="sm" variant="outline">
-                    Follow
+                  <Button
+                    size="sm"
+                    variant={user.followedByCurrentUser ? 'outline' : 'default'}
+                    onClick={() => handleToggleFollow(user)}
+                    isLoading={mutatingUserId === user.id}
+                  >
+                    {user.followedByCurrentUser ? 'Unfollow' : 'Follow'}
                   </Button>
                 </div>
               ))}

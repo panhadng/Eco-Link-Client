@@ -1,10 +1,13 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useSubscription } from "@apollo/client";
+import { useMutation, useSubscription } from "@apollo/client";
 import { useRooms, useMessages, useCreateMessage } from "@/hooks/useMessages";
 import { useAuth } from "@/context/AuthContext";
-import { MESSAGE_ADDED_SUBSCRIPTION } from "@/lib/graphql/messages";
+import {
+  MARK_MESSAGES_AS_SEEN,
+  MESSAGE_ADDED_SUBSCRIPTION,
+} from "@/lib/graphql/messages";
 import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -27,6 +30,7 @@ export default function MessagesPage() {
   const [filePreviews, setFilePreviews] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const markedMessageIdsRef = useRef<Set<string>>(new Set());
 
   const {
     messages,
@@ -36,6 +40,7 @@ export default function MessagesPage() {
   const { createMessage, loading: sending } = useCreateMessage(
     selectedRoomId || ""
   );
+  const [markMessagesAsSeen] = useMutation(MARK_MESSAGES_AS_SEEN);
 
   const selectedRoom = rooms.find((r: Room) => r.id === selectedRoomId);
 
@@ -64,6 +69,43 @@ export default function MessagesPage() {
       refetchRooms();
     }
   }, [subscriptionData, refetchMessages, refetchRooms]);
+
+  useEffect(() => {
+    markedMessageIdsRef.current = new Set();
+  }, [selectedRoomId]);
+
+  useEffect(() => {
+    if (!selectedRoomId || !user || messages.length === 0) {
+      return;
+    }
+
+    const unseenMessages = messages.filter(
+      (message) => !message.seen && message.senderId !== user.id
+    );
+
+    if (unseenMessages.length === 0) {
+      return;
+    }
+
+    const newMessageIds = unseenMessages
+      .map((message) => message.id)
+      .filter((id) => !markedMessageIdsRef.current.has(id));
+
+    if (newMessageIds.length === 0) {
+      return;
+    }
+
+    newMessageIds.forEach((id) => markedMessageIdsRef.current.add(id));
+
+    markMessagesAsSeen({ variables: { messageIds: newMessageIds } })
+      .then(() => {
+        void Promise.all([refetchMessages(), refetchRooms()]);
+      })
+      .catch((error) => {
+        console.error("Failed to mark messages as seen", error);
+        newMessageIds.forEach((id) => markedMessageIdsRef.current.delete(id));
+      });
+  }, [messages, selectedRoomId, user, markMessagesAsSeen, refetchMessages, refetchRooms]);
 
   useEffect(() => {
     if (subError) {

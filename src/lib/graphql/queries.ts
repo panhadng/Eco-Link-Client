@@ -16,6 +16,7 @@ export const GET_CURRENT_USER = gql`
       }
       createdAt
       followedByCount
+      followingCount
     }
   }
 `;
@@ -34,6 +35,7 @@ export const GET_USER_BY_SLUG = gql`
       }
       createdAt
       followedByCount
+      followingCount
       followedByCurrentUser
     }
   }
@@ -49,6 +51,8 @@ export const GET_USERS = gql`
       about
       createdAt
       followedByCount
+      followingCount
+      followedByCurrentUser
     }
   }
 `;
@@ -188,6 +192,151 @@ export const GET_COMMENTS = gql`
 export const GET_POST_EMOTIONS_BY_CURRENT_USER = gql`
   query PostsEmotionsByCurrentUser($postId: ID!) {
     PostsEmotionsByCurrentUser(postId: $postId)
+  }
+`;
+
+// Notification Queries
+export const GET_NOTIFICATIONS = gql`
+  query GetNotifications($read: Boolean, $orderBy: NotificationOrdering, $first: Int, $offset: Int) {
+    notifications(read: $read, orderBy: $orderBy, first: $first, offset: $offset) {
+      id
+      read
+      reason
+      createdAt
+      updatedAt
+      relatedUser {
+        id
+        name
+        slug
+        avatar {
+          url
+        }
+      }
+      from {
+        __typename
+        ... on Post {
+          id
+          title
+          slug
+          content
+          author {
+            id
+            name
+            slug
+          }
+        }
+        ... on Comment {
+          id
+          content
+          author {
+            id
+            name
+            slug
+          }
+          post {
+            id
+            title
+            author {
+              id
+              name
+              slug
+            }
+          }
+        }
+        ... on Group {
+          id
+          name
+          slug
+        }
+      }
+    }
+  }
+`;
+
+export const GET_GROUPS = gql`
+  query GetGroups($first: Int, $offset: Int) {
+    Group(first: $first, offset: $offset) {
+      id
+      name
+      slug
+      about
+      description
+      descriptionExcerpt
+      groupType
+      actionRadius
+      locationName
+      membersCount
+      myRole
+      isMutedByMe
+      createdAt
+      updatedAt
+      avatar {
+        url
+      }
+    }
+  }
+`;
+
+export const GET_GROUP_BY_SLUG = gql`
+  query GetGroupBySlug($slug: String!) {
+    Group(slug: $slug) {
+      id
+      name
+      slug
+      about
+      description
+      descriptionExcerpt
+      groupType
+      actionRadius
+      locationName
+      membersCount
+      myRole
+      isMutedByMe
+      createdAt
+      updatedAt
+      avatar {
+        url
+      }
+    }
+  }
+`;
+
+export const GET_GROUP_MEMBERS = gql`
+  query GetGroupMembers($id: ID!, $first: Int, $offset: Int) {
+    GroupMembers(id: $id, first: $first, offset: $offset) {
+      id
+      name
+      slug
+      avatar {
+        url
+      }
+    }
+  }
+`;
+
+export const GET_GROUP_POSTS = gql`
+  query GetGroupPosts($groupId: ID!, $first: Int, $offset: Int) {
+    Post(filter: { group: { id: $groupId } }, first: $first, offset: $offset, orderBy: createdAt_desc) {
+      id
+      title
+      content
+      contentExcerpt
+      createdAt
+      commentsCount
+      shoutedCount
+      shoutedByCurrentUser
+      emotionsCount
+      image {
+        url
+        alt
+        aspectRatio
+      }
+      author {
+        id
+        name
+        slug
+      }
+    }
   }
 `;
 

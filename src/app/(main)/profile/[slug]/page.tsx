@@ -1,9 +1,14 @@
 'use client';
 
 import { use, useMemo, useState } from 'react';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { useRouter } from 'next/navigation';
-import { GET_USER_BY_SLUG, GET_USER_POSTS, GET_USER_SHOUTED_POSTS } from '@/lib/graphql/queries';
+import {
+  GET_CURRENT_USER,
+  GET_USER_BY_SLUG,
+  GET_USER_POSTS,
+  GET_USER_SHOUTED_POSTS,
+} from '@/lib/graphql/queries';
 import { useAuth } from '@/context/AuthContext';
 import { useCreateRoom } from '@/hooks/useMessages';
 import { Avatar } from '@/components/ui/Avatar';
@@ -16,19 +21,37 @@ import { MapPinIcon, CalendarIcon, ChatBubbleLeftRightIcon } from '@heroicons/re
 import { formatDate } from '@/lib/utils';
 import Image from 'next/image';
 import { Post } from '@/types';
+import { FOLLOW_USER, UNFOLLOW_USER } from '@/lib/graphql/mutations';
+import toast from 'react-hot-toast';
 
 export default function ProfilePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
   const router = useRouter();
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, refetchUser: refetchCurrentUser } = useAuth();
   const { createRoom, loading: creatingRoom } = useCreateRoom();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const { data: userData, loading: userLoading } = useQuery(GET_USER_BY_SLUG, {
+  const { data: userData, loading: userLoading, refetch: refetchProfile } = useQuery(GET_USER_BY_SLUG, {
     variables: { slug },
   });
 
   const user = userData?.User?.[0];
+
+  const [followUser, { loading: followLoading }] = useMutation(FOLLOW_USER, {
+    refetchQueries: [
+      { query: GET_USER_BY_SLUG, variables: { slug } },
+      { query: GET_CURRENT_USER },
+    ],
+    awaitRefetchQueries: true,
+  });
+
+  const [unfollowUser, { loading: unfollowLoading }] = useMutation(UNFOLLOW_USER, {
+    refetchQueries: [
+      { query: GET_USER_BY_SLUG, variables: { slug } },
+      { query: GET_CURRENT_USER },
+    ],
+    awaitRefetchQueries: true,
+  });
 
   const { data: postsData, loading: postsLoading } = useQuery(GET_USER_POSTS, {
     variables: {
@@ -45,6 +68,26 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
     },
     skip: !user?.id, // Fetch as soon as we have user ID to show count
   });
+
+  const isFollowing = Boolean(user?.followedByCurrentUser);
+
+  const handleFollowToggle = async () => {
+    if (!user?.id) return;
+    try {
+      if (isFollowing) {
+        await unfollowUser({ variables: { id: user.id } });
+        toast.success(`Unfollowed ${user.name}`);
+      } else {
+        await followUser({ variables: { id: user.id } });
+        toast.success(`Now following ${user.name}`);
+      }
+      await refetchProfile();
+      refetchCurrentUser();
+    } catch (error) {
+      console.error('Error updating follow status:', error);
+      toast.error('Could not update follow status');
+    }
+  };
 
   // Combine and sort posts by date
   const allPosts = useMemo(() => {
@@ -132,7 +175,13 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
               </Button>
             ) : (
               <div className="mt-4 flex gap-2">
-                <Button>Follow</Button>
+                <Button
+                  variant={isFollowing ? 'outline' : 'default'}
+                  onClick={handleFollowToggle}
+                  isLoading={followLoading || unfollowLoading}
+                >
+                  {isFollowing ? 'Unfollow' : 'Follow'}
+                </Button>
                 <Button
                   variant="outline"
                   onClick={handleStartChat}
@@ -175,7 +224,9 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
                 <span className="text-gray-500 dark:text-gray-400">Followers</span>
               </div>
               <div>
-                <span className="font-semibold text-gray-900 dark:text-white">0</span>{' '}
+                <span className="font-semibold text-gray-900 dark:text-white">
+                  {user.followingCount ?? 0}
+                </span>{' '}
                 <span className="text-gray-500 dark:text-gray-400">Following</span>
               </div>
             </div>

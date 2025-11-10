@@ -1,14 +1,23 @@
 'use client';
 
 import Link from 'next/link';
+import { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { HomeIcon, BellIcon, UserCircleIcon, MagnifyingGlassIcon, ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline';
+import { HomeIcon, UserCircleIcon, MagnifyingGlassIcon, ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline';
 import { useAuth } from '@/context/AuthContext';
 import { Avatar } from '@/components/ui/Avatar';
+import { NotificationMenu } from '@/components/notifications/NotificationMenu';
+import { useRooms } from '@/hooks/useMessages';
 
 export function Navbar() {
   const { user, logout } = useAuth();
   const router = useRouter();
+  const { rooms } = useRooms();
+
+  const unreadMessageCount = useMemo(
+    () => rooms.reduce((total, room) => total + (room.unreadCount ?? 0), 0),
+    [rooms]
+  );
 
   const handleLogout = () => {
     logout();
@@ -47,13 +56,19 @@ export function Navbar() {
               <HomeIcon className="h-6 w-6 text-gray-600 dark:text-gray-300" />
             </Link>
             
-            <Link href="/messages" className="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-800">
+            <Link
+              href="/messages"
+              className="relative rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
               <ChatBubbleLeftRightIcon className="h-6 w-6 text-gray-600 dark:text-gray-300" />
+              {unreadMessageCount > 0 && (
+                <span className="absolute -top-1 -right-1 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-500 px-1 text-xs font-semibold text-white">
+                  {unreadMessageCount > 9 ? '9+' : unreadMessageCount}
+                </span>
+              )}
             </Link>
             
-            <button className="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-800">
-              <BellIcon className="h-6 w-6 text-gray-600 dark:text-gray-300" />
-            </button>
+            <NotificationMenu />
 
             {user && (
               <div className="relative group">

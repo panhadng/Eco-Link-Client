@@ -44,7 +44,7 @@ export function Sidebar() {
                 <p className="text-xs text-gray-500 dark:text-gray-400">Followers</p>
               </div>
               <div>
-                <p className="text-lg font-semibold text-gray-900 dark:text-white">0</p>
+                <p className="text-lg font-semibold text-gray-900 dark:text-white">{user.followingCount ?? 0}</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">Following</p>
               </div>
             </div>
