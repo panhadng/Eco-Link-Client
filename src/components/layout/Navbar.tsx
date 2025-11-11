@@ -8,6 +8,7 @@ import { useAuth } from '@/context/AuthContext';
 import { Avatar } from '@/components/ui/Avatar';
 import { NotificationMenu } from '@/components/notifications/NotificationMenu';
 import { useRooms } from '@/hooks/useMessages';
+import { Room } from '@/types';
 
 export function Navbar() {
   const { user, logout } = useAuth();
@@ -15,7 +16,7 @@ export function Navbar() {
   const { rooms } = useRooms();
 
   const unreadMessageCount = useMemo(
-    () => rooms.reduce((total, room) => total + (room.unreadCount ?? 0), 0),
+    () => rooms.reduce((total: number, room: Room) => total + (room.unreadCount ?? 0), 0),
     [rooms]
   );
 

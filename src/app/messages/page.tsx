@@ -80,7 +80,7 @@ export default function MessagesPage() {
     }
 
     const unseenMessages = messages.filter(
-      (message) => !message.seen && message.senderId !== user.id
+      (message: Message) => !message.seen && message.senderId !== user.id
     );
 
     if (unseenMessages.length === 0) {
@@ -88,14 +88,14 @@ export default function MessagesPage() {
     }
 
     const newMessageIds = unseenMessages
-      .map((message) => message.id)
-      .filter((id) => !markedMessageIdsRef.current.has(id));
+      .map((message: Message) => message.id)
+      .filter((id: string) => !markedMessageIdsRef.current.has(id));
 
     if (newMessageIds.length === 0) {
       return;
     }
 
-    newMessageIds.forEach((id) => markedMessageIdsRef.current.add(id));
+    newMessageIds.forEach((id: string) => markedMessageIdsRef.current.add(id));
 
     markMessagesAsSeen({ variables: { messageIds: newMessageIds } })
       .then(() => {
@@ -103,7 +103,7 @@ export default function MessagesPage() {
       })
       .catch((error) => {
         console.error("Failed to mark messages as seen", error);
-        newMessageIds.forEach((id) => markedMessageIdsRef.current.delete(id));
+        newMessageIds.forEach((id: string) => markedMessageIdsRef.current.delete(id));
       });
   }, [messages, selectedRoomId, user, markMessagesAsSeen, refetchMessages, refetchRooms]);
 
