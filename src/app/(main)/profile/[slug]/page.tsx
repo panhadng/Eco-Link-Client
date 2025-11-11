@@ -53,7 +53,7 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
     awaitRefetchQueries: true,
   });
 
-  const { data: postsData, loading: postsLoading } = useQuery(GET_USER_POSTS, {
+  const { data: postsData, loading: postsLoading, refetch: refetchUserPosts } = useQuery(GET_USER_POSTS, {
     variables: {
       authorId: user?.id,
       first: 20,
@@ -269,7 +269,14 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
                   />
                 );
               }
-              return <PostCard key={post.id} post={post} />;
+              return (
+                <PostCard
+                  key={post.id}
+                  post={post}
+                  onPostUpdated={() => void refetchUserPosts()}
+                  onPostDeleted={() => void refetchUserPosts()}
+                />
+              );
             })}
           </div>
         )}

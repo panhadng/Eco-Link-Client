@@ -19,7 +19,7 @@ export function Avatar({ src, alt, name, size = 'md', className, ...props }: Ava
   return (
     <div
       className={cn(
-        'relative inline-flex items-center justify-center overflow-hidden bg-[linear-gradient(to_bottom_right,#3b82f6,#9333ea)] text-white font-semibold',
+        'relative inline-flex items-center justify-center overflow-hidden bg-[linear-gradient(to_bottom_right,#3b82f6,#9333ea)] text-white font-semibold rounded-xl',
         sizeClasses[size],
         className
       )}

@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { Post } from '@/types';
 
 export default function FeedPage() {
-  const { posts, loading, loadMore } = usePosts(10);
+  const { posts, loading, loadMore, refetch } = usePosts(10);
   const { ref, inView } = useInView();
 
   useEffect(() => {
@@ -39,7 +39,12 @@ export default function FeedPage() {
       ) : (
         <>
           {posts.map((post: Post) => (
-            <PostCard key={post.id} post={post} />
+            <PostCard
+              key={post.id}
+              post={post}
+              onPostUpdated={() => refetch()}
+              onPostDeleted={() => refetch()}
+            />
           ))}
 
           <div ref={ref} className="py-4 text-center">

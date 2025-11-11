@@ -10,7 +10,7 @@ import Link from 'next/link';
 
 export default function PostPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const { post, loading } = usePost(id);
+  const { post, loading, refetch } = usePost(id);
 
   if (loading) {
     return (
@@ -41,7 +41,11 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
         <span>Back to feed</span>
       </Link>
 
-      <PostCard post={post} />
+      <PostCard
+        post={post}
+        onPostUpdated={() => void refetch()}
+        onPostDeleted={() => void refetch()}
+      />
 
       <Card className="p-6">
         <CommentSection postId={post.id} comments={post.comments || []} />

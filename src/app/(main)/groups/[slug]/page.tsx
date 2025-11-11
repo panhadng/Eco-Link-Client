@@ -409,7 +409,12 @@ export default function GroupDetailPage({ params }: { params: Promise<PageParams
         ) : (
           <div className="space-y-4">
             {posts.map((post) => (
-              <PostCard key={post.id} post={post} />
+              <PostCard
+                key={post.id}
+                post={post}
+                onPostUpdated={() => void refetchPosts()}
+                onPostDeleted={() => void refetchPosts()}
+              />
             ))}
           </div>
         )}

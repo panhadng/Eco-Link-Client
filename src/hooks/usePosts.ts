@@ -3,6 +3,7 @@ import { GET_POSTS, GET_POST_BY_ID } from '@/lib/graphql/queries';
 import {
   CREATE_POST,
   DELETE_POST,
+  UPDATE_POST,
   SHOUT_POST,
   UNSHOUT_POST,
 } from '@/lib/graphql/mutations';
@@ -80,6 +81,23 @@ export function useDeletePost() {
 
   return {
     deletePost,
+    loading,
+  };
+}
+
+export function useUpdatePost() {
+  const [updatePost, { loading }] = useMutation(UPDATE_POST, {
+    refetchQueries: [{ query: GET_POSTS, variables: { first: 10, offset: 0, orderBy: ['createdAt_desc'] } }],
+    onCompleted: () => {
+      toast.success('Post updated successfully!');
+    },
+    onError: (error) => {
+      toast.error(error.message || 'Failed to update post');
+    },
+  });
+
+  return {
+    updatePost,
     loading,
   };
 }
