@@ -45,8 +45,20 @@ export const SIGNUP_VERIFICATION = gql`
 
 // Post Mutations
 export const CREATE_POST = gql`
-  mutation CreatePost($title: String!, $content: String!, $visibility: Visibility, $image: ImageInput) {
-    CreatePost(title: $title, content: $content, visibility: $visibility, image: $image) {
+  mutation CreatePost(
+    $title: String!
+    $content: String!
+    $visibility: Visibility
+    $image: ImageInput
+    $groupId: ID
+  ) {
+    CreatePost(
+      title: $title
+      content: $content
+      visibility: $visibility
+      image: $image
+      groupId: $groupId
+    ) {
       id
       title
       content

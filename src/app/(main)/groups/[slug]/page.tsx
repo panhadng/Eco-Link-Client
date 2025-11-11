@@ -1,6 +1,6 @@
 'use client';
 
-import { use, useMemo, useState } from 'react';
+import { use, useCallback, useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useMutation, useQuery } from '@apollo/client';
@@ -17,6 +17,7 @@ import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
 import { PostCard } from '@/components/post/PostCard';
 import { EditGroupModal } from '@/components/groups/EditGroupModal';
+import { CreatePost } from '@/components/post/CreatePost';
 import { useAuth } from '@/context/AuthContext';
 import {
   GET_GROUP_BY_SLUG,
@@ -200,6 +201,10 @@ export default function GroupDetailPage({ params }: { params: Promise<PageParams
   const isPending = group?.myRole === 'pending';
   const canManage = group?.myRole && MANAGER_ROLES.includes(group.myRole);
 
+  const handleCreateGroupPost = useCallback(async () => {
+    await Promise.all([refetchPosts(), refetchGroup()]);
+  }, [refetchPosts, refetchGroup]);
+
   const handleJoinOrLeave = async () => {
     if (!group || !user) {
       toast.error('You need to be logged in to manage membership');
@@ -337,6 +342,10 @@ export default function GroupDetailPage({ params }: { params: Promise<PageParams
           </div>
         </div>
       </Card>
+
+      {isMember && (
+        <CreatePost groupId={group.id} groupName={group.name} onCreated={handleCreateGroupPost} />
+      )}
 
       {/* About */}
       <Card className="p-6">

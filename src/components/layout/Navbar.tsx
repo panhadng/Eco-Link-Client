@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useMemo, useRef } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { HomeIcon, UserCircleIcon, MagnifyingGlassIcon, ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline';
 import { useAuth } from '@/context/AuthContext';
 import { Avatar } from '@/components/ui/Avatar';
@@ -14,6 +14,16 @@ export function Navbar() {
   const { user, logout } = useAuth();
   const router = useRouter();
   const { rooms } = useRooms();
+  const searchParams = useSearchParams();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const term = searchParams?.get('term') ?? '';
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.value = term;
+    }
+  }, [term]);
 
   const unreadMessageCount = useMemo(
     () => rooms.reduce((total: number, room: Room) => total + (room.unreadCount ?? 0), 0),
@@ -23,6 +33,16 @@ export function Navbar() {
   const handleLogout = () => {
     logout();
     router.push('/login');
+  };
+
+  const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const value = inputRef.current?.value.trim() ?? '';
+    if (value.length === 0) {
+      router.push('/search');
+    } else {
+      router.push(`/search?term=${encodeURIComponent(value)}`);
+    }
   };
 
   return (
@@ -40,16 +60,22 @@ export function Navbar() {
           </Link>
 
           {/* Search Bar */}
-          <div className="hidden flex-1 max-w-md px-8 md:block">
+          <form onSubmit={handleSearchSubmit} className="hidden flex-1 max-w-md px-8 md:block">
             <div className="relative">
               <MagnifyingGlassIcon className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
               <input
+                ref={inputRef}
                 type="text"
+                defaultValue={term}
                 placeholder="Search..."
+                aria-label="Search"
                 className="w-full rounded-full border border-gray-300 bg-gray-50 py-2 pl-10 pr-4 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
               />
+              <button type="submit" className="sr-only">
+                Search
+              </button>
             </div>
-          </div>
+          </form>
 
           {/* Nav Icons */}
           <div className="flex items-center space-x-4">

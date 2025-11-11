@@ -24,13 +24,21 @@ type CreatePostVariables = {
   title: string;
   content: string;
   visibility?: string;
+  groupId?: string;
   image?: {
     upload: File;
     alt: string;
   };
 };
 
-export function CreatePost() {
+interface CreatePostProps {
+  groupId?: string;
+  groupName?: string;
+  placeholder?: string;
+  onCreated?: () => void;
+}
+
+export function CreatePost({ groupId, groupName, placeholder, onCreated }: CreatePostProps = {}) {
   const { user } = useAuth();
   const { createPost, loading } = useCreatePost();
   const [expanded, setExpanded] = useState(false);
@@ -67,29 +75,37 @@ export function CreatePost() {
     }
   }, []);
 
-  const onSubmit = useCallback(async (data: CreatePostFormData) => {
-    try {
-      const variables: CreatePostVariables = {
-        title: data.title,
-        content: data.content,
-        visibility: 'public',
-      };
-
-      if (selectedImage) {
-        variables.image = {
-          upload: selectedImage,
-          alt: data.title,
+  const onSubmit = useCallback(
+    async (data: CreatePostFormData) => {
+      try {
+        const variables: CreatePostVariables = {
+          title: data.title,
+          content: data.content,
+          visibility: 'public',
         };
-      }
 
-      await createPost({ variables });
-      reset();
-      setExpanded(false);
-      removeImage();
-    } catch (error) {
-      console.error('Error creating post:', error);
-    }
-  }, [createPost, removeImage, reset, selectedImage]);
+        if (groupId) {
+          variables.groupId = groupId;
+        }
+
+        if (selectedImage) {
+          variables.image = {
+            upload: selectedImage,
+            alt: data.title,
+          };
+        }
+
+        await createPost({ variables });
+        reset();
+        setExpanded(false);
+        removeImage();
+        onCreated?.();
+      } catch (error) {
+        console.error('Error creating post:', error);
+      }
+    },
+    [createPost, groupId, onCreated, removeImage, reset, selectedImage],
+  );
 
   const onSubmitForm = useCallback(
     (event: FormEvent<HTMLFormElement>) => {
@@ -99,6 +115,11 @@ export function CreatePost() {
   );
 
   if (!user) return null;
+
+  const firstName = user.name.split(' ')[0];
+  const collapsedPrompt =
+    placeholder ?? (groupName ? `Share something with ${groupName}` : `What's on your mind, ${firstName}?`);
+  const submitLabel = groupId ? 'Share' : 'Post';
 
   return (
     <Card className="p-4">
@@ -112,7 +133,7 @@ export function CreatePost() {
                 onClick={() => setExpanded(true)}
                 className="w-full rounded-full border border-gray-300 bg-gray-50 px-4 py-2 text-left text-gray-500 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
               >
-                What&apos;s on your mind, {user.name.split(' ')[0]}?
+                {collapsedPrompt}
               </button>
             ) : (
               <div className="space-y-3">
@@ -183,7 +204,7 @@ export function CreatePost() {
                       Cancel
                     </Button>
                     <Button type="submit" isLoading={loading}>
-                      Post
+                      {submitLabel}
                     </Button>
                   </div>
                 </div>

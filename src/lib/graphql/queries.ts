@@ -340,3 +340,66 @@ export const GET_GROUP_POSTS = gql`
   }
 `;
 
+export const SEARCH_USERS = gql`
+  query SearchUsers($term: String!, $first: Int, $offset: Int) {
+    User(
+      filter: {
+        OR: [
+          { name_contains: $term }
+          { slug_contains: $term }
+          { about_contains: $term }
+        ]
+      }
+      first: $first
+      offset: $offset
+    ) {
+      id
+      name
+      slug
+      about
+      locationName
+      followedByCount
+      followingCount
+      avatar {
+        url
+      }
+    }
+  }
+`;
+
+export const SEARCH_POSTS = gql`
+  query SearchPosts($term: String!, $first: Int, $offset: Int) {
+    Post(
+      filter: {
+        OR: [
+          { title_contains: $term }
+          { content_contains: $term }
+        ]
+      }
+      first: $first
+      offset: $offset
+      orderBy: createdAt_desc
+    ) {
+      id
+      title
+      content
+      contentExcerpt
+      createdAt
+      commentsCount
+      shoutedCount
+      shoutedByCurrentUser
+      emotionsCount
+      image {
+        url
+        alt
+        aspectRatio
+      }
+      author {
+        id
+        name
+        slug
+      }
+    }
+  }
+`;
+
