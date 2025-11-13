@@ -2,11 +2,12 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useEffect, startTransition, useRef } from 'react';
-import { useMutation } from '@apollo/client';
+import { useState, useEffect, useMemo, startTransition, useRef } from 'react';
+import { useMutation, useLazyQuery } from '@apollo/client';
 import { useAuth } from '@/context/AuthContext';
 import { ADD_POST_EMOTION, REMOVE_POST_EMOTION } from '@/lib/graphql/mutations';
-import { Post } from '@/types';
+import { GET_POST_LIKERS } from '@/lib/graphql/queries';
+import { Emotion, Post } from '@/types';
 import { Avatar } from '@/components/ui/Avatar';
 import { Card } from '@/components/ui/Card';
 import { ShareButton } from './ShareButton';
@@ -39,6 +40,7 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
 
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(post.emotionsCount || 0);
+  const [isLikersModalOpen, setIsLikersModalOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -46,11 +48,36 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
 
   const isOwnPost = user?.id === post.author.id;
 
+  const [fetchPostLikers, { data: likersData, loading: likersLoading, called: likersCalled, refetch: refetchLikers }] =
+    useLazyQuery(GET_POST_LIKERS, {
+      fetchPolicy: 'network-only',
+    });
+
+  const likersPost = likersData?.Post?.[0];
+  const likers: Emotion[] = (likersPost?.emotions as Emotion[]) ?? [];
+  const totalLikerCount = likersPost?.emotionsCount ?? likeCount;
+  const hasLikedEmotion = useMemo(() => {
+    if (!user) {
+      return false;
+    }
+    return (post.emotions ?? []).some(
+      (emotion) => emotion.emotion === 'happy' && emotion.User?.id === user.id,
+    );
+  }, [post.emotions, user?.id]);
+
   useEffect(() => {
     startTransition(() => {
       setLikeCount(post.emotionsCount || 0);
     });
   }, [post.emotionsCount]);
+
+  useEffect(() => {
+    if (!user) {
+      setLiked(false);
+      return;
+    }
+    setLiked(hasLikedEmotion);
+  }, [user?.id, hasLikedEmotion]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -120,6 +147,23 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
   const handleDeleteOpen = () => {
     setMenuOpen(false);
     setIsDeleteModalOpen(true);
+  };
+
+  const handleOpenLikers = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+
+    setIsLikersModalOpen(true);
+
+    const variables = { id: post.id };
+    if (!likersCalled) {
+      void fetchPostLikers({ variables });
+    } else {
+      void refetchLikers?.(variables);
+    }
+  };
+
+  const handleCloseLikers = () => {
+    setIsLikersModalOpen(false);
   };
 
   return (
@@ -199,17 +243,25 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
 
         {/* Actions */}
         <div className="mt-4 flex items-center justify-between border-t border-gray-200 pt-3 dark:border-gray-700">
-          <button
-            onClick={handleLike}
-            className="flex items-center space-x-2 rounded-lg px-3 py-2 text-sm text-gray-600 hover:bg-red-50 hover:text-red-600 dark:text-gray-400 dark:hover:bg-red-900/20"
-          >
-            {liked ? (
-              <HeartIconSolid className="h-5 w-5 text-red-600" />
-            ) : (
-              <HeartIcon className="h-5 w-5" />
-            )}
-            <span>{likeCount}</span>
-          </button>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={handleLike}
+              className="flex items-center rounded-lg px-3 py-2 text-sm text-gray-600 hover:bg-red-50 hover:text-red-600 dark:text-gray-400 dark:hover:bg-red-900/20"
+              aria-label={liked ? 'Unlike post' : 'Like post'}
+            >
+              {liked ? (
+                <HeartIconSolid className="h-5 w-5 text-red-600" />
+              ) : (
+                <HeartIcon className="h-5 w-5" />
+              )}
+            </button>
+            <button
+              onClick={handleOpenLikers}
+              className="text-sm font-medium text-gray-600 underline decoration-transparent transition hover:text-blue-600 hover:decoration-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
+            >
+              {likeCount} like{likeCount === 1 ? '' : 's'}
+            </button>
+          </div>
 
           <Link
             href={`/post/${post.id}`}
@@ -260,6 +312,52 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
           </Modal>
         </>
       )}
+
+      <Modal isOpen={isLikersModalOpen} onClose={handleCloseLikers} title="Liked by" size="sm">
+        {likersLoading && likers.length === 0 ? (
+          <p className="text-sm text-gray-500 dark:text-gray-400">Loading likes…</p>
+        ) : (
+          <>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Total likes: {totalLikerCount}
+            </p>
+            <div className="mt-3 max-h-80 space-y-3 overflow-y-auto pr-1">
+              {likers.length === 0 ? (
+                <p className="text-sm text-gray-500 dark:text-gray-400">No likes yet.</p>
+              ) : (
+                likers.map((emotion, index) => {
+                  const liker = emotion.User;
+                  if (!liker) return null;
+                  const key = `${liker.id}-${index}`;
+                  return (
+                    <Link
+                      key={key}
+                      href={`/profile/${liker.slug}`}
+                      className="flex items-center gap-3 rounded-lg p-2 transition hover:bg-gray-100 dark:hover:bg-gray-800"
+                      onClick={handleCloseLikers}
+                    >
+                      <Avatar name={liker.name} src={liker.avatar?.url} size="sm" />
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-semibold text-gray-900 dark:text-white">
+                          {liker.name}
+                        </p>
+                        <p className="truncate text-xs text-gray-500 dark:text-gray-400">
+                          @{liker.slug}
+                        </p>
+                        {liker.about && (
+                          <p className="mt-1 line-clamp-2 text-xs text-gray-600 dark:text-gray-300">
+                            {liker.about}
+                          </p>
+                        )}
+                      </div>
+                    </Link>
+                  );
+                })
+              )}
+            </div>
+          </>
+        )}
+      </Modal>
     </Card>
   );
 }

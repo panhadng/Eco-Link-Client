@@ -27,28 +27,33 @@ export function Sidebar() {
       <div className="sticky top-20 space-y-4">
         {/* User Profile Card */}
         {user && (
-          <Link
-            href={`/profile/${user.slug}`}
-            className="block rounded-lg border border-gray-200 bg-white p-4 hover:shadow-md dark:border-gray-800 dark:bg-gray-900"
-          >
-            <div className="flex items-center space-x-3">
+          <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
+            <Link href={`/profile/${user.slug}`} className="flex items-center space-x-3">
               <Avatar name={user.name} size="lg" />
               <div className="flex-1 overflow-hidden">
                 <p className="truncate font-semibold text-gray-900 dark:text-white">{user.name}</p>
                 <p className="truncate text-sm text-gray-500 dark:text-gray-400">@{user.slug}</p>
               </div>
-            </div>
+            </Link>
             <div className="mt-4 flex justify-around border-t border-gray-200 pt-3 text-center dark:border-gray-700">
-              <div>
+              <Link
+                href={`/profile/${user.slug}/followers`}
+                className="block transition hover:text-blue-600 dark:hover:text-blue-400"
+              >
                 <p className="text-lg font-semibold text-gray-900 dark:text-white">{user.followedByCount}</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">Followers</p>
-              </div>
-              <div>
-                <p className="text-lg font-semibold text-gray-900 dark:text-white">{user.followingCount ?? 0}</p>
+              </Link>
+              <Link
+                href={`/profile/${user.slug}/following`}
+                className="block transition hover:text-blue-600 dark:hover:text-blue-400"
+              >
+                <p className="text-lg font-semibold text-gray-900 dark:text-white">
+                  {user.followingCount ?? 0}
+                </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">Following</p>
-              </div>
+              </Link>
             </div>
-          </Link>
+          </div>
         )}
 
         {/* Navigation Menu */}

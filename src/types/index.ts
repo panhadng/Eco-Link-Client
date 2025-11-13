@@ -29,12 +29,18 @@ export interface Post {
   shoutedCount: number;
   shoutedByCurrentUser?: boolean;
   emotionsCount?: number;
+  emotions?: Emotion[];
   comments?: Comment[];
   image?: {
     url: string;
     alt?: string;
     aspectRatio?: number;
   };
+}
+
+export interface Emotion {
+  emotion: string;
+  User?: User;
 }
 
 // Comment types

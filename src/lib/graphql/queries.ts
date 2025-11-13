@@ -28,6 +28,7 @@ export const GET_USER_BY_SLUG = gql`
       name
       slug
       role
+      email
       about
       locationName
       avatar {
@@ -37,6 +38,62 @@ export const GET_USER_BY_SLUG = gql`
       followedByCount
       followingCount
       followedByCurrentUser
+    }
+  }
+`;
+
+export const GET_USER_FOLLOWERS = gql`
+  query GetUserFollowers($slug: String!, $first: Int, $offset: Int, $filter: _UserFilter) {
+    User(slug: $slug) {
+      id
+      name
+      slug
+      role
+      email
+      followedByCount
+      followingCount
+      followedBy(first: $first, offset: $offset, filter: $filter) {
+        id
+        name
+        slug
+        role
+        email
+        about
+        locationName
+        avatar {
+          url
+        }
+        followedByCount
+        followingCount
+      }
+    }
+  }
+`;
+
+export const GET_USER_FOLLOWING = gql`
+  query GetUserFollowing($slug: String!, $first: Int, $offset: Int, $filter: _UserFilter) {
+    User(slug: $slug) {
+      id
+      name
+      slug
+      role
+      email
+      followedByCount
+      followingCount
+      following(first: $first, offset: $offset, filter: $filter) {
+        id
+        name
+        slug
+        role
+        email
+        about
+        locationName
+        avatar {
+          url
+        }
+        followedByCount
+        followingCount
+      }
     }
   }
 `;
@@ -71,6 +128,12 @@ export const GET_POSTS = gql`
       shoutedCount
       shoutedByCurrentUser
       emotionsCount
+      emotions {
+        emotion
+        User {
+          id
+        }
+      }
       image {
         url
         alt
@@ -98,6 +161,12 @@ export const GET_POST_BY_ID = gql`
       shoutedCount
       shoutedByCurrentUser
       emotionsCount
+      emotions {
+        emotion
+        User {
+          id
+        }
+      }
       author {
         id
         name
@@ -117,6 +186,29 @@ export const GET_POST_BY_ID = gql`
   }
 `;
 
+export const GET_POST_LIKERS = gql`
+  query GetPostLikers($id: ID!) {
+    Post(id: $id) {
+      id
+      emotionsCount
+      emotions {
+        emotion
+        User {
+          id
+          name
+          slug
+          about
+          followedByCount
+          followingCount
+          avatar {
+            url
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const GET_USER_POSTS = gql`
   query GetUserPosts($authorId: ID!, $first: Int, $offset: Int) {
     Post(filter: { author: { id: $authorId } }, first: $first, offset: $offset, orderBy: createdAt_desc) {
@@ -129,6 +221,12 @@ export const GET_USER_POSTS = gql`
       shoutedCount
       shoutedByCurrentUser
       emotionsCount
+      emotions {
+        emotion
+        User {
+          id
+        }
+      }
       image {
         url
         alt
@@ -157,6 +255,12 @@ export const GET_USER_SHOUTED_POSTS = gql`
         shoutedCount
         shoutedByCurrentUser
         emotionsCount
+        emotions {
+          emotion
+          User {
+            id
+          }
+        }
         image {
           url
           alt
@@ -378,7 +482,6 @@ export const SEARCH_POSTS = gql`
       }
       first: $first
       offset: $offset
-      orderBy: createdAt_desc
     ) {
       id
       title
@@ -389,6 +492,12 @@ export const SEARCH_POSTS = gql`
       shoutedCount
       shoutedByCurrentUser
       emotionsCount
+      emotions {
+        emotion
+        User {
+          id
+        }
+      }
       image {
         url
         alt
@@ -402,4 +511,3 @@ export const SEARCH_POSTS = gql`
     }
   }
 `;
-

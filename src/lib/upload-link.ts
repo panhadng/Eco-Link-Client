@@ -7,7 +7,7 @@ export interface UploadLinkOptions {
 }
 
 // Simple file extraction without external dependencies
-function extractFiles(obj: any, path = '', files = new Map()): any {
+function extractFiles(obj: unknown, path = '', files = new Map<File, string[]>): unknown {
   if (obj instanceof File) {
     const currentPaths = files.get(obj) || [];
     files.set(obj, [...currentPaths, path]);
@@ -19,9 +19,9 @@ function extractFiles(obj: any, path = '', files = new Map()): any {
   }
 
   if (obj && typeof obj === 'object' && !(obj instanceof File)) {
-    const clone: any = {};
+    const clone: Record<string, unknown> = {};
     for (const key in obj) {
-      clone[key] = extractFiles(obj[key], path ? `${path}.${key}` : key, files);
+      clone[key] = extractFiles(obj[key as keyof typeof obj], path ? `${path}.${key}` : key, files);
     }
     return clone;
   }

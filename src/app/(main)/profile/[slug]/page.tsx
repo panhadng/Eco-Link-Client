@@ -1,6 +1,7 @@
 'use client';
 
 import { use, useMemo, useState } from 'react';
+import Link from 'next/link';
 import { useMutation, useQuery } from '@apollo/client';
 import { useRouter } from 'next/navigation';
 import {
@@ -217,18 +218,24 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
             </div>
 
             <div className="mt-4 flex space-x-6 text-sm">
-              <div>
+              <Link
+                href={`/profile/${user.slug}/followers`}
+                className="transition hover:text-blue-600 dark:hover:text-blue-400"
+              >
                 <span className="font-semibold text-gray-900 dark:text-white">
                   {user.followedByCount}
                 </span>{' '}
                 <span className="text-gray-500 dark:text-gray-400">Followers</span>
-              </div>
-              <div>
+              </Link>
+              <Link
+                href={`/profile/${user.slug}/following`}
+                className="transition hover:text-blue-600 dark:hover:text-blue-400"
+              >
                 <span className="font-semibold text-gray-900 dark:text-white">
                   {user.followingCount ?? 0}
                 </span>{' '}
                 <span className="text-gray-500 dark:text-gray-400">Following</span>
-              </div>
+              </Link>
             </div>
           </div>
         </div>
