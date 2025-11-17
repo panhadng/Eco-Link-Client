@@ -236,7 +236,7 @@ export default function GroupDetailPage({ params }: { params: Promise<PageParams
   if (isLoading) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-[hsl(38,55%,45%)] border-t-transparent dark:border-[hsl(38,65%,55%)]" />
       </div>
     );
   }
@@ -253,7 +253,7 @@ export default function GroupDetailPage({ params }: { params: Promise<PageParams
     return (
       <Card className="p-12 text-center">
         <p className="text-gray-500 dark:text-gray-400">Group not found.</p>
-        <Link href="/groups" className="mt-4 inline-block text-blue-600 hover:underline dark:text-blue-400">
+        <Link href="/groups" className="mt-4 inline-block text-[hsl(38,55%,45%)] hover:underline dark:text-[hsl(38,65%,55%)]">
           Back to groups
         </Link>
       </Card>
@@ -289,7 +289,7 @@ export default function GroupDetailPage({ params }: { params: Promise<PageParams
                     <p className="mt-1 text-sm text-gray-700 dark:text-gray-300">{group.locationName}</p>
                   )}
                   {membershipLabel && (
-                    <p className="mt-2 text-sm font-medium text-blue-600 dark:text-blue-400">{membershipLabel}</p>
+                    <p className="mt-2 text-sm font-medium text-[hsl(38,55%,45%)] dark:text-[hsl(38,65%,55%)]">{membershipLabel}</p>
                   )}
                 </div>
               </div>
@@ -390,7 +390,7 @@ export default function GroupDetailPage({ params }: { params: Promise<PageParams
         ) : (
           <div className="mt-4 flex flex-wrap gap-4">
             {members.map((member) => (
-              <Link key={member.id} href={`/profile/${member.slug}`} className="flex w-40 items-center gap-3 rounded-md border border-gray-200 p-3 hover:border-blue-300 dark:border-gray-800 dark:hover:border-blue-700">
+              <Link key={member.id} href={`/profile/${member.slug}`} className="flex w-40 items-center gap-3 rounded-md border border-gray-200 p-3 hover:border-gray-300 dark:border-gray-800 dark:hover:border-gray-600">
                 <Avatar name={member.name} src={member.avatar?.url} size="sm" />
                 <div className="min-w-0">
                   <p className="truncate text-sm font-medium text-gray-900 dark:text-white">{member.name}</p>

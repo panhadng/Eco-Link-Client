@@ -195,7 +195,7 @@ export default function MessagesPage() {
         >
           {roomsLoading ? (
             <div className="flex items-center justify-center p-8">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-[hsl(38,55%,45%)] border-t-transparent dark:border-[hsl(38,65%,55%)]" />
             </div>
           ) : rooms.length === 0 ? (
             <div className="p-8 text-center text-gray-500 dark:text-gray-400">
@@ -213,7 +213,7 @@ export default function MessagesPage() {
                   onClick={() => setSelectedRoomId(room.id)}
                   className={`flex w-full items-start gap-3 p-4 text-left transition-colors hover:bg-gray-50 dark:hover:bg-gray-800 ${
                     selectedRoomId === room.id
-                      ? "bg-blue-50 dark:bg-blue-900/20"
+                      ? "bg-[hsl(38,55%,45%)]/10 dark:bg-[hsl(38,65%,55%)]/20"
                       : ""
                   }`}
                 >
@@ -224,7 +224,7 @@ export default function MessagesPage() {
                         {room.roomName}
                       </p>
                       {room.unreadCount > 0 && (
-                        <span className="ml-2 flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-xs text-white">
+                        <span className="ml-2 flex h-5 w-5 items-center justify-center rounded-full bg-[hsl(38,55%,45%)] text-xs text-white dark:bg-[hsl(38,65%,55%)]">
                           {room.unreadCount}
                         </span>
                       )}
@@ -267,7 +267,7 @@ export default function MessagesPage() {
             <div className="flex-1 overflow-y-auto p-4">
               {messagesLoading ? (
                 <div className="flex items-center justify-center h-full">
-                  <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
+                  <div className="h-8 w-8 animate-spin rounded-full border-4 border-[hsl(38,55%,45%)] border-t-transparent dark:border-[hsl(38,65%,55%)]" />
                 </div>
               ) : messages.length === 0 ? (
                 <div className="flex items-center justify-center h-full text-gray-500 dark:text-gray-400">
@@ -293,7 +293,7 @@ export default function MessagesPage() {
                           <div
                             className={`max-w-md rounded-lg px-4 py-2 ${
                               isOwn
-                                ? "bg-blue-600 text-white"
+                                ? "bg-[hsl(38,55%,45%)] text-white dark:bg-[hsl(38,65%,55%)]"
                                 : "bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-white"
                             }`}
                           >
@@ -410,7 +410,7 @@ export default function MessagesPage() {
                   value={messageText}
                   onChange={(e) => setMessageText(e.target.value)}
                   placeholder="Type a message..."
-                  className="flex-1 rounded-full border border-gray-300 bg-gray-50 px-4 py-2 text-sm text-gray-900 light:text-black focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+                  className="flex-1 rounded-full border border-gray-300 bg-gray-50 px-4 py-2 text-sm text-gray-900 light:text-black focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 dark:border-gray-700 dark:bg-[hsl(30,8%,22%)] dark:text-gray-100 dark:focus:border-gray-600 dark:focus:ring-gray-600"
                   disabled={sending}
                 />
                 <Button

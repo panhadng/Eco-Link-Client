@@ -190,14 +190,14 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
             <div className="relative" ref={menuRef}>
               <button
                 onClick={() => setMenuOpen((prev) => !prev)}
-                className="rounded-full p-2 text-gray-500 hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-800"
+                className="rounded-full p-2 text-gray-500 hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 dark:text-gray-400 dark:hover:bg-gray-800 dark:focus-visible:ring-gray-600"
                 aria-haspopup="menu"
                 aria-expanded={menuOpen}
               >
                 <EllipsisHorizontalIcon className="h-5 w-5" />
               </button>
               {menuOpen && (
-                <div className="absolute right-0 z-20 mt-2 w-40 rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                <div className="absolute right-0 z-20 mt-2 w-40 rounded-lg border border-gray-200 bg-[hsl(35,20%,99%)] py-1 shadow-lg dark:border-gray-700 dark:bg-[hsl(30,12%,12%)]">
                   <button
                     onClick={handleEditOpen}
                     className="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
@@ -282,7 +282,7 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
             </button>
             <button
               onClick={handleOpenLikers}
-              className="text-sm font-medium text-gray-600 underline decoration-transparent transition hover:text-blue-600 hover:decoration-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
+              className="text-sm font-medium text-gray-600 underline decoration-transparent transition hover:text-[hsl(38,55%,45%)] hover:decoration-[hsl(38,55%,45%)] dark:text-gray-400 dark:hover:text-[hsl(38,65%,55%)] dark:hover:decoration-[hsl(38,65%,55%)]"
             >
               {likeCount} like{likeCount === 1 ? '' : 's'}
             </button>
@@ -290,7 +290,7 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
 
           <Link
             href={`/post/${post.id}`}
-            className="flex items-center space-x-2 rounded-lg px-3 py-2 text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-600 dark:text-gray-400 dark:hover:bg-blue-900/20"
+            className="flex items-center space-x-2 rounded-lg px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 hover:text-[hsl(38,55%,45%)] dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-[hsl(38,65%,55%)]"
           >
             <ChatBubbleLeftIcon className="h-5 w-5" />
             <span>{post.commentsCount}</span>

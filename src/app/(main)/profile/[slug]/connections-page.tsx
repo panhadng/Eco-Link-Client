@@ -146,7 +146,7 @@ export function ConnectionsPage({ slug, type }: ConnectionsPageProps) {
               href={`/profile/${slug}/followers`}
               className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                 type === 'followers'
-                  ? 'bg-blue-600 text-white shadow-sm dark:bg-blue-500'
+                  ? 'bg-[hsl(38,55%,45%)] text-white shadow-sm dark:bg-[hsl(38,65%,55%)]'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
               }`}
             >
@@ -156,7 +156,7 @@ export function ConnectionsPage({ slug, type }: ConnectionsPageProps) {
               href={`/profile/${slug}/following`}
               className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                 type === 'following'
-                  ? 'bg-blue-600 text-white shadow-sm dark:bg-blue-500'
+                  ? 'bg-[hsl(38,55%,45%)] text-white shadow-sm dark:bg-[hsl(38,65%,55%)]'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
               }`}
             >
@@ -204,7 +204,7 @@ export function ConnectionsPage({ slug, type }: ConnectionsPageProps) {
               <div className="min-w-0">
                 <Link
                   href={`/profile/${connection.slug}`}
-                  className="block truncate text-sm font-semibold text-blue-600 hover:underline dark:text-blue-400"
+                  className="block truncate text-sm font-semibold text-[hsl(38,55%,45%)] hover:underline dark:text-[hsl(38,65%,55%)]"
                 >
                   {connection.name}
                 </Link>
@@ -225,7 +225,7 @@ export function ConnectionsPage({ slug, type }: ConnectionsPageProps) {
             </div>
             <Link
               href={`/profile/${connection.slug}`}
-              className="text-sm text-blue-600 hover:underline dark:text-blue-400"
+              className="text-sm text-[hsl(38,55%,45%)] hover:underline dark:text-[hsl(38,65%,55%)]"
             >
               View profile
             </Link>

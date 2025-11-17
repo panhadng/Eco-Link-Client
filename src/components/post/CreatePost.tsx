@@ -131,7 +131,7 @@ export function CreatePost({ groupId, groupName, placeholder, onCreated }: Creat
               <button
                 type="button"
                 onClick={() => setExpanded(true)}
-                className="w-full rounded-full border border-gray-300 bg-gray-50 px-4 py-2 text-left text-gray-500 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+                className="w-full rounded-full border border-gray-300 bg-[hsl(35,18%,94%)] px-4 py-2 text-left text-gray-500 hover:bg-gray-100 dark:border-gray-700 dark:bg-[hsl(30,8%,20%)] dark:hover:bg-gray-700"
               >
                 {collapsedPrompt}
               </button>
@@ -140,7 +140,7 @@ export function CreatePost({ groupId, groupName, placeholder, onCreated }: Creat
                 <input
                   type="text"
                   placeholder="Post title..."
-                  className="w-full border-0 border-b border-gray-300 bg-transparent p-2 text-lg font-semibold text-gray-900 focus:border-blue-500 focus:outline-none dark:border-gray-700 dark:text-gray-100"
+                  className="w-full border-0 border-b border-gray-300 bg-transparent p-2 text-lg font-semibold text-gray-900 focus:border-gray-400 focus:outline-none dark:border-gray-700 dark:text-gray-100 dark:focus:border-gray-600"
                   {...register('title')}
                 />
                 {errors.title && (

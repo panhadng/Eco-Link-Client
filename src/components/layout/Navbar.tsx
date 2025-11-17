@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useEffect, useMemo, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { HomeIcon, UserCircleIcon, MagnifyingGlassIcon, ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline';
@@ -46,17 +47,20 @@ export function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-40 border-b border-gray-200 bg-white text-gray-900 shadow-sm dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100">
+    <nav className="sticky top-0 z-40 border-b border-gray-200 bg-[hsl(35,20%,99%)] text-gray-900 shadow-sm dark:border-gray-800 dark:bg-[hsl(30,12%,12%)] dark:text-gray-100">
       <div className="mx-auto max-w-7xl px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[linear-gradient(to_bottom_right,#3b82f6,#9333ea)]">
-              <span className="text-xl font-bold text-white">E</span>
-            </div>
-            <span className="hidden text-xl font-bold text-gray-900 dark:text-white sm:inline">
-              EcoLink
-            </span>
+            <Image
+              src="/images/eco-link-logo-nobg.png"
+              alt="Eco-Link Logo"
+              width={120}
+              height={40}
+              className="h-10 w-auto"
+              priority
+              unoptimized
+            />
           </Link>
 
           {/* Search Bar */}
@@ -69,7 +73,7 @@ export function Navbar() {
                 defaultValue={term}
                 placeholder="Search..."
                 aria-label="Search"
-                className="w-full rounded-full border border-gray-300 bg-gray-50 py-2 pl-10 pr-4 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+                className="w-full rounded-full border border-gray-300 bg-gray-50 py-2 pl-10 pr-4 text-sm text-gray-900 focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 dark:border-gray-700 dark:bg-[hsl(30,8%,22%)] dark:text-gray-100 dark:focus:border-gray-600 dark:focus:ring-gray-600"
               />
               <button type="submit" className="sr-only">
                 Search

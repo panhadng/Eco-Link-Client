@@ -21,7 +21,7 @@ export function SharedPostCard({ post, sharedBy, sharedAt }: SharedPostCardProps
   return (
     <Card className="overflow-hidden">
       {/* Shared By Header */}
-      <div className="border-b border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800">
+      <div className="border-b border-gray-200 bg-[hsl(35,20%,92%)] px-4 py-3 dark:border-gray-700 dark:bg-[hsl(30,10%,18%)]">
         <div className="flex items-center space-x-2">
           <Avatar name={sharedBy.name} size="sm" />
           <div className="flex-1">
@@ -32,7 +32,7 @@ export function SharedPostCard({ post, sharedBy, sharedAt }: SharedPostCardProps
               >
                 {sharedBy.name}
               </Link>
-              <ArrowPathRoundedSquareIcon className="h-4 w-4 text-green-600" />
+              <ArrowPathRoundedSquareIcon className="h-4 w-4 text-[hsl(38,55%,45%)] dark:text-[hsl(38,65%,55%)]" />
               <span className="text-sm text-gray-600 dark:text-gray-400">shared this</span>
             </div>
             {sharedAt && (

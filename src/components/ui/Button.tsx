@@ -7,13 +7,13 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-blue-600 text-white hover:bg-blue-700',
-        destructive: 'bg-red-600 text-white hover:bg-red-700',
+        default: 'bg-[hsl(38,55%,45%)] text-white hover:opacity-90 dark:bg-[hsl(38,65%,55%)]',
+        destructive: 'bg-red-600 text-white hover:opacity-90 dark:bg-red-500',
         outline:
-          'border border-gray-300 bg-transparent text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800',
-        secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-100',
-        ghost: 'text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800',
-        link: 'text-blue-600 underline-offset-4 hover:underline dark:text-blue-400',
+          'border border-gray-300 bg-transparent text-gray-900 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-100 dark:hover:bg-gray-800',
+        secondary: 'bg-gray-200 text-gray-900 hover:opacity-90 dark:bg-gray-700 dark:text-gray-100',
+        ghost: 'text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800',
+        link: 'text-[hsl(38,55%,45%)] underline-offset-4 hover:underline dark:text-[hsl(38,65%,55%)]',
       },
       size: {
         default: 'h-10 px-4 py-2',

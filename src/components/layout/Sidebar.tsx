@@ -27,7 +27,7 @@ export function Sidebar() {
       <div className="sticky top-20 space-y-4">
         {/* User Profile Card */}
         {user && (
-          <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
+          <div className="rounded-lg border border-gray-200 bg-[hsl(35,20%,99%)] p-4 dark:border-gray-800 dark:bg-[hsl(30,12%,12%)]">
             <Link href={`/profile/${user.slug}`} className="flex items-center space-x-3">
               <Avatar name={user.name} size="lg" />
               <div className="flex-1 overflow-hidden">
@@ -38,14 +38,14 @@ export function Sidebar() {
             <div className="mt-4 flex justify-around border-t border-gray-200 pt-3 text-center dark:border-gray-700">
               <Link
                 href={`/profile/${user.slug}/followers`}
-                className="block transition hover:text-blue-600 dark:hover:text-blue-400"
+                className="block transition hover:text-[hsl(38,55%,45%)] dark:hover:text-[hsl(38,65%,55%)]"
               >
                 <p className="text-lg font-semibold text-gray-900 dark:text-white">{user.followedByCount}</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">Followers</p>
               </Link>
               <Link
                 href={`/profile/${user.slug}/following`}
-                className="block transition hover:text-blue-600 dark:hover:text-blue-400"
+                className="block transition hover:text-[hsl(38,55%,45%)] dark:hover:text-[hsl(38,65%,55%)]"
               >
                 <p className="text-lg font-semibold text-gray-900 dark:text-white">
                   {user.followingCount ?? 0}
@@ -57,7 +57,7 @@ export function Sidebar() {
         )}
 
         {/* Navigation Menu */}
-        <nav className="rounded-lg border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
+        <nav className="rounded-lg border border-gray-200 bg-[hsl(35,20%,99%)] dark:border-gray-800 dark:bg-[hsl(30,12%,12%)]">
           {menuItems.map((item) => (
             <Link
               key={item.name}

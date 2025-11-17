@@ -28,7 +28,6 @@ export const GET_USER_BY_SLUG = gql`
       name
       slug
       role
-      email
       about
       locationName
       avatar {
@@ -49,7 +48,6 @@ export const GET_USER_FOLLOWERS = gql`
       name
       slug
       role
-      email
       followedByCount
       followingCount
       followedBy(first: $first, offset: $offset, filter: $filter) {
@@ -57,7 +55,6 @@ export const GET_USER_FOLLOWERS = gql`
         name
         slug
         role
-        email
         about
         locationName
         avatar {
@@ -77,7 +74,6 @@ export const GET_USER_FOLLOWING = gql`
       name
       slug
       role
-      email
       followedByCount
       followingCount
       following(first: $first, offset: $offset, filter: $filter) {
@@ -85,7 +81,6 @@ export const GET_USER_FOLLOWING = gql`
         name
         slug
         role
-        email
         about
         locationName
         avatar {

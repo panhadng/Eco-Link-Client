@@ -200,7 +200,7 @@ export function NotificationMenu() {
       <button
         type="button"
         onClick={toggleMenu}
-        className="relative rounded-lg p-2 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:hover:bg-gray-800"
+        className="relative rounded-lg p-2 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:hover:bg-gray-800 dark:focus:ring-gray-600"
         aria-label="Notifications"
       >
         <BellIcon className="h-6 w-6 text-gray-600 dark:text-gray-300" />
@@ -212,7 +212,7 @@ export function NotificationMenu() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-3 w-[500px] rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
+        <div className="absolute right-0 mt-3 w-[500px] rounded-lg border border-gray-200 bg-[hsl(35,20%,99%)] shadow-lg dark:border-gray-700 dark:bg-[hsl(30,12%,12%)]">
           <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3 dark:border-gray-700">
             <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">Notifications</p>
             <Button
@@ -256,7 +256,7 @@ export function NotificationMenu() {
                         href={link}
                         onClick={() => handleNotificationClick(notification)}
                         className={`flex items-start space-x-3 px-4 py-3 text-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-800 ${
-                          notification.read ? 'bg-white dark:bg-gray-900' : 'bg-blue-50/60 dark:bg-blue-900/20'
+                          notification.read ? 'bg-[hsl(35,20%,99%)] dark:bg-[hsl(30,12%,12%)]' : 'bg-[hsl(38,55%,45%)]/10 dark:bg-[hsl(38,65%,55%)]/20'
                         }`}
                       >
                         <Avatar
@@ -287,7 +287,7 @@ export function NotificationMenu() {
                           </p>
                         </div>
                         {!notification.read && (
-                          <span className="mt-1 h-2 w-2 rounded-full bg-blue-500" aria-hidden="true" />
+                          <span className="mt-1 h-2 w-2 rounded-full bg-[hsl(38,55%,45%)] dark:bg-[hsl(38,65%,55%)]" aria-hidden="true" />
                         )}
                       </Link>
                     </li>

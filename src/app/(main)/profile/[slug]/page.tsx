@@ -113,14 +113,14 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
   if (userLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-[hsl(38,55%,45%)] border-t-transparent dark:border-[hsl(38,65%,55%)]" />
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div className="rounded-lg bg-white p-12 text-center dark:bg-gray-900">
+      <div className="rounded-lg bg-[hsl(35,20%,99%)] p-12 text-center dark:bg-[hsl(30,12%,12%)]">
         <p className="text-gray-500 dark:text-gray-400">User not found</p>
       </div>
     );
@@ -147,7 +147,7 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
       {/* Profile Header */}
       <Card className="overflow-hidden">
         {/* Cover Photo */}
-        <div className="h-32 bg-[linear-gradient(to_right,#3b82f6,#9333ea)]" />
+        <div className="h-32 bg-gradient-to-r from-[hsl(38,55%,45%)] to-[hsl(42,60%,50%)]" />
 
         {/* Profile Info */}
         <div className="relative px-6 pb-6">
@@ -171,7 +171,7 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
             )}
 
             {isOwnProfile ? (
-              <Button variant="outline" className="mt-4 dark:text-white" onClick={() => setIsEditModalOpen(true)}>
+              <Button variant="outline" className="mt-4" onClick={() => setIsEditModalOpen(true)}>
                 Edit Profile
               </Button>
             ) : (
@@ -197,9 +197,8 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
                   variant="outline"
                   onClick={handleStartChat}
                   isLoading={creatingRoom}
-                  className="dark:text-white"
                 >
-                  <ChatBubbleLeftRightIcon className="h-5 w-5 mr-2 dark:text-white" />
+                  <ChatBubbleLeftRightIcon className="h-5 w-5 mr-2" />
                   Message
                 </Button>
               </div>
@@ -230,7 +229,7 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
             <div className="mt-4 flex space-x-6 text-sm">
               <Link
                 href={`/profile/${user.slug}/followers`}
-                className="transition hover:text-blue-600 dark:hover:text-blue-400"
+                className="transition hover:text-[hsl(38,55%,45%)] dark:hover:text-[hsl(38,65%,55%)]"
               >
                 <span className="font-semibold text-gray-900 dark:text-white">
                   {user.followedByCount}
@@ -239,7 +238,7 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
               </Link>
               <Link
                 href={`/profile/${user.slug}/following`}
-                className="transition hover:text-blue-600 dark:hover:text-blue-400"
+                className="transition hover:text-[hsl(38,55%,45%)] dark:hover:text-[hsl(38,65%,55%)]"
               >
                 <span className="font-semibold text-gray-900 dark:text-white">
                   {user.followingCount ?? 0}
@@ -262,7 +261,7 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
             {[...Array(3)].map((_, i) => (
               <div
                 key={i}
-                className="h-48 animate-pulse rounded-lg bg-white dark:bg-gray-900"
+                className="h-48 animate-pulse rounded-lg bg-[hsl(35,20%,99%)] dark:bg-[hsl(30,12%,12%)]"
               />
             ))}
           </div>

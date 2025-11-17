@@ -2,49 +2,61 @@
 
 :root {
   color-scheme: light;
-  --background: 210 40% 98%;
-  --foreground: 224 71% 4%;
-  --card: 0 0% 100%;
-  --card-foreground: 224 71% 4%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 224 71% 4%;
-  --primary: 221 83% 53%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 210 40% 96%;
-  --secondary-foreground: 222 47% 11%;
-  --muted: 210 40% 96%;
-  --muted-foreground: 215 16% 47%;
-  --accent: 199 89% 48%;
-  --accent-foreground: 210 40% 98%;
+  /* Light version of brownish-gold theme color */
+  --background: 38 20% 96%;
+  --foreground: 30 20% 12%;
+  /* Warm white cards */
+  --card: 35 20% 99%;
+  --card-foreground: 30 20% 12%;
+  --popover: 35 20% 99%;
+  --popover-foreground: 30 20% 12%;
+  /* Brownish-gold primary matching logo */
+  --primary: 38 55% 45%;
+  --primary-foreground: 35 25% 98%;
+  /* Warm neutral secondary */
+  --secondary: 35 20% 92%;
+  --secondary-foreground: 30 25% 15%;
+  --muted: 35 18% 94%;
+  --muted-foreground: 30 15% 40%;
+  /* Complementary earthy accent */
+  --accent: 42 60% 50%;
+  --accent-foreground: 35 25% 98%;
   --destructive: 0 84% 60%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 214 32% 91%;
-  --input: 214 32% 91%;
-  --ring: 221 83% 53%;
+  --destructive-foreground: 35 25% 98%;
+  /* Warm borders */
+  --border: 35 15% 88%;
+  --input: 35 15% 88%;
+  --ring: 38 55% 45%;
   --radius: 0.75rem;
 }
 
 .dark {
   color-scheme: dark;
-  --background: 224 71% 4%;
-  --foreground: 213 47% 94%;
-  --card: 224 71% 6%;
-  --card-foreground: 213 47% 94%;
-  --popover: 224 71% 6%;
-  --popover-foreground: 213 47% 94%;
-  --primary: 217 91% 60%;
-  --primary-foreground: 222 47% 11%;
-  --secondary: 215 27% 26%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 215 27% 26%;
-  --muted-foreground: 215 20% 65%;
-  --accent: 199 89% 48%;
-  --accent-foreground: 210 40% 98%;
-  --destructive: 0 63% 45%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 215 27% 26%;
-  --input: 215 27% 26%;
-  --ring: 217 91% 60%;
+  /* Dark version of brownish-gold theme color */
+  --background: 38 15% 10%;
+  --foreground: 35 20% 92%;
+  /* Slightly lighter dark brown for cards */
+  --card: 30 12% 12%;
+  --card-foreground: 35 20% 92%;
+  --popover: 30 12% 12%;
+  --popover-foreground: 35 20% 92%;
+  /* Lighter gold/amber for primary in dark mode */
+  --primary: 38 65% 55%;
+  --primary-foreground: 30 15% 10%;
+  /* Warm dark secondary */
+  --secondary: 30 10% 18%;
+  --secondary-foreground: 35 20% 92%;
+  --muted: 30 8% 20%;
+  --muted-foreground: 35 15% 65%;
+  /* Brighter earthy accent for dark mode */
+  --accent: 42 70% 60%;
+  --accent-foreground: 30 15% 10%;
+  --destructive: 0 63% 50%;
+  --destructive-foreground: 35 20% 92%;
+  /* Dark warm borders */
+  --border: 30 8% 22%;
+  --input: 30 8% 22%;
+  --ring: 38 65% 55%;
 }
 
 body {
@@ -106,25 +118,25 @@ body.dark {
 }
 
 .rich-text code {
-  background-color: rgba(15, 23, 42, 0.08);
+  background-color: hsl(35 20% 90%);
   border-radius: 0.4rem;
   padding: 0.1rem 0.4rem;
   font-size: 0.875rem;
 }
 
 .dark .rich-text code {
-  background-color: rgba(255, 255, 255, 0.12);
+  background-color: hsl(30 10% 20%);
 }
 
 .rich-text pre {
   padding: 1rem;
   border-radius: 0.75rem;
   overflow-x: auto;
-  background-color: rgba(15, 23, 42, 0.08);
+  background-color: hsl(35 20% 90%);
 }
 
 .dark .rich-text pre {
-  background-color: rgba(255, 255, 255, 0.06);
+  background-color: hsl(30 10% 18%);
 }
 
 .rich-text blockquote {
