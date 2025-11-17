@@ -16,7 +16,8 @@ import { NOTIFICATION_ADDED } from '@/lib/graphql/subscriptions';
 import { Notification } from '@/types';
 import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
-import { formatDate, truncateText } from '@/lib/utils';
+import { formatDate } from '@/lib/utils';
+import { getRichTextHtml } from '@/lib/utils/html';
 
 const NOTIFICATION_LIMIT = 20;
 
@@ -82,11 +83,11 @@ function getNotificationExcerpt(notification: Notification): string | undefined 
   if (!source) return undefined;
 
   if (source.__typename === 'Post') {
-    if (source.content) return truncateText(source.content, 120);
+    if (source.content) return source.content;
   }
 
   if (source.__typename === 'Comment') {
-    if (source.content) return truncateText(source.content, 120);
+    if (source.content) return source.content;
   }
 
   return undefined;
@@ -211,7 +212,7 @@ export function NotificationMenu() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-3 w-80 rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
+        <div className="absolute right-0 mt-3 w-[500px] rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
           <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3 dark:border-gray-700">
             <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">Notifications</p>
             <Button
@@ -224,7 +225,7 @@ export function NotificationMenu() {
             </Button>
           </div>
 
-          <div className="max-h-96 overflow-y-auto">
+          <div className="max-h-[600px] overflow-y-auto">
             {loading ? (
               <div className="space-y-3 p-4">
                 {[...Array(3)].map((_, index) => (
@@ -265,9 +266,22 @@ export function NotificationMenu() {
                         />
                         <div className="flex-1 overflow-hidden">
                           <p className="font-medium text-gray-900 dark:text-gray-100">{message}</p>
-                          {excerpt && (
-                            <p className="mt-1 truncate text-gray-600 dark:text-gray-400">{excerpt}</p>
-                          )}
+                          {excerpt && (() => {
+                            const htmlContent = getRichTextHtml(excerpt);
+                            if (htmlContent) {
+                              return (
+                                <div
+                                  className="rich-text mt-1 line-clamp-3 text-sm text-gray-600 dark:text-gray-400"
+                                  dangerouslySetInnerHTML={{ __html: htmlContent }}
+                                />
+                              );
+                            }
+                            return (
+                              <p className="mt-1 line-clamp-3 text-sm text-gray-600 dark:text-gray-400">
+                                {excerpt}
+                              </p>
+                            );
+                          })()}
                           <p className="mt-1 text-xs text-gray-500 dark:text-gray-500">
                             {formatDate(timestamp)}
                           </p>

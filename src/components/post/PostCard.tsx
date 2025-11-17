@@ -15,6 +15,7 @@ import { EditPostModal } from './EditPostModal';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import { formatDate } from '@/lib/utils';
+import { getRichTextHtml } from '@/lib/utils/html';
 import {
   HeartIcon,
   ChatBubbleLeftIcon,
@@ -221,9 +222,25 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
           onClick={onPostClick || (() => (window.location.href = `/post/${post.id}`))}
         >
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{post.title}</h3>
-          <p className="mt-2 text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
-            {post.contentExcerpt || post.content}
-          </p>
+          {(() => {
+            const content = post.contentExcerpt || post.content;
+            const htmlContent = getRichTextHtml(content);
+            
+            if (htmlContent) {
+              return (
+                <div
+                  className="rich-text mt-2 text-gray-700 dark:text-gray-300"
+                  dangerouslySetInnerHTML={{ __html: htmlContent }}
+                />
+              );
+            }
+            
+            return (
+              <p className="mt-2 text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+                {content}
+              </p>
+            );
+          })()}
 
           {/* Image */}
           {post.image?.url && (

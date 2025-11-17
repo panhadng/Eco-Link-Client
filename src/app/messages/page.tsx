@@ -137,7 +137,9 @@ export default function MessagesPage() {
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if ((!messageText.trim() && selectedFiles.length === 0) || !selectedRoomId)
+    const trimmedMessage = messageText.trim();
+
+    if ((!trimmedMessage && selectedFiles.length === 0) || !selectedRoomId)
       return;
 
     try {
@@ -149,8 +151,8 @@ export default function MessagesPage() {
         roomId: selectedRoomId,
       };
 
-      if (messageText.trim()) {
-        variables.content = messageText.trim();
+      if (trimmedMessage) {
+        variables.content = trimmedMessage;
       }
 
       if (selectedFiles.length > 0) {
@@ -159,6 +161,10 @@ export default function MessagesPage() {
           type: file.type,
           name: file.name,
         }));
+
+        if (!trimmedMessage) {
+          variables.content = '';
+        }
       }
 
       await createMessage({ variables });
