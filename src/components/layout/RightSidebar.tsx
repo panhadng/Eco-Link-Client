@@ -10,6 +10,7 @@ import { User } from '@/types';
 import { FOLLOW_USER, UNFOLLOW_USER } from '@/lib/graphql/mutations';
 import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
+import { UserPlusIcon, UserMinusIcon } from '@heroicons/react/24/outline';
 
 export function RightSidebar() {
   const { user: currentUser, refetchUser: refetchCurrentUser } = useAuth();
@@ -92,7 +93,17 @@ export function RightSidebar() {
                     onClick={() => handleToggleFollow(user)}
                     isLoading={mutatingUserId === user.id}
                   >
-                    {user.followedByCurrentUser ? 'Unfollow' : 'Follow'}
+                    {user.followedByCurrentUser ? (
+                      <>
+                        <UserMinusIcon className="h-4 w-4 mr-1.5" />
+                        Unfollow
+                      </>
+                    ) : (
+                      <>
+                        <UserPlusIcon className="h-4 w-4 mr-1.5" />
+                        Follow
+                      </>
+                    )}
                   </Button>
                 </div>
               ))}

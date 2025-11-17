@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { startTransition, useEffect, useState } from 'react';
 import { useUpdatePost } from '@/hooks/usePosts';
 import { Modal } from '@/components/ui/Modal';
 import { Input } from '@/components/ui/Input';
@@ -22,8 +22,12 @@ export function EditPostModal({ post, isOpen, onClose, onUpdated }: EditPostModa
 
   useEffect(() => {
     if (post && isOpen) {
-      setTitle(post.title ?? '');
-      setContent(post.content ?? '');
+      startTransition(() => {
+        setTimeout(() => {
+          setTitle(post.title ?? '');
+          setContent(post.content ?? '');
+        }, 0);
+      });
     }
   }, [post, isOpen]);
 

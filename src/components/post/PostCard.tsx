@@ -12,6 +12,7 @@ import { Avatar } from '@/components/ui/Avatar';
 import { Card } from '@/components/ui/Card';
 import { ShareButton } from './ShareButton';
 import { EditPostModal } from './EditPostModal';
+import { ImageViewer } from './ImageViewer';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import { formatDate } from '@/lib/utils';
@@ -42,6 +43,7 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(post.emotionsCount || 0);
   const [isLikersModalOpen, setIsLikersModalOpen] = useState(false);
+  const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -244,13 +246,19 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
 
           {/* Image */}
           {post.image?.url && (
-            <div className="mt-3 overflow-hidden rounded-lg">
+            <div
+              className="mt-3 overflow-hidden rounded-lg cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsImageViewerOpen(true);
+              }}
+            >
               <div className="relative aspect-video w-full">
                 <Image
                   src={post.image.url}
                   alt={post.image.alt || post.title}
                   fill
-                  className="object-cover"
+                  className="object-cover transition-transform hover:scale-105"
                   unoptimized
                 />
               </div>
@@ -375,6 +383,16 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
           </>
         )}
       </Modal>
+
+      {/* Image Viewer */}
+      {post.image?.url && (
+        <ImageViewer
+          isOpen={isImageViewerOpen}
+          onClose={() => setIsImageViewerOpen(false)}
+          imageUrl={post.image.url}
+          alt={post.image.alt || post.title}
+        />
+      )}
     </Card>
   );
 }

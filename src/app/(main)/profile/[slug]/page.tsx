@@ -18,7 +18,7 @@ import { Card } from '@/components/ui/Card';
 import { PostCard } from '@/components/post/PostCard';
 import { SharedPostCard } from '@/components/post/SharedPostCard';
 import { EditProfileModal } from '@/components/profile/EditProfileModal';
-import { MapPinIcon, CalendarIcon, ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline';
+import { MapPinIcon, CalendarIcon, ChatBubbleLeftRightIcon, UserPlusIcon, UserMinusIcon } from '@heroicons/react/24/outline';
 import { formatDate } from '@/lib/utils';
 import Image from 'next/image';
 import { Post } from '@/types';
@@ -181,7 +181,17 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
                   onClick={handleFollowToggle}
                   isLoading={followLoading || unfollowLoading}
                 >
-                  {isFollowing ? 'Unfollow' : 'Follow'}
+                  {isFollowing ? (
+                    <>
+                      <UserMinusIcon className="h-5 w-5 mr-2" />
+                      Unfollow
+                    </>
+                  ) : (
+                    <>
+                      <UserPlusIcon className="h-5 w-5 mr-2" />
+                      Follow
+                    </>
+                  )}
                 </Button>
                 <Button
                   variant="outline"

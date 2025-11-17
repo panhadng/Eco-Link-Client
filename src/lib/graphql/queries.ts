@@ -167,6 +167,11 @@ export const GET_POST_BY_ID = gql`
           id
         }
       }
+      image {
+        url
+        alt
+        aspectRatio
+      }
       author {
         id
         name
