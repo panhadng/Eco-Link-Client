@@ -253,12 +253,13 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
                 setIsImageViewerOpen(true);
               }}
             >
-              <div className="relative aspect-video w-full">
+              <div className="relative w-full max-h-[600px] flex items-center justify-center bg-gray-100 dark:bg-gray-800">
                 <Image
                   src={post.image.url}
                   alt={post.image.alt || post.title}
-                  fill
-                  className="object-cover transition-transform hover:scale-105"
+                  width={800}
+                  height={600}
+                  className="w-full h-auto max-h-[600px] object-contain transition-transform hover:scale-105"
                   unoptimized
                 />
               </div>
