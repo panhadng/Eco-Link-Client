@@ -114,13 +114,13 @@ export function RightSidebar() {
         {/* Footer Links */}
         <div className="rounded-lg border border-gray-200 bg-[hsl(35,20%,99%)] p-4 dark:border-gray-800 dark:bg-[hsl(30,12%,12%)]">
           <div className="flex flex-wrap gap-2 text-xs text-gray-500 dark:text-gray-400">
-            <Link href="/about" className="hover:underline">About</Link>
+            <Link href="/about" prefetch={false} className="hover:underline">About</Link>
             <span>·</span>
-            <Link href="/help" className="hover:underline">Help</Link>
+            <Link href="/help" prefetch={false} className="hover:underline">Help</Link>
             <span>·</span>
-            <Link href="/terms" className="hover:underline">Terms</Link>
+            <Link href="/terms" prefetch={false} className="hover:underline">Terms</Link>
             <span>·</span>
-            <Link href="/privacy" className="hover:underline">Privacy</Link>
+            <Link href="/privacy" prefetch={false} className="hover:underline">Privacy</Link>
           </div>
           <p className="mt-3 text-xs text-gray-400">© 2024 EcoLink Social</p>
         </div>

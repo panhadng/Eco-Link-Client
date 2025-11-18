@@ -62,6 +62,7 @@ export function Sidebar() {
             <Link
               key={item.name}
               href={item.href}
+              prefetch={item.href === '/saved' || item.href === '/settings' ? false : undefined}
               className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg dark:text-gray-300 dark:hover:bg-gray-800"
             >
               <item.icon className="h-6 w-6" />

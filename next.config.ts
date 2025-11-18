@@ -9,6 +9,18 @@ const nextConfig: NextConfig = {
         port: '9000',
         pathname: '/ocelot/**',
       },
+      {
+        protocol: 'http',
+        hostname: '13.203.0.20',
+        port: '9000',
+        pathname: '/ocelot/**',
+      },
+      {
+        protocol: 'http',
+        hostname: '13.203.0.20',
+        port: '8000',
+        pathname: '/**',
+      },
     ],
   },
 };
