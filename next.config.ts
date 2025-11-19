@@ -7,13 +7,13 @@ const nextConfig: NextConfig = {
         protocol: 'http',
         hostname: 'localhost',
         port: '9000',
-        pathname: '/ocelot/**',
+        pathname: '/ecolink/**',
       },
       {
         protocol: 'http',
         hostname: '13.203.0.20',
         port: '9000',
-        pathname: '/ocelot/**',
+        pathname: '/ecolink/**',
       },
       {
         protocol: 'http',

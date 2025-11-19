@@ -183,8 +183,8 @@ export default function MessagesPage() {
     <div className="flex h-[calc(100vh-8rem)] max-w-full gap-4 text-gray-900 dark:text-gray-100">
       {/* Room List */}
       <Card className="w-96 shrink-0 overflow-hidden">
-        <div className="border-b border-gray-200 p-4 dark:border-gray-800">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+        <div className="border-b border-gray-200 p-4 dark:border-gray-800" style={{ backgroundColor: '#0c0c6d' }}>
+          <h2 className="text-lg font-semibold text-white">
             Messages
           </h2>
         </div>
@@ -195,7 +195,7 @@ export default function MessagesPage() {
         >
           {roomsLoading ? (
             <div className="flex items-center justify-center p-8">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-[hsl(38,55%,45%)] border-t-transparent dark:border-[hsl(38,65%,55%)]" />
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
             </div>
           ) : rooms.length === 0 ? (
             <div className="p-8 text-center text-gray-500 dark:text-gray-400">
@@ -211,10 +211,10 @@ export default function MessagesPage() {
                 <button
                   key={room.id}
                   onClick={() => setSelectedRoomId(room.id)}
-                  className={`flex w-full items-start gap-3 p-4 text-left transition-colors hover:bg-gray-50 dark:hover:bg-gray-800 ${
+                  className={`flex w-full items-start gap-3 p-4 text-left transition-colors ${
                     selectedRoomId === room.id
-                      ? "bg-[hsl(38,55%,45%)]/10 dark:bg-[hsl(38,65%,55%)]/20"
-                      : ""
+                      ? "bg-gray-200 dark:bg-gray-700"
+                      : "hover:bg-gray-50 dark:hover:bg-gray-800"
                   }`}
                 >
                   <Avatar name={room.roomName} src={room.avatar} size="md" />
@@ -224,7 +224,7 @@ export default function MessagesPage() {
                         {room.roomName}
                       </p>
                       {room.unreadCount > 0 && (
-                        <span className="ml-2 flex h-5 w-5 items-center justify-center rounded-full bg-[hsl(38,55%,45%)] text-xs text-white dark:bg-[hsl(38,65%,55%)]">
+                        <span className="ml-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
                           {room.unreadCount}
                         </span>
                       )}
@@ -250,14 +250,14 @@ export default function MessagesPage() {
         {selectedRoom ? (
           <>
             {/* Chat Header */}
-            <div className="flex items-center gap-3 border-b border-gray-200 p-4 dark:border-gray-800">
+            <div className="flex items-center gap-3 border-b border-gray-200 p-4 dark:border-gray-800" style={{ backgroundColor: '#0c0c6d' }}>
               <Avatar
                 name={selectedRoom.roomName}
                 src={selectedRoom.avatar}
                 size="md"
               />
               <div>
-                <h3 className="font-semibold text-gray-900 dark:text-white">
+                <h3 className="font-semibold text-white">
                   {selectedRoom.roomName}
                 </h3>
               </div>
@@ -267,7 +267,7 @@ export default function MessagesPage() {
             <div className="flex-1 overflow-y-auto p-4">
               {messagesLoading ? (
                 <div className="flex items-center justify-center h-full">
-                  <div className="h-8 w-8 animate-spin rounded-full border-4 border-[hsl(38,55%,45%)] border-t-transparent dark:border-[hsl(38,65%,55%)]" />
+                  <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
                 </div>
               ) : messages.length === 0 ? (
                 <div className="flex items-center justify-center h-full text-gray-500 dark:text-gray-400">
@@ -293,9 +293,10 @@ export default function MessagesPage() {
                           <div
                             className={`max-w-md rounded-lg px-4 py-2 ${
                               isOwn
-                                ? "bg-[hsl(38,55%,45%)] text-white dark:bg-[hsl(38,65%,55%)]"
-                                : "bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-white"
+                                ? "text-white"
+                                : "text-white"
                             }`}
+                            style={isOwn ? { backgroundColor: '#0c0c6d' } : { backgroundColor: '#52ba00' }}
                           >
                             {message.content && (
                               <p className="whitespace-pre-wrap wrap-break-word">

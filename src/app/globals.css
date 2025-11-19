@@ -2,61 +2,61 @@
 
 :root {
   color-scheme: light;
-  /* Light version of brownish-gold theme color */
-  --background: 38 20% 96%;
-  --foreground: 30 20% 12%;
-  /* Warm white cards */
-  --card: 35 20% 99%;
-  --card-foreground: 30 20% 12%;
-  --popover: 35 20% 99%;
-  --popover-foreground: 30 20% 12%;
-  /* Brownish-gold primary matching logo */
-  --primary: 38 55% 45%;
-  --primary-foreground: 35 25% 98%;
-  /* Warm neutral secondary */
-  --secondary: 35 20% 92%;
-  --secondary-foreground: 30 25% 15%;
-  --muted: 35 18% 94%;
-  --muted-foreground: 30 15% 40%;
-  /* Complementary earthy accent */
-  --accent: 42 60% 50%;
-  --accent-foreground: 35 25% 98%;
+  /* Light background */
+  --background: 0 0% 98%;
+  --foreground: 240 10% 10%;
+  /* White cards */
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 10%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 10%;
+  /* Dark blue primary (#0c0c6d) */
+  --primary: 240 80% 24%;
+  --primary-foreground: 0 0% 100%;
+  /* Neutral secondary */
+  --secondary: 240 5% 92%;
+  --secondary-foreground: 240 10% 15%;
+  --muted: 240 5% 94%;
+  --muted-foreground: 240 5% 40%;
+  /* Light green accent (#52ba00) */
+  --accent: 94 100% 37%;
+  --accent-foreground: 0 0% 100%;
   --destructive: 0 84% 60%;
-  --destructive-foreground: 35 25% 98%;
-  /* Warm borders */
-  --border: 35 15% 88%;
-  --input: 35 15% 88%;
-  --ring: 38 55% 45%;
+  --destructive-foreground: 0 0% 100%;
+  /* Neutral borders */
+  --border: 240 5% 88%;
+  --input: 240 5% 88%;
+  --ring: 240 80% 24%;
   --radius: 0.75rem;
 }
 
 .dark {
   color-scheme: dark;
-  /* Dark version of brownish-gold theme color */
-  --background: 38 15% 10%;
-  --foreground: 35 20% 92%;
-  /* Slightly lighter dark brown for cards */
-  --card: 30 12% 12%;
-  --card-foreground: 35 20% 92%;
-  --popover: 30 12% 12%;
-  --popover-foreground: 35 20% 92%;
-  /* Lighter gold/amber for primary in dark mode */
-  --primary: 38 65% 55%;
-  --primary-foreground: 30 15% 10%;
-  /* Warm dark secondary */
-  --secondary: 30 10% 18%;
-  --secondary-foreground: 35 20% 92%;
-  --muted: 30 8% 20%;
-  --muted-foreground: 35 15% 65%;
-  /* Brighter earthy accent for dark mode */
-  --accent: 42 70% 60%;
-  --accent-foreground: 30 15% 10%;
+  /* Dark background */
+  --background: 240 15% 8%;
+  --foreground: 240 5% 92%;
+  /* Dark cards */
+  --card: 240 12% 10%;
+  --card-foreground: 240 5% 92%;
+  --popover: 240 12% 10%;
+  --popover-foreground: 240 5% 92%;
+  /* Lighter dark blue for primary in dark mode */
+  --primary: 240 70% 35%;
+  --primary-foreground: 0 0% 100%;
+  /* Dark secondary */
+  --secondary: 240 10% 18%;
+  --secondary-foreground: 240 5% 92%;
+  --muted: 240 8% 20%;
+  --muted-foreground: 240 5% 65%;
+  /* Brighter light green accent for dark mode */
+  --accent: 94 100% 45%;
+  --accent-foreground: 240 15% 8%;
   --destructive: 0 63% 50%;
-  --destructive-foreground: 35 20% 92%;
-  /* Dark warm borders */
-  --border: 30 8% 22%;
-  --input: 30 8% 22%;
-  --ring: 38 65% 55%;
+  --destructive-foreground: 0 0% 100%;
+  /* Dark borders */
+  --border: 240 8% 22%;
+  --input: 240 8% 22%;
+  --ring: 240 70% 35%;
 }
 
 body {
@@ -118,25 +118,25 @@ body.dark {
 }
 
 .rich-text code {
-  background-color: hsl(35 20% 90%);
+  background-color: hsl(240 5% 90%);
   border-radius: 0.4rem;
   padding: 0.1rem 0.4rem;
   font-size: 0.875rem;
 }
 
 .dark .rich-text code {
-  background-color: hsl(30 10% 20%);
+  background-color: hsl(240 10% 20%);
 }
 
 .rich-text pre {
   padding: 1rem;
   border-radius: 0.75rem;
   overflow-x: auto;
-  background-color: hsl(35 20% 90%);
+  background-color: hsl(240 5% 90%);
 }
 
 .dark .rich-text pre {
-  background-color: hsl(30 10% 18%);
+  background-color: hsl(240 10% 18%);
 }
 
 .rich-text blockquote {

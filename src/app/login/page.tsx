@@ -75,12 +75,12 @@ export default function LoginPage() {
 
           <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
             Don&apos;t have an account?{' '}
-            <Link href="/register" className="font-medium text-[hsl(38,55%,45%)] hover:underline dark:text-[hsl(38,65%,55%)]">
+            <Link href="/register" className="font-medium text-primary hover:underline">
               Sign up
             </Link>
           </div>
 
-          <div className="mt-4 rounded-md bg-[hsl(38,55%,45%)]/10 p-4 text-sm text-[hsl(38,55%,45%)] dark:bg-[hsl(38,65%,55%)]/20 dark:text-[hsl(38,65%,55%)]">
+          <div className="mt-4 rounded-md bg-primary/10 p-4 text-sm text-primary">
             <p className="font-semibold">Test Accounts:</p>
             <ul className="mt-2 space-y-1">
               <li>• admin@example.org / 1234</li>

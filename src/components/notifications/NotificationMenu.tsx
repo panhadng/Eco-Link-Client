@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useMutation, useQuery, useSubscription } from '@apollo/client';
 import Link from 'next/link';
 import { BellIcon } from '@heroicons/react/24/outline';
+import { BellIcon as BellIconSolid } from '@heroicons/react/24/solid';
 import toast from 'react-hot-toast';
 
 import { useAuth } from '@/context/AuthContext';
@@ -200,10 +201,11 @@ export function NotificationMenu() {
       <button
         type="button"
         onClick={toggleMenu}
-        className="relative rounded-lg p-2 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:hover:bg-gray-800 dark:focus:ring-gray-600"
+        className="group relative flex items-center justify-center rounded-lg p-2 hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
         aria-label="Notifications"
       >
-        <BellIcon className="h-6 w-6 text-gray-600 dark:text-gray-300" />
+        <BellIcon className={`h-6 w-6 text-gray-600 transition-opacity dark:text-gray-300 ${isOpen ? 'opacity-0' : 'group-hover:opacity-0'}`} />
+        <BellIconSolid className={`absolute h-6 w-6 text-[#0c0c6d] transition-opacity ${isOpen ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
         {unreadCount > 0 && (
           <span className="absolute -top-1 -right-1 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-500 px-1 text-xs font-semibold text-white">
             {unreadCount > 9 ? '9+' : unreadCount}
@@ -212,7 +214,7 @@ export function NotificationMenu() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-3 w-[500px] rounded-lg border border-gray-200 bg-[hsl(35,20%,99%)] shadow-lg dark:border-gray-700 dark:bg-[hsl(30,12%,12%)]">
+        <div className="absolute right-0 mt-3 w-[500px] rounded-lg border border-gray-200 bg-card shadow-lg dark:border-gray-700" style={{ backgroundColor: 'hsl(var(--card))', opacity: 1 }}>
           <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3 dark:border-gray-700">
             <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">Notifications</p>
             <Button
@@ -256,7 +258,7 @@ export function NotificationMenu() {
                         href={link}
                         onClick={() => handleNotificationClick(notification)}
                         className={`flex items-start space-x-3 px-4 py-3 text-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-800 ${
-                          notification.read ? 'bg-[hsl(35,20%,99%)] dark:bg-[hsl(30,12%,12%)]' : 'bg-[hsl(38,55%,45%)]/10 dark:bg-[hsl(38,65%,55%)]/20'
+                          notification.read ? 'bg-card' : 'bg-primary/10'
                         }`}
                       >
                         <Avatar
@@ -287,7 +289,7 @@ export function NotificationMenu() {
                           </p>
                         </div>
                         {!notification.read && (
-                          <span className="mt-1 h-2 w-2 rounded-full bg-[hsl(38,55%,45%)] dark:bg-[hsl(38,65%,55%)]" aria-hidden="true" />
+                          <span className="mt-1 h-2 w-2 rounded-full bg-primary" aria-hidden="true" />
                         )}
                       </Link>
                     </li>

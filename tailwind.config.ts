@@ -39,6 +39,17 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Brand colors
+        "eco-blue": {
+          DEFAULT: "#0c0c6d",
+          light: "#1a1a8a",
+          dark: "#080850",
+        },
+        "eco-green": {
+          DEFAULT: "#52ba00",
+          light: "#6dd400",
+          dark: "#3d8a00",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

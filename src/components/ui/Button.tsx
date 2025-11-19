@@ -5,16 +5,17 @@ import { cn } from '@/lib/utils';
 const buttonVariants = cva(
   'inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   {
-    variants: {
-      variant: {
-        default: 'bg-[hsl(38,55%,45%)] text-white hover:opacity-90 dark:bg-[hsl(38,65%,55%)]',
-        destructive: 'bg-red-600 text-white hover:opacity-90 dark:bg-red-500',
-        outline:
-          'border border-gray-300 bg-transparent text-gray-900 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-100 dark:hover:bg-gray-800',
-        secondary: 'bg-gray-200 text-gray-900 hover:opacity-90 dark:bg-gray-700 dark:text-gray-100',
-        ghost: 'text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800',
-        link: 'text-[hsl(38,55%,45%)] underline-offset-4 hover:underline dark:text-[hsl(38,65%,55%)]',
-      },
+      variants: {
+        variant: {
+          default: 'bg-primary text-primary-foreground hover:opacity-90',
+          destructive: 'bg-red-600 text-white hover:opacity-90 dark:bg-red-500',
+          outline:
+            'border border-gray-300 bg-background text-gray-900 hover:bg-primary hover:text-primary-foreground dark:border-gray-700 dark:text-gray-100',
+          secondary: 'bg-gray-200 text-gray-900 hover:opacity-90 dark:bg-gray-700 dark:text-gray-100',
+          ghost: 'text-gray-900 hover:bg-primary/10 hover:text-primary dark:text-gray-100',
+          link: 'text-primary underline-offset-4 hover:underline',
+          accent: 'bg-accent text-accent-foreground hover:opacity-90',
+        },
       size: {
         default: 'h-10 px-4 py-2',
         sm: 'h-9 rounded-md px-3',
@@ -37,9 +38,21 @@ export interface ButtonProps
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, isLoading, children, disabled, ...props }, ref) => {
+    // Get inline styles for theme colors
+    const getInlineStyles = () => {
+      if (variant === 'default') {
+        return { backgroundColor: '#0c0c6d', color: '#ffffff' };
+      }
+      if (variant === 'accent') {
+        return { backgroundColor: '#52ba00', color: '#ffffff' };
+      }
+      return {};
+    };
+
     return (
       <button
         className={cn(buttonVariants({ variant, size, className }))}
+        style={getInlineStyles()}
         ref={ref}
         disabled={disabled || isLoading}
         {...props}

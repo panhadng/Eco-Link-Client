@@ -236,7 +236,7 @@ export default function GroupDetailPage({ params }: { params: Promise<PageParams
   if (isLoading) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-[hsl(38,55%,45%)] border-t-transparent dark:border-[hsl(38,65%,55%)]" />
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" />
       </div>
     );
   }
@@ -253,7 +253,7 @@ export default function GroupDetailPage({ params }: { params: Promise<PageParams
     return (
       <Card className="p-12 text-center">
         <p className="text-gray-500 dark:text-gray-400">Group not found.</p>
-        <Link href="/groups" className="mt-4 inline-block text-[hsl(38,55%,45%)] hover:underline dark:text-[hsl(38,65%,55%)]">
+        <Link href="/groups" className="mt-4 inline-block text-primary hover:underline">
           Back to groups
         </Link>
       </Card>
@@ -289,7 +289,7 @@ export default function GroupDetailPage({ params }: { params: Promise<PageParams
                     <p className="mt-1 text-sm text-gray-700 dark:text-gray-300">{group.locationName}</p>
                   )}
                   {membershipLabel && (
-                    <p className="mt-2 text-sm font-medium text-[hsl(38,55%,45%)] dark:text-[hsl(38,65%,55%)]">{membershipLabel}</p>
+                    <p className="mt-2 text-sm font-medium text-primary">{membershipLabel}</p>
                   )}
                 </div>
               </div>

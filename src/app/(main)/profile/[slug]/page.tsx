@@ -113,7 +113,7 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
   if (userLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-[hsl(38,55%,45%)] border-t-transparent dark:border-[hsl(38,65%,55%)]" />
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" />
       </div>
     );
   }
@@ -147,7 +147,7 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
       {/* Profile Header */}
       <Card className="overflow-hidden">
         {/* Cover Photo */}
-        <div className="h-32 bg-gradient-to-r from-[hsl(38,55%,45%)] to-[hsl(42,60%,50%)]" />
+        <div className="h-32 bg-primary" style={{ backgroundColor: '#0c0c6d' }} />
 
         {/* Profile Info */}
         <div className="relative px-6 pb-6">
@@ -177,7 +177,7 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
             ) : (
               <div className="mt-4 flex gap-2">
                 <Button
-                  variant={isFollowing ? 'outline' : 'default'}
+                  variant={isFollowing ? 'accent' : 'default'}
                   onClick={handleFollowToggle}
                   isLoading={followLoading || unfollowLoading}
                 >
@@ -194,7 +194,7 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
                   )}
                 </Button>
                 <Button
-                  variant="outline"
+                  variant="default"
                   onClick={handleStartChat}
                   isLoading={creatingRoom}
                 >
@@ -229,7 +229,7 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
             <div className="mt-4 flex space-x-6 text-sm">
               <Link
                 href={`/profile/${user.slug}/followers`}
-                className="transition hover:text-[hsl(38,55%,45%)] dark:hover:text-[hsl(38,65%,55%)]"
+                className="transition hover:text-primary"
               >
                 <span className="font-semibold text-gray-900 dark:text-white">
                   {user.followedByCount}
@@ -238,7 +238,7 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
               </Link>
               <Link
                 href={`/profile/${user.slug}/following`}
-                className="transition hover:text-[hsl(38,55%,45%)] dark:hover:text-[hsl(38,65%,55%)]"
+                className="transition hover:text-primary"
               >
                 <span className="font-semibold text-gray-900 dark:text-white">
                   {user.followingCount ?? 0}

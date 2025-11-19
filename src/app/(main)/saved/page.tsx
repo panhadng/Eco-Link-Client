@@ -17,7 +17,7 @@ export default function SavedPage() {
           </p>
         </div>
         <div className="mt-6">
-          <Link href="/feed" className="text-[hsl(38,55%,45%)] hover:underline dark:text-[hsl(38,65%,55%)]">
+          <Link href="/feed" className="text-primary hover:underline">
             ← Back to feed
           </Link>
         </div>

@@ -138,7 +138,7 @@ export default function SearchPage() {
                 <div className="min-w-0">
                   <Link
                     href={`/profile/${user.slug}`}
-                    className="block truncate text-sm font-semibold text-[hsl(38,55%,45%)] hover:underline dark:text-[hsl(38,65%,55%)]"
+                    className="block truncate text-sm font-semibold text-primary hover:underline"
                   >
                     {user.name}
                   </Link>
@@ -154,7 +154,7 @@ export default function SearchPage() {
               </div>
               <Link
                 href={`/profile/${user.slug}`}
-                className="text-sm text-[hsl(38,55%,45%)] hover:underline dark:text-[hsl(38,65%,55%)]"
+                className="text-sm text-primary hover:underline"
               >
                 View profile
               </Link>
@@ -172,7 +172,7 @@ export default function SearchPage() {
                 <div className="min-w-0">
                   <Link
                     href={`/groups/${group.slug}`}
-                    className="text-lg font-semibold text-[hsl(38,55%,45%)] hover:underline dark:text-[hsl(38,65%,55%)]"
+                    className="text-lg font-semibold text-primary hover:underline"
                   >
                     {group.name}
                   </Link>
@@ -187,7 +187,7 @@ export default function SearchPage() {
                 </div>
                 <Link
                   href={`/groups/${group.slug}`}
-                  className="text-sm text-[hsl(38,55%,45%)] hover:underline dark:text-[hsl(38,65%,55%)]"
+                  className="text-sm text-primary hover:underline"
                 >
                   View group
                 </Link>

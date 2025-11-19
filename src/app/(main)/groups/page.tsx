@@ -73,7 +73,7 @@ export default function GroupsPage() {
                 <div className="min-w-0">
                   <Link
                     href={`/groups/${group.slug}`}
-                    className="truncate text-lg font-semibold text-[hsl(38,55%,45%)] hover:underline dark:text-[hsl(38,65%,55%)]"
+                    className="truncate text-lg font-semibold text-primary hover:underline"
                   >
                     {group.name}
                   </Link>

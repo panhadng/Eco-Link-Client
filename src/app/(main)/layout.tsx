@@ -20,7 +20,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-[hsl(38,55%,45%)] border-t-transparent dark:border-[hsl(38,65%,55%)]" />
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" />
       </div>
     );
   }
@@ -30,7 +30,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   }
 
   return (
-    <div className="min-h-screen bg-[hsl(38,20%,96%)] text-gray-900 transition-colors dark:bg-[hsl(38,15%,10%)] dark:text-gray-100">
+    <div className="min-h-screen bg-background text-foreground transition-colors">
       <Navbar />
       <div className="mx-auto max-w-7xl px-4 py-6">
         <div className="flex gap-6">

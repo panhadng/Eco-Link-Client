@@ -15,7 +15,7 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-[hsl(38,55%,45%)] border-t-transparent dark:border-[hsl(38,65%,55%)]" />
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" />
       </div>
     );
   }
@@ -24,7 +24,7 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
     return (
       <div className="rounded-lg bg-white p-12 text-center dark:bg-gray-900">
         <p className="text-gray-500 dark:text-gray-400">Post not found</p>
-        <Link href="/" className="mt-4 inline-block text-[hsl(38,55%,45%)] hover:underline dark:text-[hsl(38,65%,55%)]">
+        <Link href="/" className="mt-4 inline-block text-primary hover:underline">
           Go back home
         </Link>
       </div>

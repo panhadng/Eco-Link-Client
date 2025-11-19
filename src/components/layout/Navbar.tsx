@@ -3,8 +3,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useMemo, useRef } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { HomeIcon, UserCircleIcon, MagnifyingGlassIcon, ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline';
+import { HomeIcon as HomeIconSolid, ChatBubbleLeftRightIcon as ChatBubbleLeftRightIconSolid, UserCircleIcon as UserCircleIconSolid } from '@heroicons/react/24/solid';
 import { useAuth } from '@/context/AuthContext';
 import { Avatar } from '@/components/ui/Avatar';
 import { NotificationMenu } from '@/components/notifications/NotificationMenu';
@@ -14,11 +15,16 @@ import { Room } from '@/types';
 export function Navbar() {
   const { user, logout } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
   const { rooms } = useRooms();
   const searchParams = useSearchParams();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const term = searchParams?.get('term') ?? '';
+  
+  const isFeedActive = pathname === '/feed' || pathname === '/';
+  const isMessagesActive = pathname?.startsWith('/messages');
+  const isProfileActive = user && pathname?.startsWith(`/profile/${user.slug}`);
 
   useEffect(() => {
     if (inputRef.current) {
@@ -47,11 +53,11 @@ export function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-40 border-b border-gray-200 bg-[hsl(35,20%,99%)] text-gray-900 shadow-sm dark:border-gray-800 dark:bg-[hsl(30,12%,12%)] dark:text-gray-100">
+    <nav className="sticky top-0 z-40 border-b border-gray-200 bg-card text-gray-900 shadow-sm backdrop-blur-none opacity-100 dark:border-gray-800 dark:text-gray-100" style={{ backgroundColor: 'hsl(var(--card))', opacity: 1 }}>
       <div className="mx-auto max-w-7xl px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
+          <Link href="/" className="flex items-center space-x-2 py-4">
             <Image
               src="/images/eco-link-logo-nobg.png"
               alt="Eco-Link Logo"
@@ -73,7 +79,7 @@ export function Navbar() {
                 defaultValue={term}
                 placeholder="Search..."
                 aria-label="Search"
-                className="w-full rounded-full border border-gray-300 bg-gray-50 py-2 pl-10 pr-4 text-sm text-gray-900 focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 dark:border-gray-700 dark:bg-[hsl(30,8%,22%)] dark:text-gray-100 dark:focus:border-gray-600 dark:focus:ring-gray-600"
+                className="w-full rounded-full border border-gray-200 bg-background py-2 pl-10 pr-4 text-sm text-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring dark:bg-muted"
               />
               <button type="submit" className="sr-only">
                 Search
@@ -83,15 +89,28 @@ export function Navbar() {
 
           {/* Nav Icons */}
           <div className="flex items-center space-x-4">
-            <Link href="/feed" className="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-800">
-              <HomeIcon className="h-6 w-6 text-gray-600 dark:text-gray-300" />
+            <Link 
+              href="/feed" 
+              className="group relative flex items-center justify-center rounded-lg p-2 transition-colors hover:bg-primary/10"
+            >
+              <HomeIcon 
+                className={`h-6 w-6 text-gray-600 transition-opacity dark:text-gray-300 ${isFeedActive ? 'opacity-0' : 'group-hover:opacity-0'}`}
+              />
+              <HomeIconSolid 
+                className={`absolute h-6 w-6 text-[#0c0c6d] transition-opacity ${isFeedActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
+              />
             </Link>
             
             <Link
               href="/messages"
-              className="relative rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-800"
+              className="group relative flex items-center justify-center rounded-lg p-2 transition-colors hover:bg-primary/10"
             >
-              <ChatBubbleLeftRightIcon className="h-6 w-6 text-gray-600 dark:text-gray-300" />
+              <ChatBubbleLeftRightIcon 
+                className={`h-6 w-6 text-gray-600 transition-opacity dark:text-gray-300 ${isMessagesActive ? 'opacity-0' : 'group-hover:opacity-0'}`}
+              />
+              <ChatBubbleLeftRightIconSolid 
+                className={`absolute h-6 w-6 text-[#0c0c6d] transition-opacity ${isMessagesActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
+              />
               {unreadMessageCount > 0 && (
                 <span className="absolute -top-1 -right-1 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-500 px-1 text-xs font-semibold text-white">
                   {unreadMessageCount > 9 ? '9+' : unreadMessageCount}
@@ -103,24 +122,27 @@ export function Navbar() {
 
             {user && (
               <div className="relative group">
-                <button className="flex items-center space-x-2">
+                <button className="group/avatar flex items-center space-x-2 rounded-lg p-1 transition-colors hover:bg-primary/10">
                   <Avatar name={user.name} size="md" />
                 </button>
 
                 {/* Dropdown */}
-                <div className="absolute right-0 mt-2 w-48 origin-top-right scale-0 rounded-lg border border-gray-200 bg-white py-1 shadow-lg transition-transform group-hover:scale-100 dark:border-gray-700 dark:bg-gray-800">
+                <div className="absolute right-0 mt-2 w-48 origin-top-right scale-0 rounded-lg border border-gray-200 bg-card py-1 shadow-lg transition-transform group-hover:scale-100 dark:border-gray-700" style={{ backgroundColor: 'hsl(var(--card))', opacity: 1 }}>
                   <Link
                     href={`/profile/${user.slug}`}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                    className="group/profile relative block px-4 py-2 text-sm text-gray-700 hover:bg-primary/10 hover:text-primary dark:text-gray-300 transition-colors"
                   >
                     <div className="flex items-center space-x-2">
-                      <UserCircleIcon className="h-5 w-5" />
+                      <div className="relative flex items-center justify-center">
+                        <UserCircleIcon className={`h-5 w-5 transition-opacity ${isProfileActive ? 'opacity-0' : 'group-hover/profile:opacity-0'}`} />
+                        <UserCircleIconSolid className={`absolute h-5 w-5 text-[#0c0c6d] transition-opacity ${isProfileActive ? 'opacity-100' : 'opacity-0 group-hover/profile:opacity-100'}`} />
+                      </div>
                       <span>Profile</span>
                     </div>
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                   >
                     Logout
                   </button>

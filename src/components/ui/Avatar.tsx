@@ -19,7 +19,7 @@ export function Avatar({ src, alt, name, size = 'md', className, ...props }: Ava
   return (
     <div
       className={cn(
-        'relative inline-flex items-center justify-center overflow-hidden bg-[hsl(38,55%,35%)] text-white font-semibold rounded-xl dark:bg-[hsl(38,65%,45%)]',
+        'relative inline-flex items-center justify-center overflow-hidden bg-[#0c0c6d] font-semibold rounded-xl',
         sizeClasses[size],
         className
       )}
@@ -28,7 +28,7 @@ export function Avatar({ src, alt, name, size = 'md', className, ...props }: Ava
       {src ? (
         <img src={src} alt={alt || name} className="h-full w-full object-cover" />
       ) : (
-        <span>{getInitials(name)}</span>
+        <span className="text-[#52ba00]">{getInitials(name)}</span>
       )}
     </div>
   );

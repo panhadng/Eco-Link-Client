@@ -54,7 +54,7 @@ export function RightSidebar() {
     <aside className="hidden w-80 shrink-0 text-gray-900 dark:text-gray-100 xl:block">
       <div className="sticky top-20 space-y-4">
         {/* Suggestions Card */}
-        <div className="rounded-lg border border-gray-200 bg-[hsl(35,20%,99%)] p-4 dark:border-gray-800 dark:bg-[hsl(30,12%,12%)]">
+        <div className="rounded-lg border border-gray-200 bg-card p-4 dark:border-gray-800">
           <h3 className="mb-4 font-semibold text-gray-900 dark:text-white">Suggested for you</h3>
 
           {loading ? (
@@ -89,13 +89,13 @@ export function RightSidebar() {
                   </Link>
                   <Button
                     size="sm"
-                    variant={user.followedByCurrentUser ? 'outline' : 'default'}
+                    variant={user.followedByCurrentUser ? 'accent' : 'default'}
                     onClick={() => handleToggleFollow(user)}
                     isLoading={mutatingUserId === user.id}
                   >
                     {user.followedByCurrentUser ? (
                       <>
-                        <UserMinusIcon className="h-4 w-4 mr-1.5" />
+                        <UserMinusIcon className="h-4 w-4 mr-1.5 " />
                         Unfollow
                       </>
                     ) : (
@@ -112,7 +112,7 @@ export function RightSidebar() {
         </div>
 
         {/* Footer Links */}
-        <div className="rounded-lg border border-gray-200 bg-[hsl(35,20%,99%)] p-4 dark:border-gray-800 dark:bg-[hsl(30,12%,12%)]">
+        <div className="rounded-lg border border-gray-200 bg-card p-4 dark:border-gray-800">
           <div className="flex flex-wrap gap-2 text-xs text-gray-500 dark:text-gray-400">
             <Link href="/about" prefetch={false} className="hover:underline">About</Link>
             <span>·</span>
