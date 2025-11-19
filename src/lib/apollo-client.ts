@@ -6,12 +6,39 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { createUploadLink } from './upload-link';
 import { getAuthToken } from './auth';
 
+// Auto-detect protocol based on current page protocol
+const getGraphQLUri = () => {
+  const envUri = process.env.NEXT_PUBLIC_GRAPHQL_URI;
+  if (envUri) return envUri;
+  
+  if (typeof window !== 'undefined') {
+    // If on HTTPS, use HTTPS for backend
+    if (window.location.protocol === 'https:') {
+      return 'https://13.203.0.20:4000';
+    }
+  }
+  return 'http://localhost:4000';
+};
+
+const getWebSocketUri = () => {
+  const envUri = process.env.NEXT_PUBLIC_WS_URI;
+  if (envUri) return envUri;
+  
+  if (typeof window !== 'undefined') {
+    // If on HTTPS, use WSS for backend
+    if (window.location.protocol === 'https:') {
+      return 'wss://13.203.0.20:4000/graphql';
+    }
+  }
+  return 'ws://localhost:4000/graphql';
+};
+
 const uploadLink = createUploadLink({
-  uri: process.env.NEXT_PUBLIC_GRAPHQL_URI || 'http://localhost:4000',
+  uri: getGraphQLUri(),
 });
 
 const wsLink = typeof window !== 'undefined' ? new WebSocketLink({
-  uri: process.env.NEXT_PUBLIC_WS_URI || 'ws://localhost:4000/graphql',
+  uri: getWebSocketUri(),
   options: {
     reconnect: true,
     lazy: true,
