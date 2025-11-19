@@ -47,7 +47,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 text-gray-900 dark:bg-gray-950 dark:text-gray-100">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-3xl font-bold text-gray-900 dark:text-white">Welcome back</CardTitle>
+          <CardTitle className="text-3xl font-bold text-[#0c0c6d] dark:text-[#0c0c6d]">Welcome back</CardTitle>
           <CardDescription>Sign in to your account to continue</CardDescription>
         </CardHeader>
         <CardContent>
@@ -68,19 +68,19 @@ export default function LoginPage() {
               {...register('password')}
             />
 
-            <Button type="submit" className="w-full" isLoading={isLoading}>
+            <Button type="submit" variant="default" className="w-full bg-[#0c0c6d] hover:bg-[#0c0c6d]/80 cursor-pointer" isLoading={isLoading}>
               Sign in
             </Button>
           </form>
 
           <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
             Don&apos;t have an account?{' '}
-            <Link href="/register" className="font-medium text-primary hover:underline">
+            <Link href="/register" className="font-medium text-primary hover:text-[#0c0c6d] hover:underline">
               Sign up
             </Link>
           </div>
 
-          <div className="mt-4 rounded-md bg-primary/10 p-4 text-sm text-primary">
+          <div className="mt-4 rounded-md bg-gray-100 p-4 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300">
             <p className="font-semibold">Test Accounts:</p>
             <ul className="mt-2 space-y-1">
               <li>• admin@example.org / 1234</li>
