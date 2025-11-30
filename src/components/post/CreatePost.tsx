@@ -125,7 +125,7 @@ export function CreatePost({ groupId, groupName, placeholder, onCreated }: Creat
     <Card className="p-4">
       <form onSubmit={onSubmitForm}>
         <div className="flex space-x-3">
-          <Avatar name={user.name} size="md" />
+          <Avatar name={user.name} src={user.avatar?.url} size="md" />
           <div className="flex-1">
             {!expanded ? (
               <button

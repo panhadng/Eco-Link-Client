@@ -123,7 +123,7 @@ export function Navbar() {
             {user && (
               <div className="relative group">
                 <button className="group/avatar flex items-center space-x-2 rounded-lg p-1 transition-colors hover:bg-primary/10">
-                  <Avatar name={user.name} size="md" />
+                  <Avatar name={user.name} src={user.avatar?.url} size="md" />
                 </button>
 
                 {/* Dropdown */}

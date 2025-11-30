@@ -38,14 +38,16 @@ export default function FeedPage() {
         </div>
       ) : (
         <>
-          {posts.map((post: Post) => (
-            <PostCard
-              key={post.id}
-              post={post}
-              onPostUpdated={() => refetch()}
-              onPostDeleted={() => refetch()}
-            />
-          ))}
+          {posts
+            .filter((post: Post) => post.author) // Filter out posts with missing authors
+            .map((post: Post) => (
+              <PostCard
+                key={post.id}
+                post={post}
+                onPostUpdated={() => refetch()}
+                onPostDeleted={() => refetch()}
+              />
+            ))}
 
           <div ref={ref} className="py-4 text-center">
             {loading && <div className="text-gray-500">Loading more posts...</div>}

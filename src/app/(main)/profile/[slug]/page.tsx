@@ -18,7 +18,7 @@ import { Card } from '@/components/ui/Card';
 import { PostCard } from '@/components/post/PostCard';
 import { SharedPostCard } from '@/components/post/SharedPostCard';
 import { EditProfileModal } from '@/components/profile/EditProfileModal';
-import { MapPinIcon, CalendarIcon, ChatBubbleLeftRightIcon, UserPlusIcon, UserMinusIcon } from '@heroicons/react/24/outline';
+import { MapPinIcon, CalendarIcon, ChatBubbleLeftRightIcon, UserPlusIcon, UserMinusIcon, CameraIcon } from '@heroicons/react/24/outline';
 import { formatDate } from '@/lib/utils';
 import Image from 'next/image';
 import { Post } from '@/types';
@@ -147,7 +147,32 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
       {/* Profile Header */}
       <Card className="overflow-hidden">
         {/* Cover Photo */}
-        <div className="h-32 bg-primary" style={{ backgroundColor: '#0c0c6d' }} />
+        <div className="relative h-32 bg-primary" style={{ backgroundColor: '#0c0c6d' }}>
+          {user.coverImage?.url ? (
+            <Image
+              src={user.coverImage.url}
+              alt={`${user.name}'s cover photo`}
+              fill
+              className="object-cover"
+              unoptimized
+            />
+          ) : (
+            <div className="h-full w-full bg-primary" style={{ backgroundColor: '#0c0c6d' }} />
+          )}
+          {isOwnProfile && (
+            <div className="absolute right-4 top-4 z-10">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setIsEditModalOpen(true)}
+                className="bg-black/50 backdrop-blur-sm text-white border-white/20 hover:bg-black/70"
+              >
+                <CameraIcon className="h-4 w-4 mr-1" />
+                Edit Profile
+              </Button>
+            </div>
+          )}
+        </div>
 
         {/* Profile Info */}
         <div className="relative px-6 pb-6">
@@ -165,6 +190,7 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
             ) : (
               <Avatar
                 name={user.name}
+                src={user.avatar?.url}
                 size="xl"
                 className="-mt-12 border-4 border-white dark:border-gray-900"
               />
@@ -271,29 +297,32 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
           </Card>
         ) : (
           <div className="space-y-4">
-            {allPosts.map((post: Post & { type: 'authored' | 'shared' }) => {
-              if (post.type === 'shared') {
+            {allPosts
+              .filter((post: Post & { type: 'authored' | 'shared' }) => post.author) // Filter out posts with missing authors
+              .map((post: Post & { type: 'authored' | 'shared' }) => {
+                if (post.type === 'shared') {
+                  return (
+                    <SharedPostCard
+                      key={`shared-${post.id}`}
+                      post={post}
+                      sharedBy={{
+                        id: user.id,
+                        name: user.name,
+                        slug: user.slug,
+                        avatar: user.avatar,
+                      }}
+                    />
+                  );
+                }
                 return (
-                  <SharedPostCard
-                    key={`shared-${post.id}`}
+                  <PostCard
+                    key={post.id}
                     post={post}
-                    sharedBy={{
-                      id: user.id,
-                      name: user.name,
-                      slug: user.slug,
-                    }}
+                    onPostUpdated={() => void refetchUserPosts()}
+                    onPostDeleted={() => void refetchUserPosts()}
                   />
                 );
-              }
-              return (
-                <PostCard
-                  key={post.id}
-                  post={post}
-                  onPostUpdated={() => void refetchUserPosts()}
-                  onPostDeleted={() => void refetchUserPosts()}
-                />
-              );
-            })}
+              })}
           </div>
         )}
       </div>

@@ -77,7 +77,7 @@ export function RightSidebar() {
                     href={`/profile/${user.slug}`}
                     className="flex items-center space-x-3 flex-1 min-w-0"
                   >
-                    <Avatar name={user.name} size="md" />
+                    <Avatar name={user.name} src={user.avatar?.url} size="md" />
                     <div className="flex-1 overflow-hidden">
                       <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
                         {user.name}

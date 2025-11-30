@@ -49,7 +49,18 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const isOwnPost = user?.id === post.author.id;
+  const isOwnPost = user?.id === post.author?.id;
+
+  // Calculate comment count - prefer filtered count if comments array is available
+  // This will update when post.comments or post.commentsCount changes
+  const displayCommentsCount = useMemo(() => {
+    if (post.comments) {
+      // If we have the comments array, count only valid comments (with authors)
+      return post.comments.filter((comment) => comment.author).length;
+    }
+    // Fall back to backend count if comments array is not loaded
+    return post.commentsCount || 0;
+  }, [post.comments, post.commentsCount]);
 
   const [fetchPostLikers, { data: likersData, loading: likersLoading, called: likersCalled, refetch: refetchLikers }] =
     useLazyQuery(GET_POST_LIKERS, {
@@ -169,22 +180,38 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
     setIsLikersModalOpen(false);
   };
 
+  // Hide post if author is missing
+  if (!post.author) {
+    return null;
+  }
+
   return (
     <Card className="overflow-hidden transition-shadow hover:shadow-md">
       <div className="p-4">
         {/* Header */}
-        <div className="flex items-start justify-between">
-          <Link href={`/profile/${post.author.slug}`} className="flex items-center space-x-3">
-            <Avatar name={post.author.name} size="md" />
-            <div>
-              <p className="font-semibold text-gray-900 dark:text-white hover:underline">
-                {post.author.name}
-              </p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                @{post.author.slug} · {formatDate(post.createdAt)}
-              </p>
-            </div>
-          </Link>
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex-1 min-w-0">
+            <Link href={`/profile/${post.author.slug}`} className="flex items-center space-x-3">
+              <Avatar name={post.author.name} src={post.author.avatar?.url} size="md" />
+              <div className="min-w-0 flex-1">
+                <p className="font-semibold text-gray-900 dark:text-white hover:underline truncate">
+                  {post.author.name}
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  @{post.author.slug} · {formatDate(post.createdAt)}
+                </p>
+              </div>
+            </Link>
+            {post.group && (
+              <Link
+                href={`/groups/${post.group.slug}`}
+                className="mt-2 ml-12 flex items-center space-x-2 text-sm text-primary hover:underline"
+              >
+                <Avatar name={post.group.name} src={post.group.avatar?.url} size="sm" />
+                <span className="font-medium">{post.group.name}</span>
+              </Link>
+            )}
+          </div>
 
           {isOwnPost && (
             <div className="relative" ref={menuRef}>
@@ -294,7 +321,7 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
             className="flex items-center space-x-2 rounded-lg px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 hover:text-primary dark:text-gray-400 dark:hover:bg-gray-800"
           >
             <ChatBubbleLeftIcon className="h-5 w-5" />
-            <span>{post.commentsCount}</span>
+            <span>{displayCommentsCount}</span>
           </Link>
 
           <ShareButton

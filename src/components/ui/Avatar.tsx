@@ -16,17 +16,40 @@ const sizeClasses = {
 };
 
 export function Avatar({ src, alt, name, size = 'md', className, ...props }: AvatarProps) {
+  // Normalize src - treat empty string or undefined as no image
+  const hasImage = src && src.trim() !== '';
+  
   return (
     <div
       className={cn(
-        'relative inline-flex items-center justify-center overflow-hidden bg-[#0c0c6d] font-semibold rounded-xl',
+        'relative inline-flex items-center justify-center overflow-hidden font-semibold rounded-xl',
+        // Background: white/black for images, dark blue for default
+        hasImage 
+          ? 'bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700'
+          : 'bg-[#0c0c6d] border border-[#0c0c6d]',
         sizeClasses[size],
         className
       )}
       {...props}
     >
-      {src ? (
-        <img src={src} alt={alt || name} className="h-full w-full object-cover" />
+      {hasImage ? (
+        <img 
+          src={src} 
+          alt={alt || name} 
+          className="h-full w-full object-cover" 
+          onError={(e) => {
+            // If image fails to load, fall back to initials
+            const target = e.target as HTMLImageElement;
+            target.style.display = 'none';
+            const parent = target.parentElement;
+            if (parent) {
+              const fallback = document.createElement('span');
+              fallback.className = 'text-[#52ba00]';
+              fallback.textContent = getInitials(name);
+              parent.appendChild(fallback);
+            }
+          }}
+        />
       ) : (
         <span className="text-[#52ba00]">{getInitials(name)}</span>
       )}

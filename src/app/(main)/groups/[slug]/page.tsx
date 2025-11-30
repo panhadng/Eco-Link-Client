@@ -3,6 +3,7 @@
 import { use, useCallback, useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useMutation, useQuery } from '@apollo/client';
 import toast from 'react-hot-toast';
 import {
@@ -10,6 +11,7 @@ import {
   PencilSquareIcon,
   UserMinusIcon,
   UserPlusIcon,
+  UserGroupIcon,
 } from '@heroicons/react/24/outline';
 
 import { Card } from '@/components/ui/Card';
@@ -17,6 +19,7 @@ import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
 import { PostCard } from '@/components/post/PostCard';
 import { EditGroupModal } from '@/components/groups/EditGroupModal';
+import { InviteMembersModal } from '@/components/groups/InviteMembersModal';
 import { CreatePost } from '@/components/post/CreatePost';
 import { useAuth } from '@/context/AuthContext';
 import {
@@ -137,23 +140,38 @@ function getMembershipLabel(role?: GroupMemberRole | null) {
   if (!role) return null;
   switch (role) {
     case 'owner':
-      return 'You manage this group';
+      return 'Owner';
     case 'admin':
-      return 'You are an admin';
+      return 'Admin';
     case 'usual':
       return 'Member';
     case 'pending':
-      return 'Request pending';
+      return 'Pending';
     default:
       return null;
+  }
+}
+
+function getGroupVisibilityLabel(groupType: string): { label: string; variant: 'public' | 'private' | 'hidden' } {
+  switch (groupType.toLowerCase()) {
+    case 'public':
+      return { label: 'Public', variant: 'public' };
+    case 'closed':
+      return { label: 'Private', variant: 'private' };
+    case 'hidden':
+      return { label: 'Hidden', variant: 'hidden' };
+    default:
+      return { label: groupType, variant: 'public' };
   }
 }
 
 export default function GroupDetailPage({ params }: { params: Promise<PageParams> }) {
   const { slug } = use(params);
   const { user } = useAuth();
+  const router = useRouter();
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
   const {
     data: groupData,
@@ -269,31 +287,45 @@ export default function GroupDetailPage({ params }: { params: Promise<PageParams
           aria-hidden="true"
         />
         <div className="relative z-10 px-4 pb-6 pt-24 sm:px-6 sm:pt-28">
-          <div className="rounded-xl bg-white/95 p-6 shadow-sm backdrop-blur dark:bg-gray-900/85">
+          <div className="rounded-xl bg-white/95 p-6 shadow-sm backdrop-blur dark:bg-gray-900/85 overflow-hidden">
             <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-end min-w-0 flex-1">
                 {group.avatar?.url ? (
-                    <div className="relative -mt-24 h-32 w-32 overflow-hidden rounded-full border-4 border-white shadow-lg dark:border-gray-900">
+                    <div className="relative -mt-24 h-32 w-32 flex-shrink-0 overflow-hidden rounded-full border-4 border-white shadow-lg dark:border-gray-900">
                       <Image src={group.avatar.url} alt={group.name} fill className="object-cover" unoptimized />
                     </div>
                 ) : (
                   <Avatar
                     name={group.name}
                     size="xl"
-                    className="-mt-24 h-32 w-32 border-4 border-white text-3xl shadow-lg dark:border-gray-900 rounded-xl"
+                    className="-mt-24 h-32 w-32 flex-shrink-0 border-4 border-white text-3xl shadow-lg dark:border-gray-900 rounded-xl"
                   />
                 )}
-                <div className="text-gray-900 dark:text-white">
-                  <h1 className="text-2xl font-bold sm:text-3xl">{group.name}</h1>
+                <div className="text-gray-900 dark:text-white min-w-0">
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <h1 className="text-2xl font-bold sm:text-3xl truncate">{group.name}</h1>
+                    {membershipLabel && (
+                      <span
+                        className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide flex-shrink-0 ${
+                          group.myRole === 'owner'
+                            ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400'
+                            : group.myRole === 'admin'
+                              ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400'
+                              : group.myRole === 'pending'
+                                ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400'
+                                : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400'
+                        }`}
+                      >
+                        {membershipLabel}
+                      </span>
+                    )}
+                  </div>
                   {group.locationName && (
-                    <p className="mt-1 text-sm text-gray-700 dark:text-gray-300">{group.locationName}</p>
-                  )}
-                  {membershipLabel && (
-                    <p className="mt-2 text-sm font-medium text-primary">{membershipLabel}</p>
+                    <p className="mt-1 text-sm text-gray-700 dark:text-gray-300 truncate">{group.locationName}</p>
                   )}
                 </div>
               </div>
-              <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:items-center sm:justify-end sm:gap-3">
+              <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:items-center sm:justify-end sm:gap-3 flex-shrink-0 sm:ml-4">
                 <Button
                   onClick={handleJoinOrLeave}
                   disabled={joinLoading || leaveLoading || isPending}
@@ -316,22 +348,42 @@ export default function GroupDetailPage({ params }: { params: Promise<PageParams
                   )}
                 </Button>
                 {canManage && (
-                  <Button
-                    variant="outline"
-                    onClick={() => setIsEditModalOpen(true)}
-                    size="icon"
-                    aria-label="Edit group"
-                    title="Edit group"
-                  >
-                    <PencilSquareIcon className="h-5 w-5" />
-                  </Button>
+                  <>
+                    <Link href={`/groups/${slug}/admin`}>
+                      <Button variant="default" size="sm">
+                        Admin
+                      </Button>
+                    </Link>
+                    <Button
+                      variant="outline"
+                      onClick={() => setIsEditModalOpen(true)}
+                      size="icon"
+                      aria-label="Edit group"
+                      title="Edit group"
+                    >
+                      <PencilSquareIcon className="h-5 w-5" />
+                    </Button>
+                  </>
                 )}
               </div>
             </div>
             <div className="mt-6 flex flex-wrap gap-3 text-sm text-gray-600 dark:text-gray-300">
-              <span className="rounded-full bg-gray-100 px-3 py-1 font-medium capitalize tracking-wide dark:bg-gray-800">
-                {group.groupType}
-              </span>
+              {(() => {
+                const visibility = getGroupVisibilityLabel(group.groupType);
+                return (
+                  <span
+                    className={`rounded-full px-3 py-1 font-medium tracking-wide dark:bg-gray-800 ${
+                      visibility.variant === 'public'
+                        ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
+                        : visibility.variant === 'private'
+                          ? 'bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400'
+                          : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400'
+                    }`}
+                  >
+                    {visibility.label}
+                  </span>
+                );
+              })()}
               <span className="rounded-full bg-gray-100 px-3 py-1 font-medium capitalize tracking-wide dark:bg-gray-800">
                 {group.actionRadius}
               </span>
@@ -372,9 +424,21 @@ export default function GroupDetailPage({ params }: { params: Promise<PageParams
       <Card className="p-6">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Members</h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Showing {members.length} of {group.membersCount} member{group.membersCount === 1 ? '' : 's'}
-          </p>
+          <div className="flex items-center gap-3">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Showing {members.length} of {group.membersCount} member{group.membersCount === 1 ? '' : 's'}
+            </p>
+            {canManage && (
+              <Button
+                variant="default"
+                size="sm"
+                onClick={() => setIsInviteModalOpen(true)}
+              >
+                <UserGroupIcon className="mr-2 h-4 w-4" />
+                Invite
+              </Button>
+            )}
+          </div>
         </div>
         {membersLoading ? (
           <div className="mt-4 flex gap-3">
@@ -430,12 +494,24 @@ export default function GroupDetailPage({ params }: { params: Promise<PageParams
       </div>
 
       {canManage && (
-        <EditGroupModal
-          group={group}
-          isOpen={isEditModalOpen}
-          onClose={() => setIsEditModalOpen(false)}
-          onUpdated={handleAfterUpdate}
-        />
+        <>
+          <EditGroupModal
+            group={group}
+            isOpen={isEditModalOpen}
+            onClose={() => setIsEditModalOpen(false)}
+            onUpdated={handleAfterUpdate}
+            onDeleted={() => {
+              router.push('/groups');
+            }}
+          />
+          <InviteMembersModal
+            isOpen={isInviteModalOpen}
+            onClose={() => setIsInviteModalOpen(false)}
+            groupId={group.id}
+            groupSlug={group.slug}
+            groupName={group.name}
+          />
+        </>
       )}
     </div>
   );

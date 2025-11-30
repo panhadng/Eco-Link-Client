@@ -8,11 +8,12 @@ import { z } from 'zod';
 import { UPDATE_USER } from '@/lib/graphql/mutations';
 import { GET_CURRENT_USER } from '@/lib/graphql/queries';
 import { User } from '@/types';
+import { useAuth } from '@/context/AuthContext';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import { Textarea } from '@/components/ui/Textarea';
 import { Avatar } from '@/components/ui/Avatar';
-import { CameraIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { CameraIcon, XMarkIcon, PhotoIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 
@@ -31,12 +32,18 @@ const editProfileSchema = z.object({
 type EditProfileFormData = z.infer<typeof editProfileSchema>;
 
 export function EditProfileModal({ isOpen, onClose, user }: EditProfileModalProps) {
+  const { refetchUser } = useAuth();
   const [updateUser, { loading }] = useMutation(UPDATE_USER, {
     refetchQueries: [{ query: GET_CURRENT_USER }],
+    awaitRefetchQueries: true,
   });
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedCoverImage, setSelectedCoverImage] = useState<File | null>(null);
+  const [coverImagePreview, setCoverImagePreview] = useState<string | null>(null);
+  const coverFileInputRef = useRef<HTMLInputElement>(null);
+  const [removeCoverImageFlag, setRemoveCoverImageFlag] = useState(false);
 
   const {
     register,
@@ -66,11 +73,14 @@ export function EditProfileModal({ isOpen, onClose, user }: EditProfileModalProp
   }, [isOpen, user, reset]);
 
   useEffect(() => {
-    // Clear avatar selection when modal closes
+    // Clear avatar and cover image selection when modal closes
     if (!isOpen) {
       setTimeout(() => {
         setSelectedAvatar(null);
         setAvatarPreview(null);
+        setSelectedCoverImage(null);
+        setCoverImagePreview(null);
+        setRemoveCoverImageFlag(false);
       }, 0);
     }
   }, [isOpen]);
@@ -95,6 +105,31 @@ export function EditProfileModal({ isOpen, onClose, user }: EditProfileModalProp
     }
   };
 
+  const handleCoverImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && file.type.startsWith('image/')) {
+      setSelectedCoverImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setCoverImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+      setRemoveCoverImageFlag(false);
+    }
+  };
+
+  const removeCoverImage = () => {
+    if (coverImagePreview || selectedCoverImage) {
+      setSelectedCoverImage(null);
+      setCoverImagePreview(null);
+      if (coverFileInputRef.current) {
+        coverFileInputRef.current.value = '';
+      }
+    } else if (user.coverImage?.url) {
+      setRemoveCoverImageFlag(true);
+    }
+  };
+
   const onSubmit = async (data: EditProfileFormData) => {
     try {
       const variables: {
@@ -103,6 +138,7 @@ export function EditProfileModal({ isOpen, onClose, user }: EditProfileModalProp
         about: string;
         locationName: string;
         avatar?: { upload: File; alt: string };
+        coverImage?: { upload: File; alt: string } | null;
       } = {
         id: user.id,
         name: data.name,
@@ -117,7 +153,18 @@ export function EditProfileModal({ isOpen, onClose, user }: EditProfileModalProp
         };
       }
 
+      if (removeCoverImageFlag && !selectedCoverImage) {
+        variables.coverImage = null;
+      } else if (selectedCoverImage) {
+        variables.coverImage = {
+          upload: selectedCoverImage,
+          alt: `${data.name}'s cover image`,
+        };
+      }
+
       await updateUser({ variables });
+      // Manually refetch user to update AuthContext
+      await refetchUser();
       toast.success('Profile updated successfully!');
       onClose();
     } catch (error) {
@@ -129,6 +176,44 @@ export function EditProfileModal({ isOpen, onClose, user }: EditProfileModalProp
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Edit Profile" size="lg">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {/* Cover Image Upload */}
+        <div className="flex flex-col items-center space-y-4">
+          <div className="relative w-full h-48 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden flex items-center justify-center">
+            {coverImagePreview ? (
+              <Image src={coverImagePreview} alt="Cover preview" fill className="object-cover" />
+            ) : user.coverImage?.url && !removeCoverImageFlag ? (
+              <Image src={user.coverImage.url} alt="Current cover" fill className="object-cover" unoptimized />
+            ) : (
+              <span className="text-gray-500 dark:text-gray-400">No cover image</span>
+            )}
+            {(coverImagePreview || (user.coverImage?.url && !removeCoverImageFlag)) && (
+              <button
+                type="button"
+                onClick={removeCoverImage}
+                className="absolute right-2 top-2 rounded-full bg-red-500 p-2 text-white hover:bg-red-600"
+                title={selectedCoverImage || coverImagePreview ? 'Cancel upload' : 'Remove cover image'}
+              >
+                <XMarkIcon className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+          <input
+            ref={coverFileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleCoverImageSelect}
+            className="hidden"
+          />
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => coverFileInputRef.current?.click()}
+          >
+            <PhotoIcon className="mr-2 h-5 w-5" />
+            {user.coverImage?.url || coverImagePreview ? 'Change Cover Photo' : 'Upload Cover Photo'}
+          </Button>
+        </div>
+
         {/* Avatar Upload */}
         <div className="flex flex-col items-center space-y-4">
           <div className="relative">

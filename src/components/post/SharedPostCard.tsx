@@ -13,6 +13,9 @@ interface SharedPostCardProps {
     id: string;
     name: string;
     slug: string;
+    avatar?: {
+      url: string;
+    };
   };
   sharedAt?: string;
 }
@@ -23,7 +26,7 @@ export function SharedPostCard({ post, sharedBy, sharedAt }: SharedPostCardProps
       {/* Shared By Header */}
       <div className="border-b border-gray-200 bg-secondary px-4 py-3 dark:border-gray-700">
         <div className="flex items-center space-x-2">
-          <Avatar name={sharedBy.name} size="sm" />
+          <Avatar name={sharedBy.name} src={sharedBy.avatar?.url} size="sm" />
           <div className="flex-1">
             <div className="flex items-center space-x-2">
               <Link

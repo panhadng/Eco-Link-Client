@@ -7,7 +7,7 @@ const buttonVariants = cva(
   {
       variants: {
         variant: {
-          default: 'bg-primary text-primary-foreground hover:opacity-90',
+          default: 'border border-transparent bg-primary text-primary-foreground hover:opacity-90',
           destructive: 'bg-red-600 text-white hover:opacity-90 dark:bg-red-500',
           outline:
             'border border-gray-300 bg-background text-gray-900 hover:bg-primary hover:text-primary-foreground dark:border-gray-700 dark:text-gray-100',
@@ -37,7 +37,7 @@ export interface ButtonProps
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, isLoading, children, disabled, ...props }, ref) => {
+  ({ className, variant, size, isLoading, children, disabled, style, ...props }, ref) => {
     // Get inline styles for theme colors
     const getInlineStyles = () => {
       if (variant === 'default') {
@@ -49,10 +49,13 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       return {};
     };
 
+    // Merge inline styles with passed style prop
+    const mergedStyles = { ...getInlineStyles(), ...style };
+
     return (
       <button
         className={cn(buttonVariants({ variant, size, className }))}
-        style={getInlineStyles()}
+        style={mergedStyles}
         ref={ref}
         disabled={disabled || isLoading}
         {...props}

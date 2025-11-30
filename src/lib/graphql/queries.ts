@@ -14,6 +14,9 @@ export const GET_CURRENT_USER = gql`
       avatar {
         url
       }
+      coverImage {
+        url
+      }
       createdAt
       followedByCount
       followingCount
@@ -31,6 +34,9 @@ export const GET_USER_BY_SLUG = gql`
       about
       locationName
       avatar {
+        url
+      }
+      coverImage {
         url
       }
       createdAt
@@ -105,6 +111,9 @@ export const GET_USERS = gql`
       followedByCount
       followingCount
       followedByCurrentUser
+      avatar {
+        url
+      }
     }
   }
 `;
@@ -138,6 +147,18 @@ export const GET_POSTS = gql`
         id
         name
         slug
+        avatar {
+          url
+        }
+      }
+      group {
+        id
+        name
+        slug
+        groupType
+        avatar {
+          url
+        }
       }
     }
   }
@@ -236,6 +257,18 @@ export const GET_USER_POSTS = gql`
         id
         name
         slug
+        avatar {
+          url
+        }
+      }
+      group {
+        id
+        name
+        slug
+        groupType
+        avatar {
+          url
+        }
       }
     }
   }
@@ -287,6 +320,18 @@ export const GET_COMMENTS = gql`
         id
         name
         slug
+        avatar {
+          url
+        }
+      }
+      group {
+        id
+        name
+        slug
+        groupType
+        avatar {
+          url
+        }
       }
     }
   }
@@ -401,6 +446,14 @@ export const GET_GROUP_BY_SLUG = gql`
       avatar {
         url
       }
+      inviteCodes {
+        code
+        createdAt
+        expiresAt
+        comment
+        redeemedByCount
+        isValid
+      }
     }
   }
 `;
@@ -414,6 +467,7 @@ export const GET_GROUP_MEMBERS = gql`
       avatar {
         url
       }
+      myRoleInGroup
     }
   }
 `;
@@ -439,6 +493,18 @@ export const GET_GROUP_POSTS = gql`
         id
         name
         slug
+        avatar {
+          url
+        }
+      }
+      group {
+        id
+        name
+        slug
+        groupType
+        avatar {
+          url
+        }
       }
     }
   }
@@ -507,7 +573,26 @@ export const SEARCH_POSTS = gql`
         id
         name
         slug
+        avatar {
+          url
+        }
+      }
+      group {
+        id
+        name
+        slug
+        groupType
+        avatar {
+          url
+        }
       }
     }
+  }
+`;
+
+// Registration Queries
+export const VERIFY_NONCE = gql`
+  query VerifyNonce($email: String!, $nonce: String!) {
+    VerifyNonce(email: $email, nonce: $nonce)
   }
 `;

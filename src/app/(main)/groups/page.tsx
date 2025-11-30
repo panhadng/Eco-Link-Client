@@ -8,6 +8,7 @@ import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
 import { GET_GROUPS } from '@/lib/graphql/queries';
 import { Group } from '@/types';
+import { PlusIcon, ArrowPathIcon, EyeIcon } from '@heroicons/react/24/outline';
 
 export default function GroupsPage() {
   const { data, loading, error, refetch } = useQuery(GET_GROUPS, {
@@ -33,9 +34,20 @@ export default function GroupsPage() {
             Discover communities, join discussions, and collaborate with other members.
           </p>
         </div>
-        <Button variant="outline" onClick={handleRefresh} disabled={loading}>
-          Refresh
-        </Button>
+        <div className="flex gap-2">
+          <Link href="/groups/create">
+            <Button 
+              size="icon" 
+              title="Create Group" 
+              className="rounded-md border border-gray-300 dark:border-gray-700"
+            >
+              <PlusIcon className="h-5 w-5" />
+            </Button>
+          </Link>
+          <Button variant="outline" size="icon" onClick={handleRefresh} disabled={loading} title="Refresh" className="rounded-md">
+            <ArrowPathIcon className={`h-5 w-5 ${loading ? 'animate-spin' : ''}`} />
+          </Button>
+        </div>
       </div>
 
       {error && (
@@ -104,6 +116,7 @@ export default function GroupsPage() {
               <div className="mt-auto flex justify-end">
                 <Link href={`/groups/${group.slug}`}>
                   <Button variant="outline" size="sm">
+                    <EyeIcon className="mr-2 h-4 w-4" />
                     View Group
                   </Button>
                 </Link>

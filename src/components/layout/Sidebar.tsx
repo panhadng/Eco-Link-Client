@@ -38,7 +38,7 @@ export function Sidebar() {
         {user && (
           <div className="rounded-lg border border-gray-200 bg-card p-4 dark:border-gray-800">
             <Link href={`/profile/${user.slug}`} className="flex items-center space-x-3">
-              <Avatar name={user.name} size="lg" />
+              <Avatar name={user.name} src={user.avatar?.url} size="lg" />
               <div className="flex-1 overflow-hidden">
                 <p className="truncate font-semibold text-gray-900 dark:text-white">{user.name}</p>
                 <p className="truncate text-sm text-gray-500 dark:text-gray-400">@{user.slug}</p>

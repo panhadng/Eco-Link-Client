@@ -14,6 +14,7 @@ export interface User {
   followedByCount: number;
   followingCount: number;
   followedByCurrentUser?: boolean;
+  myRoleInGroup?: GroupMemberRole; // Role in a specific group context
 }
 
 // Post types
@@ -24,7 +25,7 @@ export interface Post {
   contentExcerpt?: string;
   createdAt: string;
   updatedAt?: string;
-  author: User;
+  author: User | null;
   commentsCount: number;
   shoutedCount: number;
   shoutedByCurrentUser?: boolean;
@@ -36,6 +37,15 @@ export interface Post {
     alt?: string;
     aspectRatio?: number;
   };
+  group?: {
+    id: string;
+    name: string;
+    slug: string;
+    groupType: string;
+    avatar?: {
+      url: string;
+    };
+  } | null;
 }
 
 export interface Emotion {
@@ -48,7 +58,7 @@ export interface Comment {
   id: string;
   content: string;
   createdAt: string;
-  author: User;
+  author: User | null;
   post?: Post;
 }
 
@@ -193,4 +203,19 @@ export interface Group {
   };
   createdAt?: string;
   updatedAt?: string;
+  inviteCodes?: InviteCode[];
+}
+
+export interface InviteCode {
+  code: string;
+  createdAt: string;
+  expiresAt?: string | null;
+  comment?: string | null;
+  redeemedByCount?: number;
+  isValid?: boolean;
+  invitedTo?: {
+    id: string;
+    name: string;
+    slug: string;
+  };
 }

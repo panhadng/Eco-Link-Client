@@ -1,4 +1,4 @@
-import { ApolloClient, InMemoryCache, from, split, createHttpLink } from '@apollo/client';
+import { ApolloClient, InMemoryCache, from, split } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import { WebSocketLink } from '@apollo/client/link/ws';
@@ -22,10 +22,28 @@ const getGraphQLUri = () => {
 
 const getWebSocketUri = () => {
   const envUri = process.env.NEXT_PUBLIC_WS_URI;
-  if (envUri) return envUri;
+  if (envUri) {
+    // Use the environment variable as-is (user configured it)
+    console.log('[Apollo Client] Using WebSocket URI from env:', envUri);
+    return envUri;
+  }
   
+  // If WS_URI is not set, derive it from the GraphQL URI
+  const graphqlUri = getGraphQLUri();
+  
+  // Convert HTTP/HTTPS to WS/WSS and use the same path
+  if (graphqlUri.startsWith('https://')) {
+    const wsUri = graphqlUri.replace('https://', 'wss://');
+    console.log('[Apollo Client] Auto-detected WebSocket URI from GraphQL URI:', wsUri);
+    return wsUri;
+  } else if (graphqlUri.startsWith('http://')) {
+    const wsUri = graphqlUri.replace('http://', 'ws://');
+    console.log('[Apollo Client] Auto-detected WebSocket URI from GraphQL URI:', wsUri);
+    return wsUri;
+  }
+  
+  // Fallback for local development
   if (typeof window !== 'undefined') {
-    // If on HTTPS, use WSS for backend
     if (window.location.protocol === 'https:') {
       return 'wss://13.203.0.20:4000/graphql';
     }
@@ -37,22 +55,34 @@ const uploadLink = createUploadLink({
   uri: getGraphQLUri(),
 });
 
-const wsLink = typeof window !== 'undefined' ? new WebSocketLink({
-  uri: getWebSocketUri(),
-  options: {
-    reconnect: true,
-    lazy: true,
-    connectionParams: () => {
-      const token = getAuthToken();
-      console.log('WebSocket connecting with token:', token ? 'YES' : 'NO');
-      return {
-        headers: {
-          authorization: token || '',
-        },
-      };
+const wsLink = typeof window !== 'undefined' ? (() => {
+  const wsUri = getWebSocketUri();
+  console.log('[Apollo Client] Creating WebSocketLink with URI:', wsUri);
+  
+  return new WebSocketLink({
+    uri: wsUri,
+    options: {
+      reconnect: true,
+      lazy: true,
+      connectionParams: () => {
+        const token = getAuthToken();
+        console.log('[Apollo Client] WebSocket connecting with token:', token ? 'YES' : 'NO');
+        return {
+          headers: {
+            authorization: token ? `Bearer ${token}` : '',
+          },
+        };
+      },
+      connectionCallback: (error) => {
+        if (error) {
+          console.error('[Apollo Client] WebSocket connection error:', error);
+        } else {
+          console.log('[Apollo Client] WebSocket connected successfully');
+        }
+      },
     },
-  },
-}) : null;
+  });
+})() : null;
 
 const authLink = setContext((_, { headers }) => {
   // Get token from localStorage
@@ -100,7 +130,7 @@ const client = new ApolloClient({
       Query: {
         fields: {
           Post: {
-            merge(existing = [], incoming) {
+            merge(_existing = [], incoming) {
               return incoming;
             },
           },

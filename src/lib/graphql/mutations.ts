@@ -43,6 +43,29 @@ export const SIGNUP_VERIFICATION = gql`
   }
 `;
 
+export const SIMPLE_SIGNUP = gql`
+  mutation SimpleSignup(
+    $email: String!
+    $name: String!
+    $password: String!
+    $termsAndConditionsAgreedVersion: String!
+    $locale: String
+  ) {
+    SimpleSignup(
+      email: $email
+      name: $name
+      password: $password
+      termsAndConditionsAgreedVersion: $termsAndConditionsAgreedVersion
+      locale: $locale
+    ) {
+      id
+      name
+      slug
+      email
+    }
+  }
+`;
+
 // Post Mutations
 export const CREATE_POST = gql`
   mutation CreatePost(
@@ -68,6 +91,9 @@ export const CREATE_POST = gql`
         id
         name
         slug
+        avatar {
+          url
+        }
       }
       commentsCount
       shoutedCount
@@ -75,6 +101,15 @@ export const CREATE_POST = gql`
         url
         alt
         aspectRatio
+      }
+      group {
+        id
+        name
+        slug
+        groupType
+        avatar {
+          url
+        }
       }
     }
   }
@@ -191,6 +226,7 @@ export const UNFOLLOW_USER = gql`
 // Update User
 export const UPDATE_USER = gql`
   mutation UpdateUser(
+    $coverImage: ImageInput
     $id: ID!
     $name: String
     $about: String
@@ -203,12 +239,16 @@ export const UPDATE_USER = gql`
       about: $about
       locationName: $locationName
       avatar: $avatar
+      coverImage: $coverImage
     ) {
       id
       name
       about
       locationName
       avatar {
+        url
+      }
+      coverImage {
         url
       }
     }
@@ -237,6 +277,53 @@ export const MARK_ALL_NOTIFICATIONS_AS_READ = gql`
 `;
 
 // Group Mutations
+export const CREATE_GROUP = gql`
+  mutation CreateGroup(
+    $name: String!
+    $description: String!
+    $about: String
+    $groupType: GroupType!
+    $actionRadius: GroupActionRadius!
+    $locationName: String
+    $categoryIds: [ID]
+  ) {
+    CreateGroup(
+      name: $name
+      description: $description
+      about: $about
+      groupType: $groupType
+      actionRadius: $actionRadius
+      locationName: $locationName
+      categoryIds: $categoryIds
+    ) {
+      id
+      name
+      slug
+      about
+      description
+      groupType
+      actionRadius
+      locationName
+      membersCount
+      myRole
+      avatar {
+        url
+      }
+    }
+  }
+`;
+
+export const DELETE_GROUP = gql`
+  mutation DeleteGroup($id: ID!) {
+    DeleteGroup(id: $id) {
+      id
+      name
+      slug
+      deleted
+    }
+  }
+`;
+
 export const UPDATE_GROUP = gql`
   mutation UpdateGroup(
     $id: ID!
@@ -292,6 +379,53 @@ export const LEAVE_GROUP = gql`
       id
       name
       slug
+    }
+  }
+`;
+
+export const CHANGE_GROUP_MEMBER_ROLE = gql`
+  mutation ChangeGroupMemberRole($groupId: ID!, $userId: ID!, $roleInGroup: GroupMemberRole!) {
+    ChangeGroupMemberRole(groupId: $groupId, userId: $userId, roleInGroup: $roleInGroup) {
+      id
+      name
+      slug
+      myRoleInGroup
+    }
+  }
+`;
+
+export const REMOVE_USER_FROM_GROUP = gql`
+  mutation RemoveUserFromGroup($groupId: ID!, $userId: ID!) {
+    RemoveUserFromGroup(groupId: $groupId, userId: $userId) {
+      id
+      name
+      slug
+    }
+  }
+`;
+
+export const GENERATE_GROUP_INVITE_CODE = gql`
+  mutation GenerateGroupInviteCode($groupId: ID!, $expiresAt: String, $comment: String) {
+    generateGroupInviteCode(groupId: $groupId, expiresAt: $expiresAt, comment: $comment) {
+      code
+      createdAt
+      expiresAt
+      comment
+      isValid
+      invitedTo {
+        id
+        name
+        slug
+      }
+    }
+  }
+`;
+
+export const INVALIDATE_INVITE_CODE = gql`
+  mutation InvalidateInviteCode($code: String!) {
+    invalidateInviteCode(code: $code) {
+      code
+      expiresAt
     }
   }
 `;
