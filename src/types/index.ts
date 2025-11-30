@@ -9,6 +9,9 @@ export interface User {
   avatar?: {
     url: string;
   };
+  coverImage?: {
+    url: string;
+  };
   locationName?: string;
   createdAt: string;
   followedByCount: number;

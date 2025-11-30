@@ -69,14 +69,14 @@ export function CommentSection({ postId, comments }: CommentSectionProps) {
       <div className="space-y-4">
         {validComments.map((comment) => (
             <div key={comment.id} className="flex space-x-3">
-              <Avatar name={comment.author.name} src={comment.author.avatar?.url} size="md" />
+              <Avatar name={comment.author?.name || ''} src={comment.author?.avatar?.url || ''} size="md" />
               <div className="flex-1">
                 <div className="rounded-lg bg-gray-100 p-3 dark:bg-gray-800">
                   <Link
-                    href={`/profile/${comment.author.slug}`}
+                    href={`/profile/${comment.author?.slug || ''}`}
                     className="font-semibold text-gray-900 hover:underline dark:text-white"
                   >
-                    {comment.author.name}
+                    {comment.author?.name || ''}
                   </Link>
                   <p className="mt-1 text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
                     {comment.content}
