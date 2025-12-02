@@ -72,7 +72,7 @@ export function SelectTrigger({ children, className, disabled }: SelectTriggerPr
       onClick={() => !disabled && setOpen(!open)}
       disabled={disabled}
       className={cn(
-        'flex h-10 w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 ring-offset-background placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100',
+        'flex h-10 w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 ring-offset-background placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
         className
       )}
     >
@@ -114,7 +114,7 @@ export function SelectContent({ children, className }: SelectContentProps) {
       />
       <div
         className={cn(
-          'absolute z-50 mt-1 max-h-[300px] w-full overflow-auto rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800',
+          'absolute z-50 mt-1 max-h-[300px] w-full overflow-auto rounded-md border border-gray-200 bg-white shadow-lg',
           className
         )}
       >
@@ -141,7 +141,7 @@ export function SelectItem({ value, children, className }: SelectItemProps) {
         setOpen(false);
       }}
       className={cn(
-        'relative flex cursor-pointer select-none items-center rounded-sm px-3 py-2 text-sm outline-none hover:bg-gray-100 focus:bg-gray-100 dark:hover:bg-gray-700 dark:focus:bg-gray-700',
+        'relative flex cursor-pointer select-none items-center rounded-sm px-3 py-2 text-sm outline-none hover:bg-gray-100 focus:bg-gray-100',
         isSelected && 'bg-primary/10 text-primary',
         className
       )}

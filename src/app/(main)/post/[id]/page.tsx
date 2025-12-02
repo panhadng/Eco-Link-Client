@@ -22,8 +22,8 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
 
   if (!post) {
     return (
-      <div className="rounded-lg bg-white p-12 text-center dark:bg-gray-900">
-        <p className="text-gray-500 dark:text-gray-400">Post not found</p>
+      <div className="rounded-lg bg-white p-12 text-center">
+        <p className="text-gray-500">Post not found</p>
         <Link href="/" className="mt-4 inline-block text-primary hover:underline">
           Go back home
         </Link>
@@ -35,7 +35,7 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
     <div className="space-y-4">
       <Link
         href="/"
-        className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+        className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900"
       >
         <ArrowLeftIcon className="h-5 w-5" />
         <span>Back to feed</span>

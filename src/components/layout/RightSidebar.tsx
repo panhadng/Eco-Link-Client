@@ -51,20 +51,20 @@ export function RightSidebar() {
   };
 
   return (
-    <aside className="hidden w-80 shrink-0 text-gray-900 dark:text-gray-100 xl:block">
+    <aside className="hidden w-80 shrink-0 text-gray-900 xl:block">
       <div className="sticky top-20 space-y-4">
         {/* Suggestions Card */}
-        <div className="rounded-lg border border-gray-200 bg-card p-4 dark:border-gray-800">
-          <h3 className="mb-4 font-semibold text-gray-900 dark:text-white">Suggested for you</h3>
+        <div className="rounded-lg border border-gray-200 bg-card p-4">
+          <h3 className="mb-4 font-semibold text-gray-900">Suggested for you</h3>
 
           {loading ? (
             <div className="space-y-3">
               {[...Array(3)].map((_, i) => (
                 <div key={i} className="flex items-center space-x-3 animate-pulse">
-                  <div className="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-700" />
+                  <div className="h-10 w-10 rounded-full bg-gray-200" />
                   <div className="flex-1">
-                    <div className="h-4 w-24 bg-gray-200 rounded dark:bg-gray-700" />
-                    <div className="h-3 w-16 mt-1 bg-gray-200 rounded dark:bg-gray-700" />
+                    <div className="h-4 w-24 bg-gray-200 rounded" />
+                    <div className="h-3 w-16 mt-1 bg-gray-200 rounded" />
                   </div>
                 </div>
               ))}
@@ -79,10 +79,10 @@ export function RightSidebar() {
                   >
                     <Avatar name={user.name} src={user.avatar?.url} size="md" />
                     <div className="flex-1 overflow-hidden">
-                      <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
+                      <p className="truncate text-sm font-medium text-gray-900">
                         {user.name}
                       </p>
-                      <p className="truncate text-xs text-gray-500 dark:text-gray-400">
+                      <p className="truncate text-xs text-gray-500">
                         @{user.slug}
                       </p>
                     </div>
@@ -112,8 +112,8 @@ export function RightSidebar() {
         </div>
 
         {/* Footer Links */}
-        <div className="rounded-lg border border-gray-200 bg-card p-4 dark:border-gray-800">
-          <div className="flex flex-wrap gap-2 text-xs text-gray-500 dark:text-gray-400">
+        <div className="rounded-lg border border-gray-200 bg-card p-4">
+          <div className="flex flex-wrap gap-2 text-xs text-gray-500">
             <Link href="/about" prefetch={false} className="hover:underline">About</Link>
             <span>·</span>
             <Link href="/help" prefetch={false} className="hover:underline">Help</Link>

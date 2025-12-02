@@ -90,7 +90,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 text-gray-900 dark:bg-gray-950 dark:text-gray-100">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 text-gray-900">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-3xl font-bold">Create an account</CardTitle>
@@ -99,7 +99,7 @@ export default function RegisterPage() {
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {formError && (
-              <div className="rounded-md bg-red-50 p-4 text-sm text-red-800 dark:bg-red-900/20 dark:text-red-400">
+              <div className="rounded-md bg-red-50 p-4 text-sm text-red-800">
                 <p className="font-semibold">Registration failed</p>
                 <p className="mt-1">{formError}</p>
               </div>
@@ -142,7 +142,7 @@ export default function RegisterPage() {
             </Button>
           </form>
 
-          <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
+          <div className="mt-6 text-center text-sm text-gray-600">
             Already have an account?{' '}
             <Link href="/login" className="font-medium text-primary hover:underline">
               Sign in

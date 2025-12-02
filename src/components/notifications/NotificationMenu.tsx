@@ -204,7 +204,7 @@ export function NotificationMenu() {
         className="group relative flex items-center justify-center rounded-lg p-2 hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
         aria-label="Notifications"
       >
-        <BellIcon className={`h-6 w-6 text-gray-600 transition-opacity dark:text-gray-300 ${isOpen ? 'opacity-0' : 'group-hover:opacity-0'}`} />
+        <BellIcon className={`h-6 w-6 text-gray-600 transition-opacity ${isOpen ? 'opacity-0' : 'group-hover:opacity-0'}`} />
         <BellIconSolid className={`absolute h-6 w-6 text-[#0c0c6d] transition-opacity ${isOpen ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
         {unreadCount > 0 && (
           <span className="absolute -top-1 -right-1 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-500 px-1 text-xs font-semibold text-white">
@@ -214,9 +214,9 @@ export function NotificationMenu() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-3 w-[500px] rounded-lg border border-gray-200 bg-card shadow-lg dark:border-gray-700" style={{ backgroundColor: 'hsl(var(--card))', opacity: 1 }}>
-          <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3 dark:border-gray-700">
-            <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">Notifications</p>
+        <div className="absolute right-0 mt-3 w-[500px] rounded-lg border border-gray-200 bg-card shadow-lg" style={{ backgroundColor: 'hsl(var(--card))', opacity: 1 }}>
+          <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3">
+            <p className="text-sm font-semibold text-gray-900">Notifications</p>
             <Button
               variant="ghost"
               size="sm"
@@ -232,20 +232,20 @@ export function NotificationMenu() {
               <div className="space-y-3 p-4">
                 {[...Array(3)].map((_, index) => (
                   <div key={index} className="flex animate-pulse space-x-3">
-                    <div className="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-700" />
+                    <div className="h-10 w-10 rounded-full bg-gray-200" />
                     <div className="flex-1 space-y-2">
-                      <div className="h-3 w-32 rounded bg-gray-200 dark:bg-gray-700" />
-                      <div className="h-3 w-24 rounded bg-gray-200 dark:bg-gray-700" />
+                      <div className="h-3 w-32 rounded bg-gray-200" />
+                      <div className="h-3 w-24 rounded bg-gray-200" />
                     </div>
                   </div>
                 ))}
               </div>
             ) : notifications.length === 0 ? (
-              <div className="p-4 text-sm text-gray-500 dark:text-gray-400">
+              <div className="p-4 text-sm text-gray-500">
                 You are all caught up!
               </div>
             ) : (
-              <ul className="divide-y divide-gray-100 dark:divide-gray-800">
+              <ul className="divide-y divide-gray-100">
                 {notifications.map((notification) => {
                   const link = getNotificationLink(notification);
                   const message = getNotificationMessage(notification);
@@ -257,7 +257,7 @@ export function NotificationMenu() {
                       <Link
                         href={link}
                         onClick={() => handleNotificationClick(notification)}
-                        className={`flex items-start space-x-3 px-4 py-3 text-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-800 ${
+                        className={`flex items-start space-x-3 px-4 py-3 text-sm transition-colors hover:bg-gray-50 ${
                           notification.read ? 'bg-card' : 'bg-primary/10'
                         }`}
                       >
@@ -267,24 +267,24 @@ export function NotificationMenu() {
                           src={notification.relatedUser?.avatar?.url}
                         />
                         <div className="flex-1 overflow-hidden">
-                          <p className="font-medium text-gray-900 dark:text-gray-100">{message}</p>
+                          <p className="font-medium text-gray-900">{message}</p>
                           {excerpt && (() => {
                             const htmlContent = getRichTextHtml(excerpt);
                             if (htmlContent) {
                               return (
                                 <div
-                                  className="rich-text mt-1 line-clamp-3 text-sm text-gray-600 dark:text-gray-400"
+                                  className="rich-text mt-1 line-clamp-3 text-sm text-gray-600"
                                   dangerouslySetInnerHTML={{ __html: htmlContent }}
                                 />
                               );
                             }
                             return (
-                              <p className="mt-1 line-clamp-3 text-sm text-gray-600 dark:text-gray-400">
+                              <p className="mt-1 line-clamp-3 text-sm text-gray-600">
                                 {excerpt}
                               </p>
                             );
                           })()}
-                          <p className="mt-1 text-xs text-gray-500 dark:text-gray-500">
+                          <p className="mt-1 text-xs text-gray-500">
                             {formatDate(timestamp)}
                           </p>
                         </div>

@@ -51,7 +51,7 @@ export function ShareButton({ postId, shoutedByCurrentUser, shoutedCount, postTi
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="flex items-center space-x-2 rounded-lg px-3 py-2 text-sm text-gray-600 hover:bg-green-50 hover:text-green-600 dark:text-gray-400 dark:hover:bg-green-900/20"
+        className="flex items-center space-x-2 rounded-lg px-3 py-2 text-sm text-gray-600 hover:bg-green-50 hover:text-green-600"
       >
         {isShared ? (
           <ArrowPathRoundedSquareIcon className="h-5 w-5 text-green-600" />
@@ -63,7 +63,7 @@ export function ShareButton({ postId, shoutedByCurrentUser, shoutedCount, postTi
 
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Share Post">
         <div className="space-y-3">
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-sm text-gray-600">
             <strong>{postTitle}</strong>
           </p>
 

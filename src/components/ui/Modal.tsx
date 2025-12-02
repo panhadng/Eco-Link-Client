@@ -46,16 +46,16 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
             leaveTo="opacity-0 scale-95"
           >
             <Dialog.Panel
-              className={`w-full ${sizeClasses[size]} rounded-lg bg-white p-6 text-gray-900 shadow-xl dark:bg-gray-900 dark:text-gray-100`}
+              className={`w-full ${sizeClasses[size]} rounded-lg bg-white p-6 text-gray-900 shadow-xl`}
             >
               {title && (
                 <div className="mb-4 flex items-center justify-between">
-                  <Dialog.Title className="text-xl font-semibold text-gray-900 dark:text-white">
+                  <Dialog.Title className="text-xl font-semibold text-gray-900">
                     {title}
                   </Dialog.Title>
                   <button
                     onClick={onClose}
-                    className="rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    className="rounded-md p-1 hover:bg-gray-100"
                   >
                     <XMarkIcon className="h-5 w-5 text-gray-500" />
                   </button>

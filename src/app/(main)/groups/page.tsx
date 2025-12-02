@@ -29,8 +29,8 @@ export default function GroupsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Groups</h1>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          <h1 className="text-2xl font-semibold text-gray-900">Groups</h1>
+          <p className="mt-1 text-sm text-gray-500">
             Discover communities, join discussions, and collaborate with other members.
           </p>
         </div>
@@ -39,7 +39,7 @@ export default function GroupsPage() {
             <Button 
               size="icon" 
               title="Create Group" 
-              className="rounded-md border border-gray-300 dark:border-gray-700"
+              className="rounded-md border border-gray-300"
             >
               <PlusIcon className="h-5 w-5" />
             </Button>
@@ -51,7 +51,7 @@ export default function GroupsPage() {
       </div>
 
       {error && (
-        <Card className="border border-red-200 bg-red-50 p-4 text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-200">
+        <Card className="border border-red-200 bg-red-50 p-4 text-red-700">
           <p>We couldn&apos;t load groups right now. Please try again.</p>
         </Card>
       )}
@@ -61,20 +61,20 @@ export default function GroupsPage() {
           {[...Array(6)].map((_, index) => (
             <Card key={index} className="animate-pulse space-y-4 p-6 w-10">
               <div className="flex items-center gap-3">
-                <div className="h-12 w-12 rounded-full bg-gray-200 dark:bg-gray-700 " />
+                <div className="h-12 w-12 rounded-full bg-gray-200 " />
                 <div className="flex-1 space-y-2">
-                  <div className="h-4 w-32 rounded bg-gray-200 dark:bg-gray-700" />
-                  <div className="h-3 w-24 rounded bg-gray-200 dark:bg-gray-700" />
+                  <div className="h-4 w-32 rounded bg-gray-200" />
+                  <div className="h-3 w-24 rounded bg-gray-200" />
                 </div>
               </div>
-              <div className="h-3 w-full rounded bg-gray-200 dark:bg-gray-700" />
-              <div className="h-3 w-3/4 rounded bg-gray-200 dark:bg-gray-700" />
+              <div className="h-3 w-full rounded bg-gray-200" />
+              <div className="h-3 w-3/4 rounded bg-gray-200" />
             </Card>
           ))}
         </div>
       ) : groups.length === 0 ? (
         <Card className="p-12 text-center">
-          <p className="text-gray-500 dark:text-gray-400">No groups found yet.</p>
+          <p className="text-gray-500">No groups found yet.</p>
         </Card>
       ) : (
         <div className="grid gap-4">
@@ -89,25 +89,25 @@ export default function GroupsPage() {
                   >
                     {group.name}
                   </Link>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                  <p className="text-sm text-gray-500">
                     {group.membersCount} member{group.membersCount === 1 ? '' : 's'}
                   </p>
                 </div>
               </div>
 
               {group.about && (
-                <p className="text-sm text-gray-600 line-clamp-3 dark:text-gray-300">{group.about}</p>
+                <p className="text-sm text-gray-600 line-clamp-3">{group.about}</p>
               )}
 
-              <div className="flex flex-wrap gap-2 text-xs text-gray-500 dark:text-gray-400">
-                <span className="rounded-full bg-gray-100 px-2 py-1 dark:bg-gray-800">
+              <div className="flex flex-wrap gap-2 text-xs text-gray-500">
+                <span className="rounded-full bg-gray-100 px-2 py-1">
                   {group.groupType}
                 </span>
-                <span className="rounded-full bg-gray-100 px-2 py-1 dark:bg-gray-800">
+                <span className="rounded-full bg-gray-100 px-2 py-1">
                   {group.actionRadius}
                 </span>
                 {group.locationName && (
-                  <span className="rounded-full bg-gray-100 px-2 py-1 dark:bg-gray-800">
+                  <span className="rounded-full bg-gray-100 px-2 py-1">
                     {group.locationName}
                   </span>
                 )}

@@ -103,28 +103,28 @@ export default function CreateGroupPage() {
     <div className="space-y-6">
       <Link
         href="/groups"
-        className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+        className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900"
       >
         <ArrowLeftIcon className="h-5 w-5" />
         <span>Back to Groups</span>
       </Link>
 
-      <Card className="p-6 bg-gray-100 dark:bg-gray-900/50">
-        <h1 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
+      <Card className="p-6 bg-gray-100">
+        <h1 className="mb-2 text-2xl font-bold text-gray-900">
           Create New Group
         </h1>
-        <p className="mb-6 text-gray-600 dark:text-gray-400">
+        <p className="mb-6 text-gray-600">
           Start a new community and bring people together around a shared
           interest or goal.
         </p>
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="space-y-6 bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700"
+          className="space-y-6 bg-white rounded-lg p-6 border border-gray-200"
         >
           {/* Group Name */}
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="mb-2 block text-sm font-medium text-gray-700">
               Group Name <span className="text-red-500">*</span>
             </label>
             <Input
@@ -137,11 +137,11 @@ export default function CreateGroupPage() {
 
           {/* About */}
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="mb-2 block text-sm font-medium text-gray-700">
               About (Short Summary)
             </label>
             <Textarea
-              className="border border-gray-200 dark:border-gray-700"
+              className="border border-gray-200"
               placeholder="A brief summary of your group..."
               rows={3}
               {...register("about")}
@@ -154,11 +154,11 @@ export default function CreateGroupPage() {
 
           {/* Description */}
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="mb-2 block text-sm font-medium text-gray-700">
               Description <span className="text-red-500">*</span>
             </label>
             <Textarea
-              className="border border-gray-200 dark:border-gray-700"
+              className="border border-gray-200"
               placeholder="Describe your group in detail. What is it about? What are the goals? Who should join?"
               rows={6}
               {...register("description")}
@@ -171,7 +171,7 @@ export default function CreateGroupPage() {
 
           {/* Group Type */}
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="mb-2 block text-sm font-medium text-gray-700">
               Group Type <span className="text-red-500">*</span>
             </label>
             <Select
@@ -223,7 +223,7 @@ export default function CreateGroupPage() {
 
           {/* Action Radius */}
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="mb-2 block text-sm font-medium text-gray-700">
               Action Radius <span className="text-red-500">*</span>
             </label>
             <Select
@@ -257,7 +257,7 @@ export default function CreateGroupPage() {
 
           {/* Location */}
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="mb-2 block text-sm font-medium text-gray-700">
               Location
             </label>
             <Input
@@ -268,7 +268,7 @@ export default function CreateGroupPage() {
           </div>
 
           {/* Actions */}
-          <div className="flex justify-end gap-3 border-t border-gray-200 pt-6 dark:border-gray-700 mt-6">
+          <div className="flex justify-end gap-3 border-t border-gray-200 pt-6 mt-6">
             <Link href="/groups">
               <Button
                 type="button"

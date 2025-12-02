@@ -116,8 +116,8 @@ export function GroupInvitationsManagement({ groupId, groupSlug }: GroupInvitati
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Invitations</h2>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          <h2 className="text-xl font-semibold text-gray-900">Invitations</h2>
+          <p className="mt-1 text-sm text-gray-500">
             Create and manage invite links for your group. Share these links to invite new members.
           </p>
         </div>
@@ -129,7 +129,7 @@ export function GroupInvitationsManagement({ groupId, groupSlug }: GroupInvitati
       {/* Create Invite Form */}
       {showCreateForm && (
         <Card className="p-6">
-          <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Create New Invite Link</h3>
+          <h3 className="mb-4 text-lg font-semibold text-gray-900">Create New Invite Link</h3>
           <form onSubmit={handleGenerateInvite} className="space-y-4">
             <Input
               label="Comment (optional)"
@@ -162,8 +162,8 @@ export function GroupInvitationsManagement({ groupId, groupSlug }: GroupInvitati
       {/* Existing Invite Codes */}
       {inviteCodes.length === 0 ? (
         <Card className="p-12 text-center">
-          <p className="text-gray-500 dark:text-gray-400">No invite codes created yet.</p>
-          <p className="mt-2 text-sm text-gray-400 dark:text-gray-500">
+          <p className="text-gray-500">No invite codes created yet.</p>
+          <p className="mt-2 text-sm text-gray-400">
             Click &quot;Create Invite Link&quot; to generate your first invite code.
           </p>
         </Card>
@@ -179,27 +179,27 @@ export function GroupInvitationsManagement({ groupId, groupSlug }: GroupInvitati
                 <div className="flex items-start justify-between">
                   <div className="flex-1 space-y-2">
                     <div className="flex items-center gap-3">
-                      <code className="rounded-md bg-gray-100 px-2 py-1 text-sm font-mono text-gray-900 dark:bg-gray-800 dark:text-gray-100">
+                      <code className="rounded-md bg-gray-100 px-2 py-1 text-sm font-mono text-gray-900">
                         {inviteCode.code}
                       </code>
                       {valid && (
-                        <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-800 dark:bg-green-900/20 dark:text-green-400">
+                        <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-800">
                           Active
                         </span>
                       )}
                       {expired && (
-                        <span className="rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-800 dark:bg-red-900/20 dark:text-red-400">
+                        <span className="rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-800">
                           Expired
                         </span>
                       )}
                       {!valid && !expired && (
-                        <span className="rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-800 dark:bg-gray-800 dark:text-gray-400">
+                        <span className="rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-800">
                           Invalid
                         </span>
                       )}
                     </div>
 
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                    <div className="text-sm text-gray-600">
                       <p>
                         Created: {inviteCode.createdAt ? new Date(inviteCode.createdAt).toLocaleDateString() : 'Unknown'}
                       </p>

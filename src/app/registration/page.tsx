@@ -107,11 +107,11 @@ function RegistrationVerificationContent() {
 
   if (isVerifying || verifyLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 text-gray-900 dark:bg-gray-950 dark:text-gray-100">
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 text-gray-900">
         <Card className="w-full max-w-md">
           <CardContent className="pt-6">
             <div className="text-center">
-              <p className="text-gray-600 dark:text-gray-400">Verifying your email...</p>
+              <p className="text-gray-600">Verifying your email...</p>
             </div>
           </CardContent>
         </Card>
@@ -121,14 +121,14 @@ function RegistrationVerificationContent() {
 
   if (!isValid) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 text-gray-900 dark:bg-gray-950 dark:text-gray-100">
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 text-gray-900">
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-1 text-center">
             <CardTitle className="text-3xl font-bold">Invalid verification link</CardTitle>
             <CardDescription>The verification link is invalid or has expired</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="rounded-md bg-red-50 p-4 text-sm text-red-800 dark:bg-red-900/20 dark:text-red-400">
+            <div className="rounded-md bg-red-50 p-4 text-sm text-red-800">
               <p>This verification link is no longer valid. Please request a new verification email.</p>
             </div>
             <Link href="/register">
@@ -141,14 +141,14 @@ function RegistrationVerificationContent() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 text-gray-900 dark:bg-gray-950 dark:text-gray-100">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 text-gray-900">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-3xl font-bold">Complete your registration</CardTitle>
           <CardDescription>Enter your information to finish creating your account</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="mb-4 rounded-md bg-green-50 p-3 text-sm text-green-800 dark:bg-green-900/20 dark:text-green-400">
+          <div className="mb-4 rounded-md bg-green-50 p-3 text-sm text-green-800">
             <p className="font-semibold">Email verified!</p>
             <p className="mt-1 text-xs">{email}</p>
           </div>
@@ -183,7 +183,7 @@ function RegistrationVerificationContent() {
             </Button>
           </form>
 
-          <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
+          <div className="mt-6 text-center text-sm text-gray-600">
             Already have an account?{' '}
             <Link href="/login" className="font-medium text-primary hover:underline">
               Sign in
@@ -199,11 +199,11 @@ export default function RegistrationVerificationPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 text-gray-900 dark:bg-gray-950 dark:text-gray-100">
+        <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 text-gray-900">
           <Card className="w-full max-w-md">
             <CardContent className="pt-6">
               <div className="text-center">
-                <p className="text-gray-600 dark:text-gray-400">Loading...</p>
+                <p className="text-gray-600">Loading...</p>
               </div>
             </CardContent>
           </Card>

@@ -133,11 +133,11 @@ export function ConnectionsPage({ slug, type }: ConnectionsPageProps) {
       <Card className="p-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
+            <h1 className="text-2xl font-semibold text-gray-900">
               {title}
             </h1>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{subtitleText}</p>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <p className="mt-1 text-sm text-gray-500">{subtitleText}</p>
+            <p className="mt-1 text-sm text-gray-500">
               Total: {totalCount}
             </p>
           </div>
@@ -147,7 +147,7 @@ export function ConnectionsPage({ slug, type }: ConnectionsPageProps) {
               className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                 type === 'followers'
                   ? 'bg-primary text-primary-foreground shadow-sm'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
               Followers
@@ -157,7 +157,7 @@ export function ConnectionsPage({ slug, type }: ConnectionsPageProps) {
               className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                 type === 'following'
                   ? 'bg-primary text-primary-foreground shadow-sm'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
               Following
@@ -176,20 +176,20 @@ export function ConnectionsPage({ slug, type }: ConnectionsPageProps) {
 
       {loading && connections.length === 0 && (
         <Card className="space-y-3 p-6">
-          <div className="h-12 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-800" />
-          <div className="h-12 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-800" />
-          <div className="h-12 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-800" />
+          <div className="h-12 animate-pulse rounded-lg bg-gray-200" />
+          <div className="h-12 animate-pulse rounded-lg bg-gray-200" />
+          <div className="h-12 animate-pulse rounded-lg bg-gray-200" />
         </Card>
       )}
 
       {error && (
-        <Card className="p-6 text-sm text-red-600 dark:text-red-400">
+        <Card className="p-6 text-sm text-red-600">
           Could not load {title.toLowerCase()}. Please try again later.
         </Card>
       )}
 
       {!loading && connections.length === 0 && !error && (
-        <Card className="p-6 text-sm text-gray-500 dark:text-gray-400">{emptyMessage}</Card>
+        <Card className="p-6 text-sm text-gray-500">{emptyMessage}</Card>
       )}
 
       <div className="space-y-3">
@@ -208,15 +208,15 @@ export function ConnectionsPage({ slug, type }: ConnectionsPageProps) {
                 >
                   {connection.name}
                 </Link>
-                <p className="truncate text-xs text-gray-500 dark:text-gray-400">
+                <p className="truncate text-xs text-gray-500">
                   @{connection.slug}
                 </p>
                 {connection.about && (
-                  <p className="mt-1 line-clamp-2 text-xs text-gray-600 dark:text-gray-300">
+                  <p className="mt-1 line-clamp-2 text-xs text-gray-600">
                     {connection.about}
                   </p>
                 )}
-                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                <p className="mt-1 text-xs text-gray-500">
                   {connection.followedByCount} follower
                   {connection.followedByCount === 1 ? '' : 's'} • {connection.followingCount}{' '}
                   following

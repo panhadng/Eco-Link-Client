@@ -236,7 +236,7 @@ export function EditGroupModal({ group, isOpen, onClose, onUpdated, onDeleted }:
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="mb-2 block text-sm font-medium text-gray-700">
               Group Name
             </label>
             <Input
@@ -248,7 +248,7 @@ export function EditGroupModal({ group, isOpen, onClose, onUpdated, onDeleted }:
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="mb-2 block text-sm font-medium text-gray-700">
               About
             </label>
             <Textarea
@@ -260,7 +260,7 @@ export function EditGroupModal({ group, isOpen, onClose, onUpdated, onDeleted }:
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="mb-2 block text-sm font-medium text-gray-700">
               Description
             </label>
             <Textarea
@@ -273,7 +273,7 @@ export function EditGroupModal({ group, isOpen, onClose, onUpdated, onDeleted }:
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="mb-2 block text-sm font-medium text-gray-700">
               Location
             </label>
             <Input
@@ -283,13 +283,13 @@ export function EditGroupModal({ group, isOpen, onClose, onUpdated, onDeleted }:
             />
           </div>
 
-          <div className="flex items-center justify-between border-t border-gray-200 pt-4 dark:border-gray-700">
+          <div className="flex items-center justify-between border-t border-gray-200 pt-4">
             <Button
               type="button"
               variant="destructive"
               onClick={() => setIsDeleteModalOpen(true)}
               disabled={loading || deleteLoading}
-              className="border border-gray-300 dark:border-gray-700"
+              className="border border-gray-300"
             >
               <TrashIcon className="mr-2 h-4 w-4" />
               Delete Group
@@ -314,7 +314,7 @@ export function EditGroupModal({ group, isOpen, onClose, onUpdated, onDeleted }:
         size="md"
       >
         <div className="space-y-4">
-          <p className="text-gray-700 dark:text-gray-300">
+          <p className="text-gray-700">
             Are you sure you want to delete <strong>{group?.name}</strong>? This action cannot be undone. All posts, members, and data associated with this group will be permanently removed.
           </p>
           <div className="flex justify-end gap-3">

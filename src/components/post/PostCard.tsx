@@ -194,10 +194,10 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
             <Link href={`/profile/${post.author.slug}`} className="flex items-center space-x-3">
               <Avatar name={post.author.name} src={post.author.avatar?.url} size="md" />
               <div className="min-w-0 flex-1">
-                <p className="font-semibold text-gray-900 dark:text-white hover:underline truncate">
+                <p className="font-semibold text-gray-900 hover:underline truncate">
                   {post.author.name}
                 </p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-gray-500">
                   @{post.author.slug} · {formatDate(post.createdAt)}
                 </p>
               </div>
@@ -217,24 +217,24 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
             <div className="relative" ref={menuRef}>
               <button
                 onClick={() => setMenuOpen((prev) => !prev)}
-                className="rounded-full p-2 text-gray-500 hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 dark:text-gray-400 dark:hover:bg-gray-800 dark:focus-visible:ring-gray-600"
+                className="rounded-full p-2 text-gray-500 hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400"
                 aria-haspopup="menu"
                 aria-expanded={menuOpen}
               >
                 <EllipsisHorizontalIcon className="h-5 w-5" />
               </button>
               {menuOpen && (
-                <div className="absolute right-0 z-20 mt-2 w-40 rounded-lg border border-gray-200 bg-card py-1 shadow-lg dark:border-gray-700">
+                <div className="absolute right-0 z-20 mt-2 w-40 rounded-lg border border-gray-200 bg-card py-1 shadow-lg">
                   <button
                     onClick={handleEditOpen}
-                    className="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                    className="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
                     <PencilSquareIcon className="h-4 w-4" />
                     Edit post
                   </button>
                   <button
                     onClick={handleDeleteOpen}
-                    className="flex w-full items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
+                    className="flex w-full items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50"
                   >
                     <TrashIcon className="h-4 w-4" />
                     Delete post
@@ -250,7 +250,7 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
           className="mt-3 cursor-pointer"
           onClick={onPostClick || (() => (window.location.href = `/post/${post.id}`))}
         >
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{post.title}</h3>
+          <h3 className="text-lg font-semibold text-gray-900">{post.title}</h3>
           {(() => {
             const content = post.contentExcerpt || post.content;
             const htmlContent = getRichTextHtml(content);
@@ -258,14 +258,14 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
             if (htmlContent) {
               return (
                 <div
-                  className="rich-text mt-2 text-gray-700 dark:text-gray-300"
+                  className="rich-text mt-2 text-gray-700"
                   dangerouslySetInnerHTML={{ __html: htmlContent }}
                 />
               );
             }
             
             return (
-              <p className="mt-2 text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+              <p className="mt-2 text-gray-700 whitespace-pre-wrap">
                 {content}
               </p>
             );
@@ -280,7 +280,7 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
                 setIsImageViewerOpen(true);
               }}
             >
-              <div className="relative w-full max-h-[600px] flex items-center justify-center bg-gray-100 dark:bg-gray-800">
+              <div className="relative w-full max-h-[600px] flex items-center justify-center bg-gray-100">
                 <Image
                   src={post.image.url}
                   alt={post.image.alt || post.title}
@@ -295,11 +295,11 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
         </div>
 
         {/* Actions */}
-        <div className="mt-4 flex items-center justify-between border-t border-gray-200 pt-3 dark:border-gray-700">
+        <div className="mt-4 flex items-center justify-between border-t border-gray-200 pt-3">
           <div className="flex items-center space-x-2">
             <button
               onClick={handleLike}
-              className="flex items-center rounded-lg px-3 py-2 text-sm text-gray-600 hover:bg-red-50 hover:text-red-600 dark:text-gray-400 dark:hover:bg-red-900/20"
+              className="flex items-center rounded-lg px-3 py-2 text-sm text-gray-600 hover:bg-red-50 hover:text-red-600"
               aria-label={liked ? 'Unlike post' : 'Like post'}
             >
               {liked ? (
@@ -310,7 +310,7 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
             </button>
             <button
               onClick={handleOpenLikers}
-              className="text-sm font-medium text-gray-600 underline decoration-transparent transition hover:text-primary hover:decoration-primary dark:text-gray-400"
+              className="text-sm font-medium text-gray-600 underline decoration-transparent transition hover:text-primary hover:decoration-primary"
             >
               {likeCount} like{likeCount === 1 ? '' : 's'}
             </button>
@@ -318,7 +318,7 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
 
           <Link
             href={`/post/${post.id}`}
-            className="flex items-center space-x-2 rounded-lg px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 hover:text-primary dark:text-gray-400 dark:hover:bg-gray-800"
+            className="flex items-center space-x-2 rounded-lg px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 hover:text-primary"
           >
             <ChatBubbleLeftIcon className="h-5 w-5" />
             <span>{displayCommentsCount}</span>
@@ -347,7 +347,7 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
             title="Delete post"
             size="sm"
           >
-            <p className="text-sm text-gray-600 dark:text-gray-300">
+            <p className="text-sm text-gray-600">
               Are you sure you want to delete this post? This action cannot be undone.
             </p>
             <div className="mt-6 flex justify-end gap-3">
@@ -368,15 +368,15 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
 
       <Modal isOpen={isLikersModalOpen} onClose={handleCloseLikers} title="Liked by" size="sm">
         {likersLoading && likers.length === 0 ? (
-          <p className="text-sm text-gray-500 dark:text-gray-400">Loading likes…</p>
+          <p className="text-sm text-gray-500">Loading likes…</p>
         ) : (
           <>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-sm text-gray-500">
               Total likes: {totalLikerCount}
             </p>
             <div className="mt-3 max-h-80 space-y-3 overflow-y-auto pr-1">
               {likers.length === 0 ? (
-                <p className="text-sm text-gray-500 dark:text-gray-400">No likes yet.</p>
+                <p className="text-sm text-gray-500">No likes yet.</p>
               ) : (
                 likers.map((emotion, index) => {
                   const liker = emotion.User;
@@ -386,19 +386,19 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
                     <Link
                       key={key}
                       href={`/profile/${liker.slug}`}
-                      className="flex items-center gap-3 rounded-lg p-2 transition hover:bg-gray-100 dark:hover:bg-gray-800"
+                      className="flex items-center gap-3 rounded-lg p-2 transition hover:bg-gray-100"
                       onClick={handleCloseLikers}
                     >
                       <Avatar name={liker.name} src={liker.avatar?.url} size="sm" />
                       <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold text-gray-900 dark:text-white">
+                        <p className="truncate text-sm font-semibold text-gray-900">
                           {liker.name}
                         </p>
-                        <p className="truncate text-xs text-gray-500 dark:text-gray-400">
+                        <p className="truncate text-xs text-gray-500">
                           @{liker.slug}
                         </p>
                         {liker.about && (
-                          <p className="mt-1 line-clamp-2 text-xs text-gray-600 dark:text-gray-300">
+                          <p className="mt-1 line-clamp-2 text-xs text-gray-600">
                             {liker.about}
                           </p>
                         )}

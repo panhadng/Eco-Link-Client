@@ -180,10 +180,10 @@ export default function MessagesPage() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-8rem)] max-w-full gap-4 text-gray-900 dark:text-gray-100">
+    <div className="flex h-[calc(100vh-8rem)] max-w-full gap-4 text-gray-900">
       {/* Room List */}
       <Card className="w-96 shrink-0 overflow-hidden">
-        <div className="border-b border-gray-200 p-4 dark:border-gray-800" style={{ backgroundColor: '#0c0c6d' }}>
+        <div className="border-b border-gray-200 p-4" style={{ backgroundColor: '#0c0c6d' }}>
           <h2 className="text-lg font-semibold text-white">
             Messages
           </h2>
@@ -198,7 +198,7 @@ export default function MessagesPage() {
               <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
             </div>
           ) : rooms.length === 0 ? (
-            <div className="p-8 text-center text-gray-500 dark:text-gray-400">
+            <div className="p-8 text-center text-gray-500">
               <ChatBubbleLeftRightIcon className="mx-auto h-12 w-12 mb-2" />
               <p>No conversations yet</p>
               <p className="text-sm mt-1">
@@ -206,21 +206,21 @@ export default function MessagesPage() {
               </p>
             </div>
           ) : (
-            <div className="divide-y divide-gray-200 dark:divide-gray-800">
+            <div className="divide-y divide-gray-200">
               {rooms.map((room: Room) => (
                 <button
                   key={room.id}
                   onClick={() => setSelectedRoomId(room.id)}
                   className={`flex w-full items-start gap-3 p-4 text-left transition-colors ${
                     selectedRoomId === room.id
-                      ? "bg-gray-200 dark:bg-gray-700"
-                      : "hover:bg-gray-50 dark:hover:bg-gray-800"
+                      ? "bg-gray-200"
+                      : "hover:bg-gray-50"
                   }`}
                 >
                   <Avatar name={room.roomName} src={room.avatar} size="md" />
                   <div className="flex-1 overflow-hidden">
                     <div className="flex items-center justify-between">
-                      <p className="truncate font-semibold text-gray-900 dark:text-white">
+                      <p className="truncate font-semibold text-gray-900">
                         {room.roomName}
                       </p>
                       {room.unreadCount > 0 && (
@@ -229,7 +229,7 @@ export default function MessagesPage() {
                         </span>
                       )}
                     </div>
-                    <p className="truncate text-sm text-gray-500 dark:text-gray-400">
+                    <p className="truncate text-sm text-gray-500">
                       {room.lastMessage?.content || "No messages yet"}
                     </p>
                     {room.lastMessageAt && (
@@ -250,7 +250,7 @@ export default function MessagesPage() {
         {selectedRoom ? (
           <>
             {/* Chat Header */}
-            <div className="flex items-center gap-3 border-b border-gray-200 p-4 dark:border-gray-800" style={{ backgroundColor: '#0c0c6d' }}>
+            <div className="flex items-center gap-3 border-b border-gray-200 p-4" style={{ backgroundColor: '#0c0c6d' }}>
               <Avatar
                 name={selectedRoom.roomName}
                 src={selectedRoom.avatar}
@@ -270,7 +270,7 @@ export default function MessagesPage() {
                   <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
                 </div>
               ) : messages.length === 0 ? (
-                <div className="flex items-center justify-center h-full text-gray-500 dark:text-gray-400">
+                <div className="flex items-center justify-center h-full text-gray-500">
                   <p>No messages yet. Start the conversation!</p>
                 </div>
               ) : (
@@ -338,7 +338,7 @@ export default function MessagesPage() {
                                         href={file.url}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="block rounded bg-gray-200 px-3 py-2 text-sm hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
+                                        className="block rounded bg-gray-200 px-3 py-2 text-sm hover:bg-gray-300"
                                       >
                                         📎 {file.name}
                                       </a>
@@ -347,7 +347,7 @@ export default function MessagesPage() {
                               </div>
                             )}
                           </div>
-                          <span className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                          <span className="mt-1 text-xs text-gray-500">
                             {formatDate(message.date)}
                           </span>
                         </div>
@@ -362,7 +362,7 @@ export default function MessagesPage() {
             {/* Message Input */}
             <form
               onSubmit={handleSendMessage}
-              className="border-t border-gray-200 p-4 dark:border-gray-800"
+              className="border-t border-gray-200 p-4"
             >
               {/* File Previews */}
               {filePreviews.length > 0 && (
@@ -401,7 +401,7 @@ export default function MessagesPage() {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="rounded-full p-2 text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+                  className="rounded-full p-2 text-gray-600 hover:bg-gray-100"
                   disabled={sending}
                 >
                   <PhotoIcon className="h-5 w-5" />
@@ -411,7 +411,7 @@ export default function MessagesPage() {
                   value={messageText}
                   onChange={(e) => setMessageText(e.target.value)}
                   placeholder="Type a message..."
-                  className="flex-1 rounded-full border border-gray-300 bg-gray-50 px-4 py-2 text-sm text-gray-900 light:text-black focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 dark:border-gray-700 dark:bg-[hsl(30,8%,22%)] dark:text-gray-100 dark:focus:border-gray-600 dark:focus:ring-gray-600"
+                  className="flex-1 rounded-full border border-gray-300 bg-gray-50 px-4 py-2 text-sm text-gray-900 light:text-black focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400"
                   disabled={sending}
                 />
                 <Button
@@ -429,7 +429,7 @@ export default function MessagesPage() {
             </form>
           </>
         ) : (
-          <div className="flex h-full items-center justify-center text-gray-500 dark:text-gray-400">
+          <div className="flex h-full items-center justify-center text-gray-500">
             <div className="text-center">
               <ChatBubbleLeftRightIcon className="mx-auto h-16 w-16 mb-4" />
               <p className="text-lg font-semibold">Select a conversation</p>

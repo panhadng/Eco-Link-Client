@@ -131,7 +131,7 @@ export function CreatePost({ groupId, groupName, placeholder, onCreated }: Creat
               <button
                 type="button"
                 onClick={() => setExpanded(true)}
-                className="w-full rounded-full border border-gray-300 bg-muted px-4 py-2 text-left text-gray-500 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-700"
+                className="w-full rounded-full border border-gray-300 bg-muted px-4 py-2 text-left text-gray-500 hover:bg-gray-100"
               >
                 {collapsedPrompt}
               </button>
@@ -140,7 +140,7 @@ export function CreatePost({ groupId, groupName, placeholder, onCreated }: Creat
                 <input
                   type="text"
                   placeholder="Post title..."
-                  className="w-full border-0 border-b border-gray-300 bg-background p-2 text-lg font-semibold text-gray-900 focus:border-gray-400 focus:outline-none dark:border-gray-700 dark:text-gray-100 dark:focus:border-gray-600"
+                  className="w-full border-0 border-b border-gray-300 bg-background p-2 text-lg font-semibold text-gray-900 focus:border-gray-400 focus:outline-none"
                   {...register('title')}
                 />
                 {errors.title && (
@@ -175,7 +175,7 @@ export function CreatePost({ groupId, groupName, placeholder, onCreated }: Creat
                   </div>
                 )}
 
-                <div className="flex items-center justify-between border-t border-gray-200 pt-3 dark:border-gray-700">
+                <div className="flex items-center justify-between border-t border-gray-200 pt-3">
                   <input
                     ref={fileInputRef}
                     type="file"
@@ -186,7 +186,7 @@ export function CreatePost({ groupId, groupName, placeholder, onCreated }: Creat
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="flex items-center space-x-2 rounded-lg px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+                    className="flex items-center space-x-2 rounded-lg px-3 py-2 text-sm text-gray-600 hover:bg-gray-100"
                   >
                     <PhotoIcon className="h-5 w-5" />
                     <span>Photo</span>

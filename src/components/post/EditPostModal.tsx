@@ -62,7 +62,7 @@ export function EditPostModal({ post, isOpen, onClose, onUpdated }: EditPostModa
     <Modal isOpen={isOpen} onClose={handleClose} title="Edit Post" size="lg">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="mb-2 block text-sm font-medium text-gray-700">
             Title
           </label>
           <Input
@@ -74,7 +74,7 @@ export function EditPostModal({ post, isOpen, onClose, onUpdated }: EditPostModa
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="mb-2 block text-sm font-medium text-gray-700">
             Content
           </label>
           <Textarea
@@ -83,7 +83,7 @@ export function EditPostModal({ post, isOpen, onClose, onUpdated }: EditPostModa
             rows={6}
             required
           />
-          <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+          <p className="mt-2 text-xs text-gray-500">
             Note: updating the post only changes the title and text. To change the image, delete the post and create a new one.
           </p>
         </div>

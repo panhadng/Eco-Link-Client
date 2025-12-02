@@ -120,8 +120,8 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
 
   if (!user) {
     return (
-      <div className="rounded-lg bg-[hsl(35,20%,99%)] p-12 text-center dark:bg-[hsl(30,12%,12%)]">
-        <p className="text-gray-500 dark:text-gray-400">User not found</p>
+      <div className="rounded-lg bg-[hsl(35,20%,99%)] p-12 text-center">
+        <p className="text-gray-500">User not found</p>
       </div>
     );
   }
@@ -150,11 +150,13 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
         <div className="relative h-32 bg-primary" style={{ backgroundColor: '#0c0c6d' }}>
           {user.coverImage?.url ? (
             <Image
+              key={user.coverImage.url}
               src={user.coverImage.url}
               alt={`${user.name}'s cover photo`}
               fill
               className="object-cover"
               unoptimized
+              priority
             />
           ) : (
             <div className="h-full w-full bg-primary" style={{ backgroundColor: '#0c0c6d' }} />
@@ -178,7 +180,7 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
         <div className="relative px-6 pb-6">
           <div className="flex items-end justify-between">
             {user.avatar?.url ? (
-              <div className="relative -mt-12 h-32 w-32 overflow-hidden rounded-full border-4 border-white dark:border-gray-900">
+              <div className="relative -mt-12 h-32 w-32 overflow-hidden rounded-full border-4 border-white">
                 <Image
                   src={user.avatar.url}
                   alt={user.name}
@@ -192,7 +194,7 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
                 name={user.name}
                 src={user.avatar?.url}
                 size="xl"
-                className="-mt-12 border-4 border-white dark:border-gray-900"
+                className="-mt-12 border-4 border-white"
               />
             )}
 
@@ -232,14 +234,14 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
           </div>
 
           <div className="mt-4">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{user.name}</h1>
-            <p className="text-gray-500 dark:text-gray-400">@{user.slug}</p>
+            <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
+            <p className="text-gray-500">@{user.slug}</p>
 
             {user.about && (
-              <p className="mt-3 text-gray-700 dark:text-gray-300">{user.about}</p>
+              <p className="mt-3 text-gray-700">{user.about}</p>
             )}
 
-            <div className="mt-3 flex flex-wrap gap-4 text-sm text-gray-500 dark:text-gray-400">
+            <div className="mt-3 flex flex-wrap gap-4 text-sm text-gray-500">
               {user.locationName && (
                 <div className="flex items-center space-x-1">
                   <MapPinIcon className="h-4 w-4" />
@@ -257,19 +259,19 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
                 href={`/profile/${user.slug}/followers`}
                 className="transition hover:text-primary"
               >
-                <span className="font-semibold text-gray-900 dark:text-white">
+                <span className="font-semibold text-gray-900">
                   {user.followedByCount}
                 </span>{' '}
-                <span className="text-gray-500 dark:text-gray-400">Followers</span>
+                <span className="text-gray-500">Followers</span>
               </Link>
               <Link
                 href={`/profile/${user.slug}/following`}
                 className="transition hover:text-primary"
               >
-                <span className="font-semibold text-gray-900 dark:text-white">
+                <span className="font-semibold text-gray-900">
                   {user.followingCount ?? 0}
                 </span>{' '}
-                <span className="text-gray-500 dark:text-gray-400">Following</span>
+                <span className="text-gray-500">Following</span>
               </Link>
             </div>
           </div>
@@ -278,7 +280,7 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
 
       {/* Posts Feed */}
       <div>
-        <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">
+        <h2 className="mb-4 text-xl font-semibold text-gray-900">
           Posts & Activity
         </h2>
 
@@ -287,13 +289,13 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
             {[...Array(3)].map((_, i) => (
               <div
                 key={i}
-                className="h-48 animate-pulse rounded-lg bg-[hsl(35,20%,99%)] dark:bg-[hsl(30,12%,12%)]"
+                className="h-48 animate-pulse rounded-lg bg-[hsl(35,20%,99%)]"
               />
             ))}
           </div>
         ) : allPosts.length === 0 ? (
           <Card className="p-12 text-center">
-            <p className="text-gray-500 dark:text-gray-400">No posts yet</p>
+            <p className="text-gray-500">No posts yet</p>
           </Card>
         ) : (
           <div className="space-y-4">
@@ -333,6 +335,10 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
           isOpen={isEditModalOpen}
           onClose={() => setIsEditModalOpen(false)}
           user={currentUser}
+          onProfileUpdated={() => {
+            refetchProfile();
+            refetchUserPosts();
+          }}
         />
       )}
     </div>

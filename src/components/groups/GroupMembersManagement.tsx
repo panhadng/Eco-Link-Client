@@ -119,8 +119,8 @@ export function GroupMembersManagement({ groupId, groupSlug }: GroupMembersManag
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Group Members</h2>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          <h2 className="text-xl font-semibold text-gray-900">Group Members</h2>
+          <p className="mt-1 text-sm text-gray-500">
             Manage member roles and permissions. Total: {members.length} member{members.length !== 1 ? 's' : ''}
           </p>
         </div>
@@ -128,7 +128,7 @@ export function GroupMembersManagement({ groupId, groupSlug }: GroupMembersManag
 
       {members.length === 0 ? (
         <Card className="p-12 text-center">
-          <p className="text-gray-500 dark:text-gray-400">No members found.</p>
+          <p className="text-gray-500">No members found.</p>
         </Card>
       ) : (
         <div className="space-y-8">
@@ -138,7 +138,7 @@ export function GroupMembersManagement({ groupId, groupSlug }: GroupMembersManag
 
             return (
               <div key={role}>
-                <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-gray-500">
                   {ROLE_LABELS[role]} ({roleMembers.length})
                 </h3>
                 <div className="space-y-2">
@@ -151,8 +151,8 @@ export function GroupMembersManagement({ groupId, groupSlug }: GroupMembersManag
                         >
                           <Avatar name={member.name} src={member.avatar?.url} size="md" />
                           <div className="min-w-0 flex-1">
-                            <p className="font-semibold text-gray-900 dark:text-white">{member.name}</p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">@{member.slug}</p>
+                            <p className="font-semibold text-gray-900">{member.name}</p>
+                            <p className="text-sm text-gray-500">@{member.slug}</p>
                           </div>
                         </Link>
 
@@ -161,7 +161,7 @@ export function GroupMembersManagement({ groupId, groupSlug }: GroupMembersManag
                             value={member.myRoleInGroup || 'usual'}
                             onChange={(e) => handleRoleChange(member.id, e.target.value as GroupMemberRole)}
                             disabled={changingRole || member.myRoleInGroup === 'owner'}
-                            className="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-900 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-primary"
+                            className="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-900 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                           >
                             {ROLE_OPTIONS.map((option) => (
                               <option key={option} value={option} disabled={option === 'owner'}>
@@ -195,8 +195,8 @@ export function GroupMembersManagement({ groupId, groupSlug }: GroupMembersManag
       {isRemoveModalOpen && selectedMember && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <Card className="w-full max-w-md p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Remove Member</h3>
-            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+            <h3 className="text-lg font-semibold text-gray-900">Remove Member</h3>
+            <p className="mt-2 text-sm text-gray-600">
               Are you sure you want to remove <strong>{selectedMember.name}</strong> from this group? This action
               cannot be undone.
             </p>

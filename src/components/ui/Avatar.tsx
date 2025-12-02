@@ -1,4 +1,5 @@
 import { HTMLAttributes } from 'react';
+import Image from 'next/image';
 import { cn, getInitials } from '@/lib/utils';
 
 interface AvatarProps extends HTMLAttributes<HTMLDivElement> {
@@ -25,7 +26,7 @@ export function Avatar({ src, alt, name, size = 'md', className, ...props }: Ava
         'relative inline-flex items-center justify-center overflow-hidden font-semibold rounded-xl',
         // Background: white/black for images, dark blue for default
         hasImage 
-          ? 'bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700'
+          ? 'bg-white border border-gray-200'
           : 'bg-[#0c0c6d] border border-[#0c0c6d]',
         sizeClasses[size],
         className
@@ -33,10 +34,12 @@ export function Avatar({ src, alt, name, size = 'md', className, ...props }: Ava
       {...props}
     >
       {hasImage ? (
-        <img 
-          src={src} 
+        <Image 
+          src={src!} 
           alt={alt || name} 
-          className="h-full w-full object-cover" 
+          fill
+          className="object-cover" 
+          unoptimized
           onError={(e) => {
             // If image fails to load, fall back to initials
             const target = e.target as HTMLImageElement;

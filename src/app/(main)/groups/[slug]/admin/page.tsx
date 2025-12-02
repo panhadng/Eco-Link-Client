@@ -52,7 +52,7 @@ export default function GroupAdminPage({ params }: { params: Promise<PageParams>
   if (groupError || !group) {
     return (
       <Card className="p-12 text-center">
-        <p className="text-red-600 dark:text-red-400">We couldn&apos;t load this group.</p>
+        <p className="text-red-600">We couldn&apos;t load this group.</p>
         <Link href={`/groups/${slug}`} className="mt-4 inline-block text-primary hover:underline">
           Back to group
         </Link>
@@ -63,7 +63,7 @@ export default function GroupAdminPage({ params }: { params: Promise<PageParams>
   if (!canManage) {
     return (
       <Card className="p-12 text-center">
-        <p className="text-red-600 dark:text-red-400">You don&apos;t have permission to access this page.</p>
+        <p className="text-red-600">You don&apos;t have permission to access this page.</p>
         <Link href={`/groups/${slug}`} className="mt-4 inline-block text-primary hover:underline">
           Back to group
         </Link>
@@ -88,15 +88,15 @@ export default function GroupAdminPage({ params }: { params: Promise<PageParams>
             </Button>
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Group Admin</h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">{group.name}</p>
+            <h1 className="text-2xl font-bold text-gray-900">Group Admin</h1>
+            <p className="text-sm text-gray-500">{group.name}</p>
           </div>
         </div>
       </div>
 
       {/* Tabs */}
       <Card className="p-0">
-        <div className="border-b border-gray-200 dark:border-gray-700">
+        <div className="border-b border-gray-200">
           <nav className="flex space-x-8 px-6" aria-label="Tabs">
             {tabs.map((tab) => {
               const Icon = tab.icon;
@@ -109,7 +109,7 @@ export default function GroupAdminPage({ params }: { params: Promise<PageParams>
                     ${
                       activeTab === tab.id
                         ? 'border-primary text-primary'
-                        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+                        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
                     }
                   `}
                 >

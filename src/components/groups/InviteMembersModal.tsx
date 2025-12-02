@@ -88,7 +88,7 @@ export function InviteMembersModal({
       <div className="space-y-6">
         {!generatedInviteCode ? (
           <form onSubmit={handleGenerateInvite} className="space-y-4">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-gray-600">
               Create an invite link for <strong>{groupName}</strong>. Share this link with people you want to invite to join the group.
             </p>
 
@@ -126,17 +126,17 @@ export function InviteMembersModal({
           </form>
         ) : (
           <div className="space-y-4">
-            <div className="rounded-lg bg-green-50 p-4 dark:bg-green-900/20">
-              <p className="text-sm font-medium text-green-800 dark:text-green-400">
+            <div className="rounded-lg bg-green-50 p-4">
+              <p className="text-sm font-medium text-green-800">
                 Invite link created successfully!
               </p>
-              <p className="mt-1 text-xs text-green-700 dark:text-green-500">
+              <p className="mt-1 text-xs text-green-700">
                 Copy and share this link with people you want to invite.
               </p>
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="mb-2 block text-sm font-medium text-gray-700">
                 Invite Link
               </label>
               <div className="flex gap-2">

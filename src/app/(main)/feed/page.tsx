@@ -26,13 +26,13 @@ export default function FeedPage() {
           {[...Array(3)].map((_, i) => (
             <div
               key={i}
-              className="h-48 animate-pulse rounded-lg bg-white dark:bg-gray-900"
+              className="h-48 animate-pulse rounded-lg bg-white"
             />
           ))}
         </div>
       ) : posts.length === 0 ? (
-        <div className="rounded-lg bg-white p-12 text-center dark:bg-gray-900">
-          <p className="text-gray-500 dark:text-gray-400">
+        <div className="rounded-lg bg-white p-12 text-center">
+          <p className="text-gray-500">
             No posts yet. Create the first one!
           </p>
         </div>

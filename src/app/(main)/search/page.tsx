@@ -88,8 +88,8 @@ export default function SearchPage() {
   return (
     <div className="space-y-6">
       <Card className="p-6">
-        <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Search</h1>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        <h1 className="text-2xl font-semibold text-gray-900">Search</h1>
+        <p className="mt-1 text-sm text-gray-500">
           Find people, groups, and posts across the community.
         </p>
 
@@ -106,31 +106,31 @@ export default function SearchPage() {
         </form>
 
         {!hasSearchTerm && (
-          <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
+          <p className="mt-4 text-sm text-gray-500">
             Try searching for a person, a group, or a topic to get started.
           </p>
         )}
       </Card>
 
       {isLoading && (
-        <Card className="p-6 text-sm text-gray-500 dark:text-gray-400">Searching…</Card>
+        <Card className="p-6 text-sm text-gray-500">Searching…</Card>
       )}
 
       {hasError && (
-        <Card className="p-6 text-sm text-red-600 dark:text-red-400">
+        <Card className="p-6 text-sm text-red-600">
           Something went wrong while searching. Please try again.
         </Card>
       )}
 
       {showNoResults && (
-        <Card className="p-6 text-sm text-gray-500 dark:text-gray-400">
+        <Card className="p-6 text-sm text-gray-500">
           No matches found for “{term}”.
         </Card>
       )}
 
       {userResults.length > 0 && (
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">People</h2>
+          <h2 className="text-lg font-semibold text-gray-900">People</h2>
           {userResults.map((user) => (
             <Card key={user.id} className="flex items-center justify-between gap-4 p-4">
               <div className="flex items-center gap-3">
@@ -142,11 +142,11 @@ export default function SearchPage() {
                   >
                     {user.name}
                   </Link>
-                  <p className="truncate text-xs text-gray-500 dark:text-gray-400">@{user.slug}</p>
+                  <p className="truncate text-xs text-gray-500">@{user.slug}</p>
                   {user.about && (
-                    <p className="mt-1 line-clamp-2 text-xs text-gray-600 dark:text-gray-300">{user.about}</p>
+                    <p className="mt-1 line-clamp-2 text-xs text-gray-600">{user.about}</p>
                   )}
-                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                  <p className="mt-1 text-xs text-gray-500">
                     {user.followedByCount} follower{user.followedByCount === 1 ? '' : 's'} •{' '}
                     {user.followingCount} following
                   </p>
@@ -165,7 +165,7 @@ export default function SearchPage() {
 
       {groupResults.length > 0 && (
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Groups</h2>
+          <h2 className="text-lg font-semibold text-gray-900">Groups</h2>
           {groupResults.map((group) => (
             <Card key={group.id} className="p-4">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -176,11 +176,11 @@ export default function SearchPage() {
                   >
                     {group.name}
                   </Link>
-                  <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                  <p className="mt-1 text-sm text-gray-500">
                     {group.membersCount} member{group.membersCount === 1 ? '' : 's'} · {group.groupType}
                   </p>
                   {group.descriptionExcerpt && (
-                    <p className="mt-2 line-clamp-2 text-sm text-gray-600 dark:text-gray-300">
+                    <p className="mt-2 line-clamp-2 text-sm text-gray-600">
                       {group.descriptionExcerpt}
                     </p>
                   )}
@@ -200,8 +200,8 @@ export default function SearchPage() {
       {postResults.length > 0 && (
         <section className="space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Posts</h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <h2 className="text-lg font-semibold text-gray-900">Posts</h2>
+            <p className="text-sm text-gray-500">
               Showing {postResults.length} result{postResults.length === 1 ? '' : 's'}
             </p>
           </div>

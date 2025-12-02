@@ -48,8 +48,8 @@ export function GroupSettingsManagement({ group, onUpdated }: GroupSettingsManag
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Group Settings</h2>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        <h2 className="text-xl font-semibold text-gray-900">Group Settings</h2>
+        <p className="mt-1 text-sm text-gray-500">
           Update your group information, description, and other settings.
         </p>
       </div>
@@ -64,7 +64,7 @@ export function GroupSettingsManagement({ group, onUpdated }: GroupSettingsManag
         />
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="block text-sm font-medium text-gray-700">
             About (Short description)
           </label>
           <Textarea
@@ -76,7 +76,7 @@ export function GroupSettingsManagement({ group, onUpdated }: GroupSettingsManag
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="block text-sm font-medium text-gray-700">
             Description
           </label>
           <Textarea

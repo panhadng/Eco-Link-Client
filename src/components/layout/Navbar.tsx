@@ -53,7 +53,7 @@ export function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-40 border-b border-gray-200 bg-card text-gray-900 shadow-sm backdrop-blur-none opacity-100 dark:border-gray-800 dark:text-gray-100" style={{ backgroundColor: 'hsl(var(--card))', opacity: 1 }}>
+    <nav className="sticky top-0 z-40 border-b border-gray-200 bg-card text-gray-900 shadow-sm backdrop-blur-none opacity-100" style={{ backgroundColor: 'hsl(var(--card))', opacity: 1 }}>
       <div className="mx-auto max-w-7xl px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
@@ -79,7 +79,7 @@ export function Navbar() {
                 defaultValue={term}
                 placeholder="Search..."
                 aria-label="Search"
-                className="w-full rounded-full border border-gray-200 bg-background py-2 pl-10 pr-4 text-sm text-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring dark:bg-muted"
+                className="w-full rounded-full border border-gray-200 bg-background py-2 pl-10 pr-4 text-sm text-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring"
               />
               <button type="submit" className="sr-only">
                 Search
@@ -94,7 +94,7 @@ export function Navbar() {
               className="group relative flex items-center justify-center rounded-lg p-2 transition-colors hover:bg-primary/10"
             >
               <HomeIcon 
-                className={`h-6 w-6 text-gray-600 transition-opacity dark:text-gray-300 ${isFeedActive ? 'opacity-0' : 'group-hover:opacity-0'}`}
+                className={`h-6 w-6 text-gray-600 transition-opacity ${isFeedActive ? 'opacity-0' : 'group-hover:opacity-0'}`}
               />
               <HomeIconSolid 
                 className={`absolute h-6 w-6 text-[#0c0c6d] transition-opacity ${isFeedActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
@@ -106,7 +106,7 @@ export function Navbar() {
               className="group relative flex items-center justify-center rounded-lg p-2 transition-colors hover:bg-primary/10"
             >
               <ChatBubbleLeftRightIcon 
-                className={`h-6 w-6 text-gray-600 transition-opacity dark:text-gray-300 ${isMessagesActive ? 'opacity-0' : 'group-hover:opacity-0'}`}
+                className={`h-6 w-6 text-gray-600 transition-opacity ${isMessagesActive ? 'opacity-0' : 'group-hover:opacity-0'}`}
               />
               <ChatBubbleLeftRightIconSolid 
                 className={`absolute h-6 w-6 text-[#0c0c6d] transition-opacity ${isMessagesActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
@@ -127,10 +127,10 @@ export function Navbar() {
                 </button>
 
                 {/* Dropdown */}
-                <div className="absolute right-0 mt-2 w-48 origin-top-right scale-0 rounded-lg border border-gray-200 bg-card py-1 shadow-lg transition-transform group-hover:scale-100 dark:border-gray-700" style={{ backgroundColor: 'hsl(var(--card))', opacity: 1 }}>
+                <div className="absolute right-0 mt-2 w-48 origin-top-right scale-0 rounded-lg border border-gray-200 bg-card py-1 shadow-lg transition-transform group-hover:scale-100" style={{ backgroundColor: 'hsl(var(--card))', opacity: 1 }}>
                   <Link
                     href={`/profile/${user.slug}`}
-                    className="group/profile relative block px-4 py-2 text-sm text-gray-700 hover:bg-primary/10 hover:text-primary dark:text-gray-300 transition-colors"
+                    className="group/profile relative block px-4 py-2 text-sm text-gray-700 hover:bg-primary/10 hover:text-primary transition-colors"
                   >
                     <div className="flex items-center space-x-2">
                       <div className="relative flex items-center justify-center">
@@ -142,7 +142,7 @@ export function Navbar() {
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                    className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 transition-colors"
                   >
                     Logout
                   </button>

@@ -42,7 +42,7 @@ export function CommentSection({ postId, comments }: CommentSectionProps) {
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+      <h3 className="text-lg font-semibold text-gray-900">
         Comments ({validComments.length})
       </h3>
 
@@ -71,18 +71,18 @@ export function CommentSection({ postId, comments }: CommentSectionProps) {
             <div key={comment.id} className="flex space-x-3">
               <Avatar name={comment.author?.name || ''} src={comment.author?.avatar?.url || ''} size="md" />
               <div className="flex-1">
-                <div className="rounded-lg bg-gray-100 p-3 dark:bg-gray-800">
+                <div className="rounded-lg bg-gray-100 p-3">
                   <Link
                     href={`/profile/${comment.author?.slug || ''}`}
-                    className="font-semibold text-gray-900 hover:underline dark:text-white"
+                    className="font-semibold text-gray-900 hover:underline"
                   >
                     {comment.author?.name || ''}
                   </Link>
-                  <p className="mt-1 text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+                  <p className="mt-1 text-gray-700 whitespace-pre-wrap">
                     {comment.content}
                   </p>
                 </div>
-                <div className="mt-1 flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400">
+                <div className="mt-1 flex items-center space-x-4 text-xs text-gray-500">
                   <span>{formatDate(comment.createdAt)}</span>
                   <button className="hover:underline">Like</button>
                   <button className="hover:underline">Reply</button>
@@ -92,7 +92,7 @@ export function CommentSection({ postId, comments }: CommentSectionProps) {
           ))}
 
         {validComments.length === 0 && (
-          <p className="py-8 text-center text-gray-500 dark:text-gray-400">
+          <p className="py-8 text-center text-gray-500">
             No comments yet. Be the first to comment!
           </p>
         )}

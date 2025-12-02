@@ -30,44 +30,10 @@
   --radius: 0.75rem;
 }
 
-.dark {
-  color-scheme: dark;
-  /* Dark background */
-  --background: 240 15% 8%;
-  --foreground: 240 5% 92%;
-  /* Dark cards */
-  --card: 240 12% 10%;
-  --card-foreground: 240 5% 92%;
-  --popover: 240 12% 10%;
-  --popover-foreground: 240 5% 92%;
-  /* Lighter dark blue for primary in dark mode */
-  --primary: 240 70% 35%;
-  --primary-foreground: 0 0% 100%;
-  /* Dark secondary */
-  --secondary: 240 10% 18%;
-  --secondary-foreground: 240 5% 92%;
-  --muted: 240 8% 20%;
-  --muted-foreground: 240 5% 65%;
-  /* Brighter light green accent for dark mode */
-  --accent: 94 100% 45%;
-  --accent-foreground: 240 15% 8%;
-  --destructive: 0 63% 50%;
-  --destructive-foreground: 0 0% 100%;
-  /* Dark borders */
-  --border: 240 8% 22%;
-  --input: 240 8% 22%;
-  --ring: 240 70% 35%;
-}
-
 body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
   transition: background-color 150ms ease, color 150ms ease;
-}
-
-body.dark {
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
 }
 
 .rich-text {
@@ -124,19 +90,11 @@ body.dark {
   font-size: 0.875rem;
 }
 
-.dark .rich-text code {
-  background-color: hsl(240 10% 20%);
-}
-
 .rich-text pre {
   padding: 1rem;
   border-radius: 0.75rem;
   overflow-x: auto;
   background-color: hsl(240 5% 90%);
-}
-
-.dark .rich-text pre {
-  background-color: hsl(240 10% 18%);
 }
 
 .rich-text blockquote {

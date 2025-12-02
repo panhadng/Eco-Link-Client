@@ -262,7 +262,7 @@ export default function GroupDetailPage({ params }: { params: Promise<PageParams
   if (groupError) {
     return (
       <Card className="p-12 text-center">
-        <p className="text-red-600 dark:text-red-400">We couldn&apos;t load this group.</p>
+        <p className="text-red-600">We couldn&apos;t load this group.</p>
       </Card>
     );
   }
@@ -270,7 +270,7 @@ export default function GroupDetailPage({ params }: { params: Promise<PageParams
   if (!group) {
     return (
       <Card className="p-12 text-center">
-        <p className="text-gray-500 dark:text-gray-400">Group not found.</p>
+        <p className="text-gray-500">Group not found.</p>
         <Link href="/groups" className="mt-4 inline-block text-primary hover:underline">
           Back to groups
         </Link>
@@ -287,33 +287,33 @@ export default function GroupDetailPage({ params }: { params: Promise<PageParams
           aria-hidden="true"
         />
         <div className="relative z-10 px-4 pb-6 pt-24 sm:px-6 sm:pt-28">
-          <div className="rounded-xl bg-white/95 p-6 shadow-sm backdrop-blur dark:bg-gray-900/85 overflow-hidden">
+          <div className="rounded-xl bg-white/95 p-6 shadow-sm backdrop-blur overflow-hidden">
             <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-end min-w-0 flex-1">
                 {group.avatar?.url ? (
-                    <div className="relative -mt-24 h-32 w-32 flex-shrink-0 overflow-hidden rounded-full border-4 border-white shadow-lg dark:border-gray-900">
+                    <div className="relative -mt-24 h-32 w-32 flex-shrink-0 overflow-hidden rounded-full border-4 border-white shadow-lg">
                       <Image src={group.avatar.url} alt={group.name} fill className="object-cover" unoptimized />
                     </div>
                 ) : (
                   <Avatar
                     name={group.name}
                     size="xl"
-                    className="-mt-24 h-32 w-32 flex-shrink-0 border-4 border-white text-3xl shadow-lg dark:border-gray-900 rounded-xl"
+                    className="-mt-24 h-32 w-32 flex-shrink-0 border-4 border-white text-3xl shadow-lg rounded-xl"
                   />
                 )}
-                <div className="text-gray-900 dark:text-white min-w-0">
+                <div className="text-gray-900 min-w-0">
                   <div className="flex items-center gap-3 flex-wrap">
                     <h1 className="text-2xl font-bold sm:text-3xl truncate">{group.name}</h1>
                     {membershipLabel && (
                       <span
                         className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide flex-shrink-0 ${
                           group.myRole === 'owner'
-                            ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400'
+                            ? 'bg-purple-100 text-purple-800'
                             : group.myRole === 'admin'
-                              ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400'
+                              ? 'bg-blue-100 text-blue-800'
                               : group.myRole === 'pending'
-                                ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400'
-                                : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400'
+                                ? 'bg-yellow-100 text-yellow-800'
+                                : 'bg-gray-100 text-gray-800'
                         }`}
                       >
                         {membershipLabel}
@@ -321,7 +321,7 @@ export default function GroupDetailPage({ params }: { params: Promise<PageParams
                     )}
                   </div>
                   {group.locationName && (
-                    <p className="mt-1 text-sm text-gray-700 dark:text-gray-300 truncate">{group.locationName}</p>
+                    <p className="mt-1 text-sm text-gray-700 truncate">{group.locationName}</p>
                   )}
                 </div>
               </div>
@@ -367,27 +367,27 @@ export default function GroupDetailPage({ params }: { params: Promise<PageParams
                 )}
               </div>
             </div>
-            <div className="mt-6 flex flex-wrap gap-3 text-sm text-gray-600 dark:text-gray-300">
+            <div className="mt-6 flex flex-wrap gap-3 text-sm text-gray-600">
               {(() => {
                 const visibility = getGroupVisibilityLabel(group.groupType);
                 return (
                   <span
-                    className={`rounded-full px-3 py-1 font-medium tracking-wide dark:bg-gray-800 ${
+                    className={`rounded-full px-3 py-1 font-medium tracking-wide ${
                       visibility.variant === 'public'
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
+                        ? 'bg-green-100 text-green-800'
                         : visibility.variant === 'private'
-                          ? 'bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400'
-                          : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400'
+                          ? 'bg-orange-100 text-orange-800'
+                          : 'bg-gray-100 text-gray-800'
                     }`}
                   >
                     {visibility.label}
                   </span>
                 );
               })()}
-              <span className="rounded-full bg-gray-100 px-3 py-1 font-medium capitalize tracking-wide dark:bg-gray-800">
+              <span className="rounded-full bg-gray-100 px-3 py-1 font-medium capitalize tracking-wide">
                 {group.actionRadius}
               </span>
-              <span className="rounded-full bg-gray-100 px-3 py-1 font-medium dark:bg-gray-800">
+              <span className="rounded-full bg-gray-100 px-3 py-1 font-medium">
                 {group.membersCount} member{group.membersCount === 1 ? '' : 's'}
               </span>
             </div>
@@ -401,7 +401,7 @@ export default function GroupDetailPage({ params }: { params: Promise<PageParams
 
       {/* About */}
       <Card className="p-6">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">About this group</h2>
+        <h2 className="text-xl font-semibold text-gray-900">About this group</h2>
         {aboutHtml && (
           <div className="rich-text mt-2" dangerouslySetInnerHTML={{ __html: aboutHtml }} />
         )}
@@ -412,9 +412,9 @@ export default function GroupDetailPage({ params }: { params: Promise<PageParams
           />
         )}
         {!aboutHtml && !descriptionHtml && (
-          <p className="mt-3 text-sm text-gray-600 dark:text-gray-300">No description has been added for this group yet.</p>
+          <p className="mt-3 text-sm text-gray-600">No description has been added for this group yet.</p>
         )}
-        <div className="mt-6 text-sm text-gray-500 dark:text-gray-400">
+        <div className="mt-6 text-sm text-gray-500">
           <p>Created {group.createdAt ? formatDate(group.createdAt) : 'recently'}</p>
           {group.isMutedByMe && <p>You have muted notifications for this group.</p>}
         </div>
@@ -423,9 +423,9 @@ export default function GroupDetailPage({ params }: { params: Promise<PageParams
       {/* Members */}
       <Card className="p-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Members</h2>
+          <h2 className="text-xl font-semibold text-gray-900">Members</h2>
           <div className="flex items-center gap-3">
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-sm text-gray-500">
               Showing {members.length} of {group.membersCount} member{group.membersCount === 1 ? '' : 's'}
             </p>
             {canManage && (
@@ -444,21 +444,21 @@ export default function GroupDetailPage({ params }: { params: Promise<PageParams
           <div className="mt-4 flex gap-3">
             {[...Array(6)].map((_, index) => (
               <div key={index} className="flex flex-col items-center gap-2 text-center">
-                <div className="h-12 w-12 rounded-full bg-gray-200 dark:bg-gray-700" />
-                <div className="h-3 w-12 rounded bg-gray-200 dark:bg-gray-700" />
+                <div className="h-12 w-12 rounded-full bg-gray-200" />
+                <div className="h-3 w-12 rounded bg-gray-200" />
               </div>
             ))}
           </div>
         ) : members.length === 0 ? (
-          <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">No members yet.</p>
+          <p className="mt-4 text-sm text-gray-500">No members yet.</p>
         ) : (
           <div className="mt-4 flex flex-wrap gap-4">
             {members.map((member) => (
-              <Link key={member.id} href={`/profile/${member.slug}`} className="flex w-40 items-center gap-3 rounded-md border border-gray-200 p-3 hover:border-gray-300 dark:border-gray-800 dark:hover:border-gray-600">
+              <Link key={member.id} href={`/profile/${member.slug}`} className="flex w-40 items-center gap-3 rounded-md border border-gray-200 p-3 hover:border-gray-300">
                 <Avatar name={member.name} src={member.avatar?.url} size="sm" />
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-medium text-gray-900 dark:text-white">{member.name}</p>
-                  <p className="truncate text-xs text-gray-500 dark:text-gray-400">@{member.slug}</p>
+                  <p className="truncate text-sm font-medium text-gray-900">{member.name}</p>
+                  <p className="truncate text-xs text-gray-500">@{member.slug}</p>
                 </div>
               </Link>
             ))}
@@ -468,16 +468,16 @@ export default function GroupDetailPage({ params }: { params: Promise<PageParams
 
       {/* Posts */}
       <div>
-        <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">Recent Posts</h2>
+        <h2 className="mb-4 text-xl font-semibold text-gray-900">Recent Posts</h2>
         {postsLoading ? (
           <div className="space-y-4">
             {[...Array(3)].map((_, index) => (
-              <Card key={index} className="h-40 animate-pulse bg-gray-100 dark:bg-gray-900" />
+              <Card key={index} className="h-40 animate-pulse bg-gray-100" />
             ))}
           </div>
         ) : posts.length === 0 ? (
           <Card className="p-12 text-center">
-            <p className="text-gray-500 dark:text-gray-400">No posts yet.</p>
+            <p className="text-gray-500">No posts yet.</p>
           </Card>
         ) : (
           <div className="space-y-4">
