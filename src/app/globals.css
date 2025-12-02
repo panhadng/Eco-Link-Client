@@ -168,6 +168,13 @@ object {
   height: auto;
 }
 
+/* Exception for logo - maintain fixed height */
+nav img[alt="Eco-Link Logo"] {
+  height: 32px !important;
+  max-height: 32px !important;
+  width: auto !important;
+}
+
 /* Prevent text from causing horizontal overflow */
 p,
 h1,
