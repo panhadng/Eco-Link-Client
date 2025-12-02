@@ -107,3 +107,20 @@ body {
   color: hsl(var(--primary));
   text-decoration: underline;
 }
+
+/* Prevent zooming on page content */
+html, body {
+  touch-action: pan-x pan-y;
+  /* Prevent double-tap zoom */
+  -ms-touch-action: pan-x pan-y;
+}
+
+/* Allow zooming on images */
+img,
+[role="img"],
+.image-zoomable,
+.image-zoomable img {
+  touch-action: auto;
+  -webkit-touch-callout: default;
+  -ms-touch-action: auto;
+}

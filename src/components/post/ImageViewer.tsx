@@ -59,7 +59,7 @@ export function ImageViewer({ isOpen, onClose, imageUrl, alt }: ImageViewerProps
 
       {/* Image Container */}
       <div
-        className="relative max-h-[90vh] max-w-[90vw]"
+        className="relative max-h-[90vh] max-w-[90vw] image-zoomable"
         onClick={(e) => e.stopPropagation()}
       >
         <Image

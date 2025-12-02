@@ -224,7 +224,7 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
                 <EllipsisHorizontalIcon className="h-5 w-5" />
               </button>
               {menuOpen && (
-                <div className="absolute right-0 z-20 mt-2 w-40 rounded-lg border border-gray-200 bg-card py-1 shadow-lg">
+                <div className="absolute right-0 z-20 mt-2 w-40 rounded-lg border border-gray-200 bg-white py-1 shadow-lg">
                   <button
                     onClick={handleEditOpen}
                     className="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -274,7 +274,7 @@ export function PostCard({ post, onPostClick, onPostUpdated, onPostDeleted }: Po
           {/* Image */}
           {post.image?.url && (
             <div
-              className="mt-3 overflow-hidden rounded-lg cursor-pointer"
+              className="mt-3 overflow-hidden rounded-lg cursor-pointer image-zoomable"
               onClick={(e) => {
                 e.stopPropagation();
                 setIsImageViewerOpen(true);

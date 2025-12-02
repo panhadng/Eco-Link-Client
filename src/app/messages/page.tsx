@@ -10,13 +10,13 @@ import {
 } from "@/lib/graphql/messages";
 import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
 import { formatDate } from "@/lib/utils";
 import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
 import {
   ChatBubbleLeftRightIcon,
   PhotoIcon,
   XMarkIcon,
+  ArrowLeftIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { Message, Room } from "@/types";
@@ -180,18 +180,19 @@ export default function MessagesPage() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-8rem)] max-w-full gap-4 text-gray-900">
+    <div className="flex h-full md:h-[calc(100vh-8rem)] max-w-full gap-0 md:gap-4 text-gray-900 relative overflow-hidden">
       {/* Room List */}
-      <Card className="w-96 shrink-0 overflow-hidden">
-        <div className="border-b border-gray-200 p-4" style={{ backgroundColor: '#0c0c6d' }}>
+      <div className={`w-full md:w-96 shrink-0 overflow-hidden absolute md:relative inset-0 md:inset-auto z-10 md:z-auto transition-transform duration-300 h-full md:h-auto flex flex-col bg-white ${
+        selectedRoomId ? "-translate-x-full md:translate-x-0" : "translate-x-0"
+      } ${!selectedRoomId ? "md:rounded-lg md:border md:border-gray-200 md:shadow-sm" : ""}`}>
+        <div className="border-b border-gray-200 p-4 shrink-0" style={{ backgroundColor: '#0c0c6d' }}>
           <h2 className="text-lg font-semibold text-white">
             Messages
           </h2>
         </div>
 
         <div
-          className="overflow-y-auto"
-          style={{ height: "calc(100% - 4rem)" }}
+          className="overflow-y-auto flex-1 min-h-0"
         >
           {roomsLoading ? (
             <div className="flex items-center justify-center p-8">
@@ -243,20 +244,29 @@ export default function MessagesPage() {
             </div>
           )}
         </div>
-      </Card>
+      </div>
 
       {/* Chat Area */}
-      <Card className="flex flex-1 flex-col overflow-hidden">
+      <div className={`flex flex-1 flex-col overflow-hidden absolute md:relative inset-0 md:inset-auto z-20 md:z-auto transition-transform duration-300 h-full md:h-auto bg-white ${
+        selectedRoomId ? "translate-x-0" : "translate-x-full md:translate-x-0"
+      } ${selectedRoomId ? "md:rounded-lg md:border md:border-gray-200 md:shadow-sm" : ""}`}>
         {selectedRoom ? (
           <>
             {/* Chat Header */}
             <div className="flex items-center gap-3 border-b border-gray-200 p-4" style={{ backgroundColor: '#0c0c6d' }}>
+              <button
+                onClick={() => setSelectedRoomId(null)}
+                className="md:hidden p-2 -ml-2 text-white hover:bg-white/10 rounded-lg transition-colors"
+                aria-label="Back to messages"
+              >
+                <ArrowLeftIcon className="h-5 w-5" />
+              </button>
               <Avatar
                 name={selectedRoom.roomName}
                 src={selectedRoom.avatar}
                 size="md"
               />
-              <div>
+              <div className="flex-1">
                 <h3 className="font-semibold text-white">
                   {selectedRoom.roomName}
                 </h3>
@@ -264,7 +274,7 @@ export default function MessagesPage() {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4">
+            <div className="flex-1 overflow-y-auto p-2 md:p-4">
               {messagesLoading ? (
                 <div className="flex items-center justify-center h-full">
                   <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
@@ -288,10 +298,10 @@ export default function MessagesPage() {
                           size="sm"
                         />
                         <div
-                          className={`flex flex-col ${isOwn ? "items-end" : ""}`}
+                          className={`flex flex-col ${isOwn ? "items-end" : ""} max-w-[85%] md:max-w-md`}
                         >
                           <div
-                            className={`max-w-md rounded-lg px-4 py-2 ${
+                            className={`w-full rounded-lg px-3 md:px-4 py-2 ${
                               isOwn
                                 ? "text-white"
                                 : "text-white"
@@ -299,7 +309,7 @@ export default function MessagesPage() {
                             style={isOwn ? { backgroundColor: '#0c0c6d' } : { backgroundColor: '#52ba00' }}
                           >
                             {message.content && (
-                              <p className="whitespace-pre-wrap wrap-break-word">
+                              <p className="whitespace-pre-wrap break-words text-sm md:text-base">
                                 {message.content}
                               </p>
                             )}
@@ -321,14 +331,14 @@ export default function MessagesPage() {
                                     file.type?.startsWith("image/") ? (
                                       <div
                                         key={idx}
-                                        className="relative overflow-hidden rounded-lg"
+                                        className="relative overflow-hidden rounded-lg image-zoomable"
                                       >
                                         <Image
                                           src={file.url}
                                           alt={file.name || "Image"}
                                           width={300}
                                           height={200}
-                                          className="object-cover"
+                                          className="object-cover w-full h-auto"
                                           unoptimized
                                         />
                                       </div>
@@ -362,7 +372,7 @@ export default function MessagesPage() {
             {/* Message Input */}
             <form
               onSubmit={handleSendMessage}
-              className="border-t border-gray-200 p-4"
+              className="border-t border-gray-200 p-2 md:p-4 pb-20 md:pb-4"
             >
               {/* File Previews */}
               {filePreviews.length > 0 && (
@@ -429,7 +439,7 @@ export default function MessagesPage() {
             </form>
           </>
         ) : (
-          <div className="flex h-full items-center justify-center text-gray-500">
+          <div className="hidden md:flex h-full items-center justify-center text-gray-500">
             <div className="text-center">
               <ChatBubbleLeftRightIcon className="mx-auto h-16 w-16 mb-4" />
               <p className="text-lg font-semibold">Select a conversation</p>
@@ -439,7 +449,7 @@ export default function MessagesPage() {
             </div>
           </div>
         )}
-      </Card>
+      </div>
     </div>
   );
 }

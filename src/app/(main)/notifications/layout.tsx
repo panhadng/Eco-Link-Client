@@ -4,10 +4,8 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { Navbar } from '@/components/layout/Navbar';
-import { Sidebar } from '@/components/layout/Sidebar';
-import { RightSidebar } from '@/components/layout/RightSidebar';
 
-export default function MainLayout({ children }: { children: React.ReactNode }) {
+export default function NotificationsLayout({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   const router = useRouter();
 
@@ -30,16 +28,13 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground transition-colors">
-      <Navbar />
-      <div className="mx-auto max-w-7xl px-2 md:px-4 py-2 md:py-6">
-        <div className="flex gap-2 md:gap-6">
-          <Sidebar />
-          <main className="flex-1 min-w-0 w-full">{children}</main>
-          <RightSidebar />
-        </div>
+    <div className="min-h-screen bg-gray-50 text-gray-900 transition-colors overflow-hidden md:overflow-auto">
+      <div className="hidden md:block">
+        <Navbar />
+      </div>
+      <div className="mx-auto max-w-7xl px-0 md:px-4 py-0 md:py-6 h-full md:h-[calc(100vh-8rem)] overflow-hidden md:overflow-visible">
+        {children}
       </div>
     </div>
   );
 }
-

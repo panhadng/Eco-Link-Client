@@ -201,20 +201,23 @@ export function NotificationMenu() {
       <button
         type="button"
         onClick={toggleMenu}
-        className="group relative flex items-center justify-center rounded-lg p-2 hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+        className="group relative flex flex-col items-center justify-center flex-1 min-w-0 py-1 md:flex-row md:rounded-lg md:p-2 hover:bg-primary/10 active:bg-primary/10 md:hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
         aria-label="Notifications"
       >
-        <BellIcon className={`h-6 w-6 text-gray-600 transition-opacity ${isOpen ? 'opacity-0' : 'group-hover:opacity-0'}`} />
-        <BellIconSolid className={`absolute h-6 w-6 text-[#0c0c6d] transition-opacity ${isOpen ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
-        {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-500 px-1 text-xs font-semibold text-white">
-            {unreadCount > 9 ? '9+' : unreadCount}
-          </span>
-        )}
+        <div className="relative flex items-center justify-center">
+          <BellIcon className={`h-6 w-6 text-gray-600 transition-opacity ${isOpen ? 'opacity-0' : 'group-hover:opacity-0 md:group-hover:opacity-0'}`} />
+          <BellIconSolid className={`absolute h-6 w-6 text-[#0c0c6d] transition-opacity ${isOpen ? 'opacity-100' : 'opacity-0 group-hover:opacity-100 md:group-hover:opacity-100'}`} />
+          {unreadCount > 0 && (
+            <span className="absolute -top-0.5 -right-1 md:-top-1 md:-right-1 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-500 px-1 text-xs font-semibold text-white">
+              {unreadCount > 9 ? '9+' : unreadCount}
+            </span>
+          )}
+        </div>
+        <span className="text-xs leading-tight text-gray-600 md:hidden">Notifications</span>
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-3 w-[500px] rounded-lg border border-gray-200 bg-card shadow-lg" style={{ backgroundColor: 'hsl(var(--card))', opacity: 1 }}>
+        <div className="fixed md:absolute right-4 md:right-0 left-4 md:left-auto bottom-20 md:bottom-auto mb-0 md:mt-3 md:top-full w-auto md:w-[500px] max-w-[calc(100vw-2rem)] md:max-w-[500px] rounded-lg border border-gray-200 bg-card shadow-lg z-50" style={{ backgroundColor: 'hsl(var(--card))', opacity: 1 }}>
           <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3">
             <p className="text-sm font-semibold text-gray-900">Notifications</p>
             <Button
