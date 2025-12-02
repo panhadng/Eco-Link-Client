@@ -10,8 +10,12 @@ import { ThemeInitializer } from "@/components/theme/ThemeInitializer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "EcoLink Social - Connect and Share",
-  description: "A modern social network built with Next.js and GraphQL",
+  title: "EcoLink Social",
+  description: "EcoLink Social",
+  icons: {
+    icon: '/icon.svg',
+    apple: '/icon.svg',
+  },
 };
 
 export const viewport: Viewport = {
