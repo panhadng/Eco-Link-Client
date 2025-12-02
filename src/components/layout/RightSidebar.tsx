@@ -52,7 +52,7 @@ export function RightSidebar() {
 
   return (
     <aside className="hidden w-80 shrink-0 text-gray-900 xl:block">
-      <div className="sticky top-20 space-y-4">
+      <div className="sticky top-[4rem] space-y-4">
         {/* Suggestions Card */}
         <div className="rounded-lg border border-gray-200 bg-card p-4">
           <h3 className="mb-4 font-semibold text-gray-900">Suggested for you</h3>

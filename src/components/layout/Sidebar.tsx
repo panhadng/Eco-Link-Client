@@ -33,7 +33,7 @@ export function Sidebar() {
 
   return (
     <aside className="hidden w-64 shrink-0 text-gray-900 lg:block">
-      <div className="sticky top-20 space-y-4">
+      <div className="sticky top-[4rem] space-y-4">
         {/* User Profile Card */}
         {user && (
           <div className="rounded-lg border border-gray-200 bg-card p-4">
