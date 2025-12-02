@@ -30,12 +30,12 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground transition-colors">
+    <div className="min-h-screen bg-background text-foreground transition-colors overflow-x-hidden">
       <Navbar />
-      <div className="mx-auto max-w-7xl px-2 md:px-4 py-2 md:py-6">
-        <div className="flex gap-2 md:gap-6">
+      <div className="mx-auto max-w-7xl px-2 md:px-4 py-2 md:py-6 overflow-x-hidden">
+        <div className="flex gap-2 md:gap-6 overflow-x-hidden">
           <Sidebar />
-          <main className="flex-1 min-w-0 w-full">{children}</main>
+          <main className="flex-1 min-w-0 w-full overflow-x-hidden max-w-full">{children}</main>
           <RightSidebar />
         </div>
       </div>

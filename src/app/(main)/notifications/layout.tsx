@@ -28,11 +28,11 @@ export default function NotificationsLayout({ children }: { children: React.Reac
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 transition-colors overflow-hidden md:overflow-auto">
+    <div className="min-h-screen bg-gray-50 text-gray-900 transition-colors overflow-hidden md:overflow-auto overflow-x-hidden">
       <div className="hidden md:block">
         <Navbar />
       </div>
-      <div className="mx-auto max-w-7xl px-0 md:px-4 py-0 md:py-6 h-full md:h-[calc(100vh-8rem)] overflow-hidden md:overflow-visible">
+      <div className="mx-auto max-w-7xl px-0 md:px-4 py-0 md:py-6 h-full md:h-[calc(100vh-8rem)] overflow-hidden md:overflow-visible overflow-x-hidden max-w-full">
         {children}
       </div>
     </div>

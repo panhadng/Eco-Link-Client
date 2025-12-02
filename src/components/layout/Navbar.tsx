@@ -91,13 +91,13 @@ export function Navbar() {
         <div className="mx-auto max-w-7xl px-2 md:px-4">
           <div className="flex h-14 md:h-16 items-center justify-between">
             {/* Logo */}
-            <Link href="/" className="flex items-center space-x-2 py-2 md:py-4">
+            <Link href="/" className="flex items-center space-x-2 py-2">
               <Image
                 src="/images/eco-link-logo-nobg.png"
                 alt="Eco-Link Logo"
                 width={120}
                 height={40}
-                className="h-8 md:h-10 w-auto"
+                className="h-8 w-auto"
                 priority
                 unoptimized
               />

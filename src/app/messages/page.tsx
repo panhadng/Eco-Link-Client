@@ -180,7 +180,7 @@ export default function MessagesPage() {
   };
 
   return (
-    <div className="flex h-full md:h-[calc(100vh-8rem)] max-w-full gap-0 md:gap-4 text-gray-900 relative overflow-hidden">
+    <div className="flex h-full md:h-[calc(100vh-8rem)] max-w-full gap-0 md:gap-4 text-gray-900 relative overflow-hidden" style={{ touchAction: 'pan-x pan-y' }}>
       {/* Room List */}
       <div className={`w-full md:w-96 shrink-0 overflow-hidden absolute md:relative inset-0 md:inset-auto z-10 md:z-auto transition-transform duration-300 h-full md:h-auto flex flex-col bg-white ${
         selectedRoomId ? "-translate-x-full md:translate-x-0" : "translate-x-0"
@@ -249,7 +249,7 @@ export default function MessagesPage() {
       {/* Chat Area */}
       <div className={`flex flex-1 flex-col overflow-hidden absolute md:relative inset-0 md:inset-auto z-20 md:z-auto transition-transform duration-300 h-full md:h-auto bg-white ${
         selectedRoomId ? "translate-x-0" : "translate-x-full md:translate-x-0"
-      } ${selectedRoomId ? "md:rounded-lg md:border md:border-gray-200 md:shadow-sm" : ""}`}>
+      } ${selectedRoomId ? "md:rounded-lg md:border md:border-gray-200 md:shadow-sm" : ""}`} style={{ touchAction: 'pan-x pan-y' }}>
         {selectedRoom ? (
           <>
             {/* Chat Header */}
