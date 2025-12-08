@@ -46,11 +46,15 @@ export const GET_MESSAGES = gql`
 
 // Room Mutations
 export const CREATE_ROOM = gql`
-  mutation CreateRoom($userId: ID!) {
-    CreateRoom(userId: $userId) {
+  mutation CreateRoom($userId: ID, $userIds: [ID!], $groupName: String) {
+    CreateRoom(userId: $userId, userIds: $userIds, groupName: $groupName) {
       id
       roomId
       roomName
+      isGroup
+      groupName
+      groupAvatar
+      avatar
     }
   }
 `;

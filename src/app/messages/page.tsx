@@ -24,9 +24,11 @@ import {
   TrashIcon,
   EllipsisVerticalIcon,
   UserGroupIcon,
+  PlusIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { Message, Room } from "@/types";
+import { CreateGroupModal } from "@/components/messages/CreateGroupModal";
 
 export default function MessagesPage() {
   const { user } = useAuth();
@@ -52,6 +54,7 @@ export default function MessagesPage() {
   const selectedRoom = rooms.find((r: Room) => r.id === selectedRoomId);
   const isGroupChat = selectedRoom?.isGroup;
   
+  const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
   const [showGroupMenu, setShowGroupMenu] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -247,10 +250,17 @@ export default function MessagesPage() {
       <div className={`w-full md:w-96 shrink-0 overflow-hidden absolute md:relative inset-0 md:inset-auto z-10 md:z-auto transition-transform duration-300 h-full md:h-auto flex flex-col bg-white ${
         selectedRoomId ? "-translate-x-full md:translate-x-0" : "translate-x-0"
       } ${!selectedRoomId ? "md:rounded-lg md:border md:border-gray-200 md:shadow-sm" : ""}`}>
-        <div className="border-b border-gray-200 p-4 shrink-0" style={{ backgroundColor: '#0c0c6d' }}>
+        <div className="border-b border-gray-200 p-4 shrink-0 flex items-center justify-between" style={{ backgroundColor: '#0c0c6d' }}>
           <h2 className="text-lg font-semibold text-white">
             Messages
           </h2>
+          <button
+            onClick={() => setShowCreateGroupModal(true)}
+            className="rounded-lg p-2 text-white hover:bg-white/10 transition-colors"
+            title="Create group chat"
+          >
+            <PlusIcon className="h-5 w-5" />
+          </button>
         </div>
 
         <div
@@ -668,6 +678,16 @@ export default function MessagesPage() {
           </div>
         </div>
       )}
+
+      {/* Create Group Modal */}
+      <CreateGroupModal
+        isOpen={showCreateGroupModal}
+        onClose={() => setShowCreateGroupModal(false)}
+        onSuccess={() => {
+          refetchRooms();
+          setShowCreateGroupModal(false);
+        }}
+      />
     </div>
   );
 }
