@@ -110,6 +110,8 @@ export interface Room {
   avatar?: string;
   lastMessageAt?: string;
   unreadCount: number;
+  isGroup?: boolean;
+  groupName?: string;
   lastMessage?: {
     id: string;
     content: string;

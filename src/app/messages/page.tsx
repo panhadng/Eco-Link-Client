@@ -7,6 +7,9 @@ import { useAuth } from "@/context/AuthContext";
 import {
   MARK_MESSAGES_AS_SEEN,
   MESSAGE_ADDED_SUBSCRIPTION,
+  UPDATE_ROOM_NAME,
+  LEAVE_ROOM,
+  DELETE_ROOM,
 } from "@/lib/graphql/messages";
 import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
@@ -17,6 +20,10 @@ import {
   PhotoIcon,
   XMarkIcon,
   ArrowLeftIcon,
+  PencilIcon,
+  TrashIcon,
+  EllipsisVerticalIcon,
+  UserGroupIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { Message, Room } from "@/types";
@@ -43,6 +50,17 @@ export default function MessagesPage() {
   const [markMessagesAsSeen] = useMutation(MARK_MESSAGES_AS_SEEN);
 
   const selectedRoom = rooms.find((r: Room) => r.id === selectedRoomId);
+  const isGroupChat = selectedRoom?.isGroup;
+  
+  const [showGroupMenu, setShowGroupMenu] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [editGroupName, setEditGroupName] = useState("");
+  const groupMenuRef = useRef<HTMLDivElement>(null);
+  
+  const [updateRoomName] = useMutation(UPDATE_ROOM_NAME);
+  const [leaveRoom] = useMutation(LEAVE_ROOM);
+  const [deleteRoom] = useMutation(DELETE_ROOM);
 
   // Subscribe to new messages
   const { data: subscriptionData, error: subError } = useSubscription(
@@ -58,17 +76,61 @@ export default function MessagesPage() {
     scrollToBottom();
   }, [messages]);
 
+  // Track processed subscription message IDs to prevent duplicate refetches
+  const processedSubscriptionIdsRef = useRef<Set<string>>(new Set());
+  
+  // Initialize processed IDs with current messages when room changes or messages load
+  useEffect(() => {
+    if (selectedRoomId && messages.length > 0) {
+      // Clear and repopulate with current message IDs
+      processedSubscriptionIdsRef.current = new Set(messages.map((msg: Message) => msg.id).filter(Boolean));
+    } else if (!selectedRoomId) {
+      // Clear when no room is selected
+      processedSubscriptionIdsRef.current.clear();
+    }
+  }, [selectedRoomId, messages.length]); // Update when room changes or message count changes
+  
   // Refetch messages when new message arrives via subscription
+  // IMPORTANT: In group chats, we skip refetch to prevent duplicates since messages are already in cache
   useEffect(() => {
     if (subscriptionData?.chatMessageAdded) {
-      console.log(
-        "🔔 New message received via WebSocket:",
-        subscriptionData.chatMessageAdded
-      );
-      refetchMessages();
-      refetchRooms();
+      const newMessage = subscriptionData.chatMessageAdded;
+      const messageId = newMessage?.id;
+      
+      // Skip if we've already processed this message ID (prevent duplicate refetches)
+      if (messageId && processedSubscriptionIdsRef.current.has(messageId)) {
+        return;
+      }
+      
+      // Only refetch if message is for current room and not from current user
+      // (our own messages are already added via mutation)
+      const messageRoomId = newMessage?.room?.id;
+      const isForCurrentRoom = selectedRoomId && messageRoomId === selectedRoomId;
+      const isFromCurrentUser = newMessage?.senderId === user?.id;
+      
+      // Check if message already exists in current messages (prevent duplicate refetch)
+      const messageExists = messages.some((msg: Message) => msg.id === messageId);
+      
+      if (isForCurrentRoom && !isFromCurrentUser && !messageExists) {
+        // Mark as processed before refetch
+        if (messageId) {
+          processedSubscriptionIdsRef.current.add(messageId);
+        }
+        
+        refetchMessages();
+        refetchRooms();
+      } else if (!isForCurrentRoom) {
+        // Just update rooms for other rooms
+        refetchRooms();
+      } else if (messageExists) {
+        // Message already exists, mark as processed but don't refetch
+        if (messageId) {
+          processedSubscriptionIdsRef.current.add(messageId);
+        }
+      }
     }
-  }, [subscriptionData, refetchMessages, refetchRooms]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subscriptionData, refetchMessages, refetchRooms, selectedRoomId, user?.id]);
 
   useEffect(() => {
     markedMessageIdsRef.current = new Set();
@@ -267,10 +329,69 @@ export default function MessagesPage() {
                 size="md"
               />
               <div className="flex-1">
-                <h3 className="font-semibold text-white">
-                  {selectedRoom.roomName}
-                </h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="font-semibold text-white">
+                    {selectedRoom.roomName}
+                  </h3>
+                  {isGroupChat && (
+                    <UserGroupIcon className="h-4 w-4 text-white/80" />
+                  )}
+                </div>
               </div>
+              {isGroupChat && (
+                <div className="relative" ref={groupMenuRef}>
+                  <button
+                    onClick={() => setShowGroupMenu(!showGroupMenu)}
+                    className="p-2 text-white hover:bg-white/10 rounded-lg transition-colors"
+                    aria-label="Group options"
+                  >
+                    <EllipsisVerticalIcon className="h-5 w-5" />
+                  </button>
+                  {showGroupMenu && (
+                    <div className="absolute right-0 top-full mt-2 w-48 rounded-lg bg-white shadow-lg border border-gray-200 z-10">
+                      <button
+                        onClick={() => {
+                          setEditGroupName(selectedRoom.groupName || selectedRoom.roomName);
+                          setShowEditModal(true);
+                          setShowGroupMenu(false);
+                        }}
+                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
+                      >
+                        <PencilIcon className="h-4 w-4" />
+                        Edit Group Name
+                      </button>
+                      <button
+                        onClick={async () => {
+                          if (confirm("Are you sure you want to leave this group?")) {
+                            try {
+                              await leaveRoom({ variables: { roomId: selectedRoomId } });
+                              setSelectedRoomId(null);
+                              refetchRooms();
+                            } catch (error) {
+                              console.error("Error leaving room:", error);
+                            }
+                          }
+                          setShowGroupMenu(false);
+                        }}
+                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50"
+                      >
+                        <ArrowLeftIcon className="h-4 w-4" />
+                        Leave Group
+                      </button>
+                      <button
+                        onClick={() => {
+                          setShowDeleteModal(true);
+                          setShowGroupMenu(false);
+                        }}
+                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50"
+                      >
+                        <TrashIcon className="h-4 w-4" />
+                        Delete Group
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Messages */}
@@ -285,7 +406,17 @@ export default function MessagesPage() {
                 </div>
               ) : (
                 <div className="flex flex-col gap-4">
-                  {[...messages].map((message: Message) => {
+                  {(() => {
+                    // Final safety check: deduplicate by ID (in case duplicates somehow slip through)
+                    const seenIds = new Set<string>();
+                    return messages.filter((msg: Message) => {
+                      if (!msg?.id || seenIds.has(msg.id)) {
+                        return false;
+                      }
+                      seenIds.add(msg.id);
+                      return true;
+                    });
+                  })().map((message: Message) => {
                     const isOwn = message.senderId === user?.id;
                     return (
                       <div
@@ -300,6 +431,12 @@ export default function MessagesPage() {
                         <div
                           className={`flex flex-col ${isOwn ? "items-end" : ""} max-w-[85%] md:max-w-md`}
                         >
+                          {/* Show sender name in group chats for messages not from current user */}
+                          {isGroupChat && !isOwn && (
+                            <span className="mb-1 text-xs font-medium text-gray-600">
+                              {message.username}
+                            </span>
+                          )}
                           <div
                             className={`w-full rounded-lg px-3 md:px-4 py-2 ${
                               isOwn
@@ -309,7 +446,7 @@ export default function MessagesPage() {
                             style={isOwn ? { backgroundColor: '#0c0c6d' } : { backgroundColor: '#52ba00' }}
                           >
                             {message.content && (
-                              <p className="whitespace-pre-wrap break-words text-sm md:text-base">
+                              <p className="whitespace-pre-wrap wrap-break-word text-sm md:text-base">
                                 {message.content}
                               </p>
                             )}
@@ -450,6 +587,87 @@ export default function MessagesPage() {
           </div>
         )}
       </div>
+      
+      {/* Edit Group Name Modal */}
+      {showEditModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl mx-4">
+            <h3 className="mb-4 text-lg font-semibold">Edit Group Name</h3>
+            <input
+              type="text"
+              value={editGroupName}
+              onChange={(e) => setEditGroupName(e.target.value)}
+              placeholder="Group name"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 mb-4"
+              autoFocus
+            />
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => {
+                  setShowEditModal(false);
+                  setEditGroupName("");
+                }}
+                className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={async () => {
+                  if (!editGroupName.trim()) return;
+                  try {
+                    await updateRoomName({
+                      variables: { roomId: selectedRoomId, groupName: editGroupName.trim() },
+                    });
+                    refetchRooms();
+                    setShowEditModal(false);
+                    setEditGroupName("");
+                  } catch (error) {
+                    console.error("Error updating room name:", error);
+                  }
+                }}
+                className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Delete Group Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl mx-4">
+            <h3 className="mb-4 text-lg font-semibold">Delete Group</h3>
+            <p className="mb-4 text-gray-700">
+              Are you sure you want to delete &quot;{selectedRoom?.roomName}&quot;? This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={async () => {
+                  try {
+                    await deleteRoom({ variables: { roomId: selectedRoomId } });
+                    setSelectedRoomId(null);
+                    refetchRooms();
+                    setShowDeleteModal(false);
+                  } catch (error) {
+                    console.error("Error deleting room:", error);
+                  }
+                }}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -10,6 +10,8 @@ export const GET_ROOMS = gql`
       avatar
       lastMessageAt
       unreadCount
+      isGroup
+      groupName
       lastMessage {
         id
         content
@@ -96,6 +98,9 @@ export const MESSAGE_ADDED_SUBSCRIPTION = gql`
       saved
       distributed
       seen
+      room {
+        id
+      }
       files {
         url
         name
@@ -108,6 +113,30 @@ export const MESSAGE_ADDED_SUBSCRIPTION = gql`
 export const ROOM_COUNT_UPDATED_SUBSCRIPTION = gql`
   subscription OnRoomCountUpdated {
     roomCountUpdated
+  }
+`;
+
+export const UPDATE_ROOM_NAME = gql`
+  mutation UpdateRoomName($roomId: ID!, $groupName: String!) {
+    UpdateRoomName(roomId: $roomId, groupName: $groupName) {
+      id
+      roomId
+      roomName
+      groupName
+      isGroup
+    }
+  }
+`;
+
+export const LEAVE_ROOM = gql`
+  mutation LeaveRoom($roomId: ID!) {
+    LeaveRoom(roomId: $roomId)
+  }
+`;
+
+export const DELETE_ROOM = gql`
+  mutation DeleteRoom($roomId: ID!) {
+    DeleteRoom(roomId: $roomId)
   }
 `;
 

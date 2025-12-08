@@ -31,8 +31,20 @@ export function useMessages(roomId: string) {
     fetchPolicy: 'cache-and-network',
   });
 
+  // Simple deduplication: filter out messages with duplicate IDs (keep first occurrence)
+  const rawMessages = data?.Message || [];
+  const seenIds = new Set<string>();
+  const uniqueMessages = rawMessages.filter((message: { id: string }) => {
+    if (!message?.id) return false; // Skip messages without IDs
+    if (seenIds.has(message.id)) {
+      return false; // Skip duplicate
+    }
+    seenIds.add(message.id);
+    return true; // Keep unique message
+  });
+
   return {
-    messages: data?.Message || [],
+    messages: uniqueMessages,
     loading,
     error,
     fetchMore,
