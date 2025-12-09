@@ -29,6 +29,8 @@ import {
 import Image from "next/image";
 import { Message, Room } from "@/types";
 import { CreateGroupModal } from "@/components/messages/CreateGroupModal";
+import { AddMembersModal } from "@/components/messages/AddMembersModal";
+import { ViewMembersModal } from "@/components/messages/ViewMembersModal";
 
 export default function MessagesPage() {
   const { user } = useAuth();
@@ -55,6 +57,8 @@ export default function MessagesPage() {
   const isGroupChat = selectedRoom?.isGroup;
   
   const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
+  const [showAddMembersModal, setShowAddMembersModal] = useState(false);
+  const [showViewMembersModal, setShowViewMembersModal] = useState(false);
   const [showGroupMenu, setShowGroupMenu] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -361,6 +365,16 @@ export default function MessagesPage() {
                     <div className="absolute right-0 top-full mt-2 w-48 rounded-lg bg-white shadow-lg border border-gray-200 z-10">
                       <button
                         onClick={() => {
+                          setShowViewMembersModal(true);
+                          setShowGroupMenu(false);
+                        }}
+                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
+                      >
+                        <UserGroupIcon className="h-4 w-4" />
+                        View Members
+                      </button>
+                      <button
+                        onClick={() => {
                           setEditGroupName(selectedRoom.groupName || selectedRoom.roomName);
                           setShowEditModal(true);
                           setShowGroupMenu(false);
@@ -369,6 +383,16 @@ export default function MessagesPage() {
                       >
                         <PencilIcon className="h-4 w-4" />
                         Edit Group Name
+                      </button>
+                      <button
+                        onClick={() => {
+                          setShowAddMembersModal(true);
+                          setShowGroupMenu(false);
+                        }}
+                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
+                      >
+                        <PlusIcon className="h-4 w-4" />
+                        Add Members
                       </button>
                       <button
                         onClick={async () => {
@@ -688,6 +712,24 @@ export default function MessagesPage() {
           setShowCreateGroupModal(false);
         }}
       />
+
+      {/* Add Members Modal */}
+      {selectedRoomId && (
+        <AddMembersModal
+          isOpen={showAddMembersModal}
+          onClose={() => setShowAddMembersModal(false)}
+          roomId={selectedRoomId}
+        />
+      )}
+
+      {/* View Members Modal */}
+      {selectedRoomId && (
+        <ViewMembersModal
+          isOpen={showViewMembersModal}
+          onClose={() => setShowViewMembersModal(false)}
+          roomId={selectedRoomId}
+        />
+      )}
     </div>
   );
 }

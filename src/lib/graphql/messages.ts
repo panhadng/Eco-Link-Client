@@ -144,3 +144,36 @@ export const DELETE_ROOM = gql`
   }
 `;
 
+export const ADD_USERS_TO_ROOM = gql`
+  mutation AddUsersToRoom($roomId: ID!, $userIds: [ID!]!) {
+    AddUsersToRoom(roomId: $roomId, userIds: $userIds) {
+      id
+      roomId
+      isGroup
+      groupName
+    }
+  }
+`;
+
+// Query to get a single room with users
+export const GET_ROOM = gql`
+  query GetRoom($roomId: ID!) {
+    Room(id: $roomId) {
+      id
+      roomId
+      roomName
+      avatar
+      isGroup
+      groupName
+      users {
+        id
+        name
+        slug
+        avatar {
+          url
+        }
+      }
+    }
+  }
+`;
+
