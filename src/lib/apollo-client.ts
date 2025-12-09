@@ -12,9 +12,12 @@ const getGraphQLUri = () => {
   if (envUri) return envUri;
   
   if (typeof window !== 'undefined') {
-    // If on HTTPS, use HTTPS for backend
+    // If on HTTPS, use HTTPS domain (nginx will proxy to backend)
     if (window.location.protocol === 'https:') {
-      return 'https://13.203.0.20:4000';
+      // Use domain - nginx will proxy /graphql to backend on port 4000
+      return 'https://eco-link.flyonit.com.au/graphql';
+      // OLD CODE (for direct IP connection - kept for reference):
+      // return 'https://13.203.0.20:4000';
     }
   }
   return 'http://localhost:4000';
@@ -45,7 +48,10 @@ const getWebSocketUri = () => {
   // Fallback for local development
   if (typeof window !== 'undefined') {
     if (window.location.protocol === 'https:') {
-      return 'wss://13.203.0.20:4000/graphql';
+      // Use domain for WebSocket - nginx will proxy to backend
+      return 'wss://eco-link.flyonit.com.au/graphql';
+      // OLD CODE (for direct IP connection - kept for reference):
+      // return 'wss://13.203.0.20:4000/graphql';
     }
   }
   return 'ws://localhost:4000/graphql';
