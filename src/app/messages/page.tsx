@@ -25,12 +25,16 @@ import {
   EllipsisVerticalIcon,
   UserGroupIcon,
   PlusIcon,
+  PaperClipIcon,
+  DocumentIcon,
+  ArrowDownTrayIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { Message, Room } from "@/types";
 import { CreateGroupModal } from "@/components/messages/CreateGroupModal";
 import { AddMembersModal } from "@/components/messages/AddMembersModal";
 import { ViewMembersModal } from "@/components/messages/ViewMembersModal";
+import { ImageViewerModal } from "@/components/messages/ImageViewerModal";
 
 export default function MessagesPage() {
   const { user } = useAuth();
@@ -38,8 +42,10 @@ export default function MessagesPage() {
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
   const [messageText, setMessageText] = useState("");
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [filePreviews, setFilePreviews] = useState<string[]>([]);
+  const [filePreviews, setFilePreviews] = useState<(string | null)[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showFileMenu, setShowFileMenu] = useState(false);
+  const fileMenuRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const markedMessageIdsRef = useRef<Set<string>>(new Set());
 
@@ -64,6 +70,7 @@ export default function MessagesPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [editGroupName, setEditGroupName] = useState("");
   const groupMenuRef = useRef<HTMLDivElement>(null);
+  const [viewingImage, setViewingImage] = useState<{ url: string; name?: string } | null>(null);
   
   const [updateRoomName] = useMutation(UPDATE_ROOM_NAME);
   const [leaveRoom] = useMutation(LEAVE_ROOM);
@@ -184,24 +191,68 @@ export default function MessagesPage() {
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    const imageFiles = files.filter((file) => file.type.startsWith("image/"));
+    
+    if (files.length > 0) {
+      setSelectedFiles((prev) => [...prev, ...files]);
 
-    if (imageFiles.length > 0) {
-      setSelectedFiles((prev) => [...prev, ...imageFiles]);
-
-      imageFiles.forEach((file) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setFilePreviews((prev) => [...prev, reader.result as string]);
-        };
-        reader.readAsDataURL(file);
+      files.forEach((file) => {
+        if (file.type.startsWith("image/")) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setFilePreviews((prev) => [...prev, reader.result as string]);
+          };
+          reader.readAsDataURL(file);
+        } else {
+          // For non-image files, add null to maintain index alignment
+          setFilePreviews((prev) => [...prev, null]);
+        }
       });
+    }
+    
+    // Reset input value to allow selecting the same file again
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    setShowFileMenu(false);
+  };
+
+  const handleFileMenuClick = (fileType: 'image' | 'all') => {
+    if (fileInputRef.current) {
+      fileInputRef.current.accept = fileType === 'image' ? 'image/*' : '*';
+      fileInputRef.current.click();
     }
   };
 
   const removeFile = (index: number) => {
     setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
     setFilePreviews((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleDownloadFile = async (url: string, name: string) => {
+    try {
+      // Fetch the file as a blob
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error('Failed to fetch file');
+      }
+      const blob = await response.blob();
+      
+      // Create a blob URL and trigger download
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = name;
+      document.body.appendChild(link);
+      link.click();
+      
+      // Cleanup
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error('Error downloading file:', error);
+      // Fallback to opening in new tab if download fails
+      window.open(url, '_blank');
+    }
   };
 
   const handleSendMessage = async (e: React.FormEvent) => {
@@ -502,7 +553,8 @@ export default function MessagesPage() {
                                     file.type?.startsWith("image/") ? (
                                       <div
                                         key={idx}
-                                        className="relative overflow-hidden rounded-lg image-zoomable"
+                                        className="relative overflow-hidden rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                                        onClick={() => setViewingImage({ url: file.url, name: file.name })}
                                       >
                                         <Image
                                           src={file.url}
@@ -514,15 +566,15 @@ export default function MessagesPage() {
                                         />
                                       </div>
                                     ) : (
-                                      <a
+                                      <button
                                         key={idx}
-                                        href={file.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="block rounded bg-gray-200 px-3 py-2 text-sm hover:bg-gray-300"
+                                        onClick={() => handleDownloadFile(file.url, file.name)}
+                                        className="flex w-full items-center gap-2 rounded bg-gray-200 px-3 py-2 text-sm hover:bg-gray-300 transition-colors text-left"
                                       >
-                                        📎 {file.name}
-                                      </a>
+                                        <PaperClipIcon className="h-4 w-4 shrink-0 text-gray-600" />
+                                        <span className="truncate flex-1 text-gray-900 font-medium">{file.name}</span>
+                                        <ArrowDownTrayIcon className="h-4 w-4 shrink-0 text-gray-600" />
+                                      </button>
                                     )
                                 )}
                               </div>
@@ -548,25 +600,43 @@ export default function MessagesPage() {
               {/* File Previews */}
               {filePreviews.length > 0 && (
                 <div className="mb-3 flex flex-wrap gap-2">
-                  {filePreviews.map((preview, idx) => (
-                    <div key={idx} className="relative">
-                      <div className="relative h-20 w-20 overflow-hidden rounded-lg">
-                        <Image
-                          src={preview}
-                          alt={`Preview ${idx}`}
-                          fill
-                          className="object-cover"
-                        />
+                  {filePreviews.map((preview, idx) => {
+                    const file = selectedFiles[idx];
+                    const isImage = file?.type.startsWith("image/");
+                    
+                    return (
+                      <div key={idx} className="relative">
+                        {isImage && preview ? (
+                          <div className="relative h-20 w-20 overflow-hidden rounded-lg">
+                            <Image
+                              src={preview}
+                              alt={`Preview ${idx}`}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        ) : (
+                          <div className="flex h-20 w-20 items-center justify-center rounded-lg border-2 border-gray-300 bg-gray-100">
+                            <DocumentIcon className="h-8 w-8 text-gray-500" />
+                          </div>
+                        )}
+                        <div className="absolute -right-2 -top-2 flex items-center gap-1">
+                          {!isImage && file && (
+                            <span className="rounded bg-gray-800 px-1.5 py-0.5 text-xs text-white">
+                              {file.name.length > 8 ? file.name.substring(0, 8) + '...' : file.name}
+                            </span>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => removeFile(idx)}
+                            className="rounded-full bg-red-500 p-1 text-white hover:bg-red-600"
+                          >
+                            <XMarkIcon className="h-3 w-3" />
+                          </button>
+                        </div>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => removeFile(idx)}
-                        className="absolute -right-2 -top-2 rounded-full bg-red-500 p-1 text-white hover:bg-red-600"
-                      >
-                        <XMarkIcon className="h-3 w-3" />
-                      </button>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
 
@@ -574,19 +644,40 @@ export default function MessagesPage() {
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept="image/*"
                   multiple
                   onChange={handleFileSelect}
                   className="hidden"
                 />
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="rounded-full p-2 text-gray-600 hover:bg-gray-100"
-                  disabled={sending}
-                >
-                  <PhotoIcon className="h-5 w-5" />
-                </button>
+                <div className="relative" ref={fileMenuRef}>
+                  <button
+                    type="button"
+                    onClick={() => setShowFileMenu(!showFileMenu)}
+                    className="rounded-full p-2 text-gray-600 hover:bg-gray-100"
+                    disabled={sending}
+                  >
+                    <EllipsisVerticalIcon className="h-5 w-5" />
+                  </button>
+                  {showFileMenu && (
+                    <div className="absolute bottom-full left-0 mb-2 w-48 rounded-lg bg-white shadow-lg border border-gray-200 z-10">
+                      <button
+                        type="button"
+                        onClick={() => handleFileMenuClick('image')}
+                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
+                      >
+                        <PhotoIcon className="h-4 w-4" />
+                        Images
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleFileMenuClick('all')}
+                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
+                      >
+                        <PaperClipIcon className="h-4 w-4" />
+                        Attachments/Files
+                      </button>
+                    </div>
+                  )}
+                </div>
                 <input
                   type="text"
                   value={messageText}
@@ -728,6 +819,16 @@ export default function MessagesPage() {
           isOpen={showViewMembersModal}
           onClose={() => setShowViewMembersModal(false)}
           roomId={selectedRoomId}
+        />
+      )}
+
+      {/* Image Viewer Modal */}
+      {viewingImage && (
+        <ImageViewerModal
+          isOpen={!!viewingImage}
+          onClose={() => setViewingImage(null)}
+          imageUrl={viewingImage.url}
+          imageName={viewingImage.name}
         />
       )}
     </div>
