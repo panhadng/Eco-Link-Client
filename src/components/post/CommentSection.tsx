@@ -7,7 +7,7 @@ import { Comment } from '@/types';
 import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
 import { Textarea } from '@/components/ui/Textarea';
-import { formatDate } from '@/lib/utils';
+import { formatDate, convertHtmlLineBreaks } from '@/lib/utils';
 import Link from 'next/link';
 
 interface CommentSectionProps {
@@ -79,7 +79,7 @@ export function CommentSection({ postId, comments }: CommentSectionProps) {
                     {comment.author?.name || ''}
                   </Link>
                   <p className="mt-1 text-gray-700 whitespace-pre-wrap">
-                    {comment.content}
+                    {convertHtmlLineBreaks(comment.content)}
                   </p>
                 </div>
                 <div className="mt-1 flex items-center space-x-4 text-xs text-gray-500">
