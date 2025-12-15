@@ -122,7 +122,7 @@ export function RightSidebar() {
             <span>·</span>
             <Link href="/privacy" prefetch={false} className="hover:underline">Privacy</Link>
           </div>
-          <p className="mt-3 text-xs text-gray-400">© 2024 EcoLink Social</p>
+          <p className="mt-3 text-xs text-gray-400">© 2025 EcoLink Social</p>
         </div>
       </div>
     </aside>

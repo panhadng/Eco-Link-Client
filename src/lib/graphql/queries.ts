@@ -192,6 +192,18 @@ export const GET_POST_BY_ID = gql`
         id
         name
         slug
+        avatar {
+          url
+        }
+      }
+      group {
+        id
+        name
+        slug
+        groupType
+        avatar {
+          url
+        }
       }
       comments {
         id
