@@ -287,12 +287,19 @@ export default function GroupDetailPage({ params }: { params: Promise<PageParams
           aria-hidden="true"
         />
         <div className="relative z-10 px-4 pb-6 pt-24 sm:px-6 sm:pt-28">
-          <div className="rounded-xl bg-white/95 p-6 shadow-sm backdrop-blur overflow-hidden">
+          <div className="rounded-xl bg-white/95 p-6 shadow-sm backdrop-blur overflow-visible">
             <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-end min-w-0 flex-1">
                 {group.avatar?.url ? (
-                    <div className="relative -mt-24 h-32 w-32 flex-shrink-0 overflow-hidden rounded-full border-4 border-white shadow-lg">
-                      <Image src={group.avatar.url} alt={group.name} fill className="object-cover" unoptimized />
+                    <div className="relative -mt-24 flex-shrink-0">
+                      <div className="relative w-32 border-4 border-white shadow-lg bg-white rounded-full flex items-center justify-center" style={{ aspectRatio: 'auto', minHeight: '128px' }}>
+                        <img 
+                          src={group.avatar.url} 
+                          alt={group.name} 
+                          className="object-contain rounded-full w-full h-auto max-w-full" 
+                          style={{ maxHeight: 'none', height: 'auto' }}
+                        />
+                      </div>
                     </div>
                 ) : (
                   <Avatar
