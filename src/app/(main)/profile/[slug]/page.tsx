@@ -278,6 +278,23 @@ export default function ProfilePage({ params }: { params: Promise<{ slug: string
         </div>
       </Card>
 
+      {/* Interests - dummy data for now; wire to user.interests when API supports it */}
+      <div className="space-y-3">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          Interests
+        </h2>
+        <div className="flex flex-wrap gap-2">
+          {['Sustainability', 'Nature', 'Community Building', 'Conservation'].map((interest) => (
+            <span
+              key={interest}
+              className="inline-flex items-center rounded-full bg-[rgba(159,207,176,0.35)] px-3 py-1 text-sm font-medium text-[#2F7D5A]"
+            >
+              {interest}
+            </span>
+          ))}
+        </div>
+      </div>
+
       {/* Posts Feed */}
       <div>
         <h2 className="mb-4 text-xl font-semibold text-gray-900">

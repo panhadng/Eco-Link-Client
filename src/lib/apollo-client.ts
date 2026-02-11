@@ -6,21 +6,32 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { createUploadLink } from './upload-link';
 import { getAuthToken } from './auth';
 
+// Ensure GraphQL URI has a path (e.g. /graphql). Root URLs often redirect and break CORS preflight.
+const normalizeGraphQLUri = (uri: string): string => {
+  const trimmed = uri.trim().replace(/\/+$/, '');
+  try {
+    const url = new URL(trimmed);
+    if (url.pathname === '' || url.pathname === '/') {
+      url.pathname = '/graphql';
+      return url.toString();
+    }
+    return trimmed;
+  } catch {
+    return uri;
+  }
+};
+
 // Auto-detect protocol based on current page protocol
 const getGraphQLUri = () => {
   const envUri = process.env.NEXT_PUBLIC_GRAPHQL_URI;
-  if (envUri) return envUri;
-  
+  if (envUri) return normalizeGraphQLUri(envUri);
+
   if (typeof window !== 'undefined') {
-    // If on HTTPS, use HTTPS domain (nginx will proxy to backend)
     if (window.location.protocol === 'https:') {
-      // Use domain - nginx will proxy /graphql to backend on port 4000
       return 'https://eco-link.flyonit.com.au/graphql';
-      // OLD CODE (for direct IP connection - kept for reference):
-      // return 'https://13.203.0.20:4000';
     }
   }
-  return 'http://localhost:4000';
+  return 'http://localhost:4000/graphql';
 };
 
 const getWebSocketUri = () => {

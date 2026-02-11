@@ -15,6 +15,8 @@ const config: Config = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        canvas: "hsl(var(--canvas))",
+        panel: "hsl(var(--panel))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -27,6 +29,8 @@ const config: Config = {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
+        success: "hsl(var(--success))",
+        warning: "hsl(var(--warning))",
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
@@ -39,22 +43,21 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Brand colors
-        "eco-blue": {
-          DEFAULT: "#0c0c6d",
-          light: "#1a1a8a",
-          dark: "#080850",
-        },
-        "eco-green": {
-          DEFAULT: "#52ba00",
-          light: "#6dd400",
-          dark: "#3d8a00",
-        },
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        xl: "calc(var(--radius) + 4px)",
+        "2xl": "calc(var(--radius) + 8px)",
+        "3xl": "calc(var(--radius) + 12px)",
+      },
+      boxShadow: {
+        glass: "0 8px 32px -8px hsl(30 9% 13% / 0.08)",
+        "glass-hover": "0 12px 40px -8px hsl(30 9% 13% / 0.12)",
+      },
+      fontFamily: {
+        sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
       },
     },
   },

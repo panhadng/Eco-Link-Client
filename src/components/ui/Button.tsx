@@ -3,24 +3,23 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center rounded-xl text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   {
       variants: {
         variant: {
           default: 'border border-transparent bg-primary text-primary-foreground hover:opacity-90',
-          destructive: 'bg-red-600 text-white hover:opacity-90',
-          outline:
-            'border border-gray-300 bg-background text-gray-900 hover:bg-primary hover:text-primary-foreground',
-          secondary: 'bg-gray-200 text-gray-900 hover:opacity-90',
-          ghost: 'text-gray-900 hover:bg-primary/10 hover:text-primary',
+          destructive: 'bg-destructive text-destructive-foreground hover:opacity-90',
+          outline: 'border border-border bg-background text-foreground hover:bg-panel hover:text-foreground',
+          secondary: 'border border-border bg-panel text-foreground hover:bg-muted',
+          ghost: 'text-foreground hover:bg-panel hover:text-primary',
           link: 'text-primary underline-offset-4 hover:underline',
           accent: 'bg-accent text-accent-foreground hover:opacity-90',
         },
       size: {
         default: 'h-10 px-4 py-2',
-        sm: 'h-9 rounded-md px-3',
-        lg: 'h-11 rounded-md px-8',
-        icon: 'h-10 w-10',
+        sm: 'h-9 rounded-xl px-3',
+        lg: 'h-11 rounded-xl px-8',
+        icon: 'h-10 w-10 rounded-xl',
       },
     },
     defaultVariants: {
@@ -38,24 +37,10 @@ export interface ButtonProps
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, isLoading, children, disabled, style, ...props }, ref) => {
-    // Get inline styles for theme colors
-    const getInlineStyles = () => {
-      if (variant === 'default') {
-        return { backgroundColor: '#0c0c6d', color: '#ffffff' };
-      }
-      if (variant === 'accent') {
-        return { backgroundColor: '#52ba00', color: '#ffffff' };
-      }
-      return {};
-    };
-
-    // Merge inline styles with passed style prop
-    const mergedStyles = { ...getInlineStyles(), ...style };
-
     return (
       <button
         className={cn(buttonVariants({ variant, size, className }))}
-        style={mergedStyles}
+        style={style}
         ref={ref}
         disabled={disabled || isLoading}
         {...props}

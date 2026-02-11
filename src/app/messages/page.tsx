@@ -28,13 +28,18 @@ import {
   PaperClipIcon,
   DocumentIcon,
   ArrowDownTrayIcon,
+  MagnifyingGlassIcon,
+  ChevronUpIcon,
 } from "@heroicons/react/24/outline";
+import { CheckIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { Message, Room } from "@/types";
 import { CreateGroupModal } from "@/components/messages/CreateGroupModal";
 import { AddMembersModal } from "@/components/messages/AddMembersModal";
 import { ViewMembersModal } from "@/components/messages/ViewMembersModal";
 import { ImageViewerModal } from "@/components/messages/ImageViewerModal";
+
+type FilterType = "all" | "unread" | "groups" | "direct";
 
 export default function MessagesPage() {
   const { user } = useAuth();
@@ -48,6 +53,8 @@ export default function MessagesPage() {
   const fileMenuRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const markedMessageIdsRef = useRef<Set<string>>(new Set());
+  const [activeFilter, setActiveFilter] = useState<FilterType>("all");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const {
     messages,
@@ -61,6 +68,32 @@ export default function MessagesPage() {
 
   const selectedRoom = rooms.find((r: Room) => r.id === selectedRoomId);
   const isGroupChat = selectedRoom?.isGroup;
+
+  // Filter rooms (Remix-style: All, Unread, Groups, Direct)
+  const filteredRooms = (() => {
+    let list = [...rooms];
+    switch (activeFilter) {
+      case "unread":
+        list = list.filter((r: Room) => (r.unreadCount ?? 0) > 0);
+        break;
+      case "groups":
+        list = list.filter((r: Room) => r.isGroup);
+        break;
+      case "direct":
+        list = list.filter((r: Room) => !r.isGroup);
+        break;
+    }
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      list = list.filter(
+        (r: Room) =>
+          r.roomName?.toLowerCase().includes(q) ||
+          r.lastMessage?.content?.toLowerCase().includes(q)
+      );
+    }
+    return list;
+  })();
+  const unreadCount = rooms.filter((r: Room) => (r.unreadCount ?? 0) > 0).length;
   
   const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
   const [showAddMembersModal, setShowAddMembersModal] = useState(false);
@@ -300,71 +333,121 @@ export default function MessagesPage() {
   };
 
   return (
-    <div className="flex h-full md:h-[calc(100vh-8rem)] max-w-full gap-0 md:gap-4 text-gray-900 relative overflow-hidden" style={{ touchAction: 'pan-x pan-y' }}>
-      {/* Room List */}
-      <div className={`w-full md:w-96 shrink-0 overflow-hidden absolute md:relative inset-0 md:inset-auto z-10 md:z-auto transition-transform duration-300 h-full md:h-auto flex flex-col bg-white ${
+    <div className="w-full max-w-7xl mx-auto h-full md:h-[calc(100vh-8rem)] rounded-3xl overflow-hidden bg-ambient-gradient p-3 md:p-4 min-h-0 shadow-[0_8px_32px_-8px_rgba(0,0,0,0.12)]">
+      <div className="flex h-full max-w-full gap-0 md:gap-4 text-foreground relative overflow-hidden" style={{ touchAction: 'pan-x pan-y' }}>
+      {/* Left: conversation list (no container) */}
+      <div className={`w-full md:w-[340px] shrink-0 overflow-hidden absolute md:relative inset-0 md:inset-auto z-10 md:z-auto transition-transform duration-300 h-full md:h-auto flex flex-col ${
         selectedRoomId ? "-translate-x-full md:translate-x-0" : "translate-x-0"
-      } ${!selectedRoomId ? "md:rounded-lg md:border md:border-gray-200 md:shadow-sm" : ""}`}>
-        <div className="border-b border-gray-200 p-4 shrink-0 flex items-center justify-between" style={{ backgroundColor: '#0c0c6d' }}>
-          <h2 className="text-lg font-semibold text-white">
-            Messages
-          </h2>
-          <button
-            onClick={() => setShowCreateGroupModal(true)}
-            className="rounded-lg p-2 text-white hover:bg-white/10 transition-colors"
-            title="Create group chat"
-          >
-            <PlusIcon className="h-5 w-5" />
-          </button>
+      }`}>
+        <div className="shrink-0 p-5 pb-4">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-semibold text-foreground tracking-tight">
+              Messages
+            </h2>
+            <button
+              onClick={() => setShowCreateGroupModal(true)}
+              className="rounded-full p-2.5 bg-black/5 text-muted-foreground hover:text-foreground hover:bg-black/10 transition-colors"
+              title="Create group chat"
+            >
+              <PlusIcon className="h-5 w-5" />
+            </button>
+          </div>
+          {/* Filter pills - All = solid emerald, Unread = grey + green badge */}
+          <div className="flex gap-2 mb-4 overflow-x-auto scrollbar-hide">
+            {[
+              { key: "all" as const, label: "All" },
+              { key: "unread" as const, label: "Unread" },
+              { key: "groups" as const, label: "Groups" },
+              { key: "direct" as const, label: "Direct" },
+            ].map(({ key, label }) => (
+              <button
+                key={key}
+                onClick={() => setActiveFilter(key)}
+                className={`px-3.5 py-1.5 text-sm font-medium rounded-full transition-all whitespace-nowrap flex items-center gap-1.5 ${
+                  activeFilter === key
+                    ? "bg-[#2F7D5A] text-white"
+                    : "bg-black/5 text-muted-foreground hover:bg-black/8 hover:text-foreground"
+                }`}
+              >
+                {label}
+                {key === "unread" && unreadCount > 0 && (
+                  <span className={`text-xs px-1.5 py-0.5 rounded-full min-w-[18px] text-center ${
+                    activeFilter === "unread" ? "bg-white/20 text-white" : "bg-[#2F7D5A] text-white"
+                  }`}>
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+          {/* Search - pill-shaped with magnifying glass */}
+          <div className="relative">
+            <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search conversations..."
+              className="w-full rounded-full bg-white pl-9 pr-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+            />
+          </div>
         </div>
 
-        <div
-          className="overflow-y-auto flex-1 min-h-0"
-        >
+        <div className="overflow-y-auto flex-1 min-h-0 px-3 pb-4">
           {roomsLoading ? (
             <div className="flex items-center justify-center p-8">
               <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
             </div>
-          ) : rooms.length === 0 ? (
-            <div className="p-8 text-center text-gray-500">
+          ) : filteredRooms.length === 0 ? (
+            <div className="p-8 text-center text-muted-foreground">
               <ChatBubbleLeftRightIcon className="mx-auto h-12 w-12 mb-2" />
-              <p>No conversations yet</p>
-              <p className="text-sm mt-1">
-                Visit a user&apos;s profile to start chatting
+              <p>
+                {activeFilter === "unread"
+                  ? "No unread messages"
+                  : activeFilter === "groups"
+                    ? "No group chats"
+                    : activeFilter === "direct"
+                      ? "No direct chats"
+                      : searchQuery
+                        ? "No results found"
+                        : "No conversations yet"}
               </p>
+              {!searchQuery && rooms.length === 0 && (
+                <p className="text-sm mt-1">Visit a user&apos;s profile to start chatting</p>
+              )}
             </div>
           ) : (
-            <div className="divide-y divide-gray-200">
-              {rooms.map((room: Room) => (
+            <div className="space-y-0">
+              {filteredRooms.map((room: Room) => (
                 <button
                   key={room.id}
                   onClick={() => setSelectedRoomId(room.id)}
-                  className={`flex w-full items-start gap-3 p-4 text-left transition-colors ${
+                  className={`w-full flex items-center gap-3 py-3 px-2 text-left transition-all duration-150 rounded-xl mb-0.5 border-l-[5px] ${
                     selectedRoomId === room.id
-                      ? "bg-gray-200"
-                      : "hover:bg-gray-50"
+                      ? "bg-[rgba(159,207,176,0.22)] border-l-[#2F7D5A]"
+                      : "bg-transparent border-l-transparent hover:bg-black/2"
                   }`}
                 >
                   <Avatar name={room.roomName} src={room.avatar} size="md" />
-                  <div className="flex-1 overflow-hidden">
-                    <div className="flex items-center justify-between">
-                      <p className="truncate font-semibold text-gray-900">
+                  <div className="flex-1 min-w-0 overflow-hidden">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className={`truncate text-sm ${(room.unreadCount ?? 0) > 0 ? "font-semibold text-foreground" : "font-medium text-foreground"}`}>
                         {room.roomName}
                       </p>
-                      {room.unreadCount > 0 && (
-                        <span className="ml-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
+                      <span className={`text-[11px] shrink-0 ${(room.unreadCount ?? 0) > 0 ? "text-primary font-medium" : "text-muted-foreground"}`}>
+                        {formatDate(room.lastMessageAt || new Date())}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between gap-2 mt-0.5">
+                      <p className={`truncate text-[13px] ${(room.unreadCount ?? 0) > 0 ? "text-foreground/80 font-medium" : "text-muted-foreground"}`}>
+                        {room.lastMessage?.content || "No messages yet"}
+                      </p>
+                      {(room.unreadCount ?? 0) > 0 && (
+                        <span className="shrink-0 h-5 min-w-[20px] px-1.5 rounded-full bg-primary text-primary-foreground text-[10px] font-semibold flex items-center justify-center">
                           {room.unreadCount}
                         </span>
                       )}
                     </div>
-                    <p className="truncate text-sm text-gray-500">
-                      {room.lastMessage?.content || "No messages yet"}
-                    </p>
-                    {room.lastMessageAt && (
-                      <p className="text-xs text-gray-400">
-                        {formatDate(room.lastMessageAt)}
-                      </p>
-                    )}
                   </div>
                 </button>
               ))}
@@ -373,17 +456,17 @@ export default function MessagesPage() {
         </div>
       </div>
 
-      {/* Chat Area */}
-      <div className={`flex flex-1 flex-col overflow-hidden absolute md:relative inset-0 md:inset-auto z-20 md:z-auto transition-transform duration-300 h-full md:h-auto bg-white ${
+      {/* Right: chat area (no container) */}
+      <div className={`flex flex-1 flex-col overflow-hidden absolute md:relative inset-0 md:inset-auto z-20 md:z-auto transition-transform duration-300 h-full md:h-auto ${
         selectedRoomId ? "translate-x-0" : "translate-x-full md:translate-x-0"
-      } ${selectedRoomId ? "md:rounded-lg md:border md:border-gray-200 md:shadow-sm" : ""}`} style={{ touchAction: 'pan-x pan-y' }}>
+      }`} style={{ touchAction: 'pan-x pan-y' }}>
         {selectedRoom ? (
           <>
-            {/* Chat Header */}
-            <div className="flex items-center gap-3 border-b border-gray-200 p-4" style={{ backgroundColor: '#0c0c6d' }}>
+            {/* Chat Header - light, name + Online, chevron/menu on right */}
+            <div className="flex items-center gap-3 p-4 rounded-t-2xl bg-transparent">
               <button
                 onClick={() => setSelectedRoomId(null)}
-                className="md:hidden p-2 -ml-2 text-white hover:bg-white/10 rounded-lg transition-colors"
+                className="md:hidden p-2 -ml-2 hover:bg-accent/50 rounded-xl transition-colors text-foreground"
                 aria-label="Back to messages"
               >
                 <ArrowLeftIcon className="h-5 w-5" />
@@ -393,33 +476,39 @@ export default function MessagesPage() {
                 src={selectedRoom.avatar}
                 size="md"
               />
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-white">
+                  <h3 className="font-semibold text-foreground truncate">
                     {selectedRoom.roomName}
                   </h3>
                   {isGroupChat && (
-                    <UserGroupIcon className="h-4 w-4 text-white/80" />
+                    <UserGroupIcon className="h-4 w-4 text-muted-foreground shrink-0" />
                   )}
                 </div>
+                <p className="text-xs text-muted-foreground">
+                  {isGroupChat ? "Group" : "Online"}
+                </p>
               </div>
+              {!isGroupChat && (
+                <ChevronUpIcon className="h-5 w-5 text-muted-foreground shrink-0" aria-hidden />
+              )}
               {isGroupChat && (
                 <div className="relative" ref={groupMenuRef}>
                   <button
                     onClick={() => setShowGroupMenu(!showGroupMenu)}
-                    className="p-2 text-white hover:bg-white/10 rounded-lg transition-colors"
+                    className="p-2 hover:bg-accent/50 rounded-xl transition-colors text-foreground"
                     aria-label="Group options"
                   >
                     <EllipsisVerticalIcon className="h-5 w-5" />
                   </button>
                   {showGroupMenu && (
-                    <div className="absolute right-0 top-full mt-2 w-48 rounded-lg bg-white shadow-lg border border-gray-200 z-10">
+                    <div className="absolute right-0 top-full mt-2 w-48 rounded-xl bg-panel shadow-glass border border-border z-10">
                       <button
                         onClick={() => {
                           setShowViewMembersModal(true);
                           setShowGroupMenu(false);
                         }}
-                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
+                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-foreground hover:bg-accent/50 rounded-t-xl"
                       >
                         <UserGroupIcon className="h-4 w-4" />
                         View Members
@@ -430,7 +519,7 @@ export default function MessagesPage() {
                           setShowEditModal(true);
                           setShowGroupMenu(false);
                         }}
-                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
+                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-foreground hover:bg-accent/50"
                       >
                         <PencilIcon className="h-4 w-4" />
                         Edit Group Name
@@ -440,7 +529,7 @@ export default function MessagesPage() {
                           setShowAddMembersModal(true);
                           setShowGroupMenu(false);
                         }}
-                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
+                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-foreground hover:bg-accent/50"
                       >
                         <PlusIcon className="h-4 w-4" />
                         Add Members
@@ -458,7 +547,7 @@ export default function MessagesPage() {
                           }
                           setShowGroupMenu(false);
                         }}
-                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50"
+                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-destructive hover:bg-destructive/10"
                       >
                         <ArrowLeftIcon className="h-4 w-4" />
                         Leave Group
@@ -468,7 +557,7 @@ export default function MessagesPage() {
                           setShowDeleteModal(true);
                           setShowGroupMenu(false);
                         }}
-                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50"
+                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-destructive hover:bg-destructive/10 rounded-b-xl"
                       >
                         <TrashIcon className="h-4 w-4" />
                         Delete Group
@@ -479,14 +568,14 @@ export default function MessagesPage() {
               )}
             </div>
 
-            {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-2 md:p-4">
+            {/* Messages - gradient behind bubbles; bubbles keep their own background */}
+            <div className="flex-1 overflow-y-auto p-2 md:p-4 bg-messages-chat-gradient">
               {messagesLoading ? (
                 <div className="flex items-center justify-center h-full">
                   <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
                 </div>
               ) : messages.length === 0 ? (
-                <div className="flex items-center justify-center h-full text-gray-500">
+                <div className="flex items-center justify-center h-full text-muted-foreground">
                   <p>No messages yet. Start the conversation!</p>
                 </div>
               ) : (
@@ -518,17 +607,17 @@ export default function MessagesPage() {
                         >
                           {/* Show sender name in group chats for messages not from current user */}
                           {isGroupChat && !isOwn && (
-                            <span className="mb-1 text-xs font-medium text-gray-600">
+                            <span className="mb-1 text-xs font-medium text-muted-foreground">
                               {message.username}
                             </span>
                           )}
                           <div
-                            className={`w-full rounded-lg px-3 md:px-4 py-2 ${
+                            className={`w-full px-3 md:px-4 py-2.5 text-foreground ${
                               isOwn
-                                ? "text-white"
-                                : "text-white"
+                                ? "rounded-[18px_18px_6px_18px] border border-[rgba(159,207,176,0.45)]"
+                                : "rounded-[18px_18px_18px_6px] border border-[rgba(157,184,231,0.45)]"
                             }`}
-                            style={isOwn ? { backgroundColor: '#0c0c6d' } : { backgroundColor: '#52ba00' }}
+                            style={isOwn ? { backgroundColor: 'rgba(228,241,233,0.95)' } : { backgroundColor: 'rgba(232,240,251,0.95)' }}
                           >
                             {message.content && (
                               <p className="whitespace-pre-wrap wrap-break-word text-sm md:text-base">
@@ -569,20 +658,21 @@ export default function MessagesPage() {
                                       <button
                                         key={idx}
                                         onClick={() => handleDownloadFile(file.url, file.name)}
-                                        className="flex w-full items-center gap-2 rounded bg-gray-200 px-3 py-2 text-sm hover:bg-gray-300 transition-colors text-left"
+                                        className="flex w-full items-center gap-2 rounded-lg bg-accent/50 px-3 py-2 text-sm hover:bg-accent transition-colors text-left border border-border"
                                       >
-                                        <PaperClipIcon className="h-4 w-4 shrink-0 text-gray-600" />
-                                        <span className="truncate flex-1 text-gray-900 font-medium">{file.name}</span>
-                                        <ArrowDownTrayIcon className="h-4 w-4 shrink-0 text-gray-600" />
+                                        <PaperClipIcon className="h-4 w-4 shrink-0 text-muted-foreground" />
+                                        <span className="truncate flex-1 text-foreground font-medium">{file.name}</span>
+                                        <ArrowDownTrayIcon className="h-4 w-4 shrink-0 text-muted-foreground" />
                                       </button>
                                     )
                                 )}
                               </div>
                             )}
                           </div>
-                          <span className="mt-1 text-xs text-gray-500">
-                            {formatDate(message.date)}
-                          </span>
+                          <div className={`mt-1 flex items-center gap-1 text-[11px] text-muted-foreground ${isOwn ? "flex-row-reverse" : ""}`}>
+                            <span>{formatDate(message.date)}</span>
+                            {isOwn && <CheckIcon className="h-3.5 w-3.5 text-primary shrink-0" />}
+                          </div>
                         </div>
                       </div>
                     );
@@ -592,10 +682,10 @@ export default function MessagesPage() {
               )}
             </div>
 
-            {/* Message Input */}
+            {/* Message Input - pill-shaped, + in light grey circle left, green send right */}
             <form
               onSubmit={handleSendMessage}
-              className="border-t border-gray-200 p-2 md:p-4 pb-20 md:pb-4"
+              className="p-2 md:p-4 pb-20 md:pb-4 bg-white/70 backdrop-blur-sm"
             >
               {/* File Previews */}
               {filePreviews.length > 0 && (
@@ -607,7 +697,7 @@ export default function MessagesPage() {
                     return (
                       <div key={idx} className="relative">
                         {isImage && preview ? (
-                          <div className="relative h-20 w-20 overflow-hidden rounded-lg">
+                          <div className="relative h-20 w-20 overflow-hidden rounded-xl border border-border">
                             <Image
                               src={preview}
                               alt={`Preview ${idx}`}
@@ -616,20 +706,20 @@ export default function MessagesPage() {
                             />
                           </div>
                         ) : (
-                          <div className="flex h-20 w-20 items-center justify-center rounded-lg border-2 border-gray-300 bg-gray-100">
-                            <DocumentIcon className="h-8 w-8 text-gray-500" />
+                          <div className="flex h-20 w-20 items-center justify-center rounded-xl border-2 border-border bg-accent/30">
+                            <DocumentIcon className="h-8 w-8 text-muted-foreground" />
                           </div>
                         )}
                         <div className="absolute -right-2 -top-2 flex items-center gap-1">
                           {!isImage && file && (
-                            <span className="rounded bg-gray-800 px-1.5 py-0.5 text-xs text-white">
+                            <span className="rounded-lg bg-primary px-1.5 py-0.5 text-xs text-primary-foreground">
                               {file.name.length > 8 ? file.name.substring(0, 8) + '...' : file.name}
                             </span>
                           )}
                           <button
                             type="button"
                             onClick={() => removeFile(idx)}
-                            className="rounded-full bg-red-500 p-1 text-white hover:bg-red-600"
+                            className="rounded-full bg-destructive p-1 text-destructive-foreground hover:bg-destructive/90"
                           >
                             <XMarkIcon className="h-3 w-3" />
                           </button>
@@ -640,7 +730,7 @@ export default function MessagesPage() {
                 </div>
               )}
 
-              <div className="flex gap-2">
+              <div className="flex gap-2 items-center">
                 <input
                   ref={fileInputRef}
                   type="file"
@@ -652,17 +742,18 @@ export default function MessagesPage() {
                   <button
                     type="button"
                     onClick={() => setShowFileMenu(!showFileMenu)}
-                    className="rounded-full p-2 text-gray-600 hover:bg-gray-100"
+                    className="rounded-full p-2.5 bg-black/5 text-muted-foreground hover:bg-black/10 hover:text-foreground transition-colors shrink-0"
                     disabled={sending}
+                    aria-label="Attach"
                   >
-                    <EllipsisVerticalIcon className="h-5 w-5" />
+                    <PlusIcon className="h-5 w-5" />
                   </button>
                   {showFileMenu && (
-                    <div className="absolute bottom-full left-0 mb-2 w-48 rounded-lg bg-white shadow-lg border border-gray-200 z-10">
+                    <div className="absolute bottom-full left-0 mb-2 w-48 rounded-xl bg-panel shadow-glass border border-border z-10">
                       <button
                         type="button"
                         onClick={() => handleFileMenuClick('image')}
-                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
+                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-foreground hover:bg-accent/50 rounded-t-xl"
                       >
                         <PhotoIcon className="h-4 w-4" />
                         Images
@@ -670,7 +761,7 @@ export default function MessagesPage() {
                       <button
                         type="button"
                         onClick={() => handleFileMenuClick('all')}
-                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
+                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-foreground hover:bg-accent/50 rounded-b-xl"
                       >
                         <PaperClipIcon className="h-4 w-4" />
                         Attachments/Files
@@ -683,7 +774,7 @@ export default function MessagesPage() {
                   value={messageText}
                   onChange={(e) => setMessageText(e.target.value)}
                   placeholder="Type a message..."
-                  className="flex-1 rounded-full border border-gray-300 bg-gray-50 px-4 py-2 text-sm text-gray-900 light:text-black focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400"
+                  className="flex-1 rounded-full bg-white px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
                   disabled={sending}
                 />
                 <Button
@@ -694,6 +785,7 @@ export default function MessagesPage() {
                     sending
                   }
                   isLoading={sending}
+                  className="shrink-0 rounded-full h-10 w-10 bg-[#2F7D5A] hover:opacity-90 text-white border-0"
                 >
                   <PaperAirplaneIcon className="h-5 w-5" />
                 </Button>
@@ -701,16 +793,17 @@ export default function MessagesPage() {
             </form>
           </>
         ) : (
-          <div className="hidden md:flex h-full items-center justify-center text-gray-500">
+          <div className="hidden md:flex h-full items-center justify-center text-muted-foreground">
             <div className="text-center">
               <ChatBubbleLeftRightIcon className="mx-auto h-16 w-16 mb-4" />
-              <p className="text-lg font-semibold">Select a conversation</p>
+              <p className="text-lg font-semibold text-foreground">Select a conversation</p>
               <p className="text-sm">
                 Choose a chat from the list to start messaging
               </p>
             </div>
           </div>
         )}
+      </div>
       </div>
       
       {/* Edit Group Name Modal */}

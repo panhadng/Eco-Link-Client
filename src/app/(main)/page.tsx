@@ -17,23 +17,18 @@ export default function FeedPage() {
   }, [inView, loading, loadMore]);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 md:space-y-4">
       <CreatePost />
 
       {loading && posts.length === 0 ? (
         <div className="space-y-4">
           {[...Array(3)].map((_, i) => (
-            <div
-              key={i}
-              className="h-48 animate-pulse rounded-lg bg-white"
-            />
+            <div key={i} className="h-48 animate-pulse rounded-2xl bg-card border border-border" />
           ))}
         </div>
       ) : posts.length === 0 ? (
-        <div className="rounded-lg bg-white p-12 text-center">
-          <p className="text-gray-500">
-            No posts yet. Create the first one!
-          </p>
+        <div className="rounded-2xl border border-border bg-card p-12 text-center">
+          <p className="text-muted-foreground">No posts yet. Create the first one!</p>
         </div>
       ) : (
         <>
@@ -47,7 +42,7 @@ export default function FeedPage() {
           ))}
 
           <div ref={ref} className="py-4 text-center">
-            {loading && <div className="text-gray-500">Loading more posts...</div>}
+            {loading && <div className="text-muted-foreground">Loading more posts…</div>}
           </div>
         </>
       )}

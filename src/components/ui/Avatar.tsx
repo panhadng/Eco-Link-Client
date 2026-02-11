@@ -25,9 +25,9 @@ export function Avatar({ src, alt, name, size = 'md', className, ...props }: Ava
       className={cn(
         'relative inline-flex items-center justify-center overflow-hidden font-semibold rounded-xl',
         // Background: white/black for images, dark blue for default
-        hasImage 
-          ? 'bg-white border border-gray-200'
-          : 'bg-[#0c0c6d] border border-[#0c0c6d]',
+        hasImage
+          ? 'bg-card border border-border'
+          : 'bg-primary border border-primary text-primary-foreground',
         sizeClasses[size],
         className
       )}
@@ -47,14 +47,14 @@ export function Avatar({ src, alt, name, size = 'md', className, ...props }: Ava
             const parent = target.parentElement;
             if (parent) {
               const fallback = document.createElement('span');
-              fallback.className = 'text-[#52ba00]';
+              fallback.className = 'text-primary-foreground';
               fallback.textContent = getInitials(name);
               parent.appendChild(fallback);
             }
           }}
         />
       ) : (
-        <span className="text-[#52ba00]">{getInitials(name)}</span>
+        <span className="text-primary-foreground">{getInitials(name)}</span>
       )}
     </div>
   );

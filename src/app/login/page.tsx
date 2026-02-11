@@ -44,11 +44,11 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 text-gray-900">
-      <Card className="w-full max-w-md">
+    <div className="flex min-h-screen items-center justify-center bg-ambient-gradient px-4 py-12 text-foreground">
+      <Card className="w-full max-w-md bg-white/90 backdrop-blur-sm shadow-[0_8px_32px_-8px_rgba(0,0,0,0.12)]">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-3xl font-bold text-[#0c0c6d]">Welcome back</CardTitle>
-          <CardDescription>Sign in to your account to continue</CardDescription>
+          <CardTitle className="text-3xl font-bold text-primary">Welcome back</CardTitle>
+          <CardDescription className="text-muted-foreground">Sign in to your account to continue</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -68,20 +68,20 @@ export default function LoginPage() {
               {...register('password')}
             />
 
-            <Button type="submit" variant="default" className="w-full bg-[#0c0c6d] hover:bg-[#0c0c6d]/80 cursor-pointer" isLoading={isLoading}>
+            <Button type="submit" variant="default" className="w-full cursor-pointer" isLoading={isLoading}>
               Sign in
             </Button>
           </form>
 
-          <div className="mt-6 text-center text-sm text-gray-600">
+          <div className="mt-6 text-center text-sm text-muted-foreground">
             Don&apos;t have an account?{' '}
-            <Link href="/register" className="font-medium text-primary hover:text-[#0c0c6d] hover:underline">
+            <Link href="/register" className="font-medium text-primary hover:underline">
               Sign up
             </Link>
           </div>
 
-          <div className="mt-4 rounded-md bg-gray-100 p-4 text-sm text-gray-700">
-            <p className="font-semibold">Test Accounts:</p>
+          <div className="mt-4 rounded-xl bg-muted/80 p-4 text-sm text-muted-foreground">
+            <p className="font-semibold text-foreground">Test Accounts:</p>
             <ul className="mt-2 space-y-1">
               <li>• admin@example.org / 1234</li>
               <li>• user@example.org / 1234</li>

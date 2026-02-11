@@ -28,7 +28,7 @@ export default function MessagesLayout({ children }: { children: React.ReactNode
   }
 
   return (
-      <div className="messages-container min-h-screen bg-gray-50 text-gray-900 transition-colors overflow-hidden md:overflow-auto overflow-x-hidden">
+    <div className="messages-container min-h-screen text-foreground transition-colors overflow-hidden md:overflow-auto overflow-x-hidden bg-ambient-gradient">
       <Navbar />
       <div className="mx-auto max-w-7xl px-0 md:px-4 py-0 md:py-6 h-[calc(100vh-4rem)] md:h-auto overflow-hidden md:overflow-visible overflow-x-hidden max-w-full">
         {children}
