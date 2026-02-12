@@ -28,16 +28,21 @@ const getGraphQLUri = () => {
 
   if (typeof window !== 'undefined') {
     if (window.location.protocol === 'https:') {
-      return 'https://eco-link.flyonit.com.au/graphql';
+      return 'https://ecolink.flyonit.com.au/graphql';
     }
   }
   return 'http://localhost:4000/graphql';
 };
 
+// Strip quotes and whitespace that can come from .env (e.g. NEXT_PUBLIC_WS_URI="wss://...")
+const normalizeWsUri = (uri: string): string => {
+  return uri.trim().replace(/^["']|["']$/g, '');
+};
+
 const getWebSocketUri = () => {
-  const envUri = process.env.NEXT_PUBLIC_WS_URI;
+  const raw = process.env.NEXT_PUBLIC_WS_URI;
+  const envUri = raw ? normalizeWsUri(raw) : '';
   if (envUri) {
-    // Use the environment variable as-is (user configured it)
     console.log('[Apollo Client] Using WebSocket URI from env:', envUri);
     return envUri;
   }
