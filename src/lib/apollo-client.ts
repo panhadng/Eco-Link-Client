@@ -65,7 +65,7 @@ const getWebSocketUri = () => {
   if (typeof window !== 'undefined') {
     if (window.location.protocol === 'https:') {
       // Use domain for WebSocket - nginx will proxy to backend
-      return 'wss://eco-link.flyonit.com.au/graphql';
+      return 'wss://ecolink.flyonit.com.au/graphql';
       // OLD CODE (for direct IP connection - kept for reference):
       // return 'wss://13.203.0.20:4000/graphql';
     }
@@ -77,18 +77,36 @@ const uploadLink = createUploadLink({
   uri: getGraphQLUri(),
 });
 
+// Log WebSocket failure only once to avoid console spam when proxy doesn't support WS
+let wsErrorLogged = false;
+const logWsErrorOnce = (message: string) => {
+  if (!wsErrorLogged) {
+    wsErrorLogged = true;
+    console.warn(
+      '[Apollo Client] WebSocket failed. Real-time updates (messages, notifications) will not work until the server proxy supports WebSockets. See WEBSOCKET-SETUP.md.',
+      message
+    );
+  }
+};
+
 const wsLink = typeof window !== 'undefined' ? (() => {
   const wsUri = getWebSocketUri();
-  console.log('[Apollo Client] Creating WebSocketLink with URI:', wsUri);
-  
+  if (process.env.NODE_ENV === 'development') {
+    console.log('[Apollo Client] Creating WebSocketLink with URI:', wsUri);
+  }
+
   return new WebSocketLink({
     uri: wsUri,
     options: {
       reconnect: true,
+      reconnectionAttempts: 5,
+      // reconnectionDelay: 3000,
       lazy: true,
       connectionParams: () => {
         const token = getAuthToken();
-        console.log('[Apollo Client] WebSocket connecting with token:', token ? 'YES' : 'NO');
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[Apollo Client] WebSocket connecting with token:', token ? 'YES' : 'NO');
+        }
         return {
           headers: {
             authorization: token ? `Bearer ${token}` : '',
@@ -97,8 +115,8 @@ const wsLink = typeof window !== 'undefined' ? (() => {
       },
       connectionCallback: (error) => {
         if (error) {
-          console.error('[Apollo Client] WebSocket connection error:', error);
-        } else {
+          logWsErrorOnce(String(error));
+        } else if (process.env.NODE_ENV === 'development') {
           console.log('[Apollo Client] WebSocket connected successfully');
         }
       },
